@@ -8,7 +8,7 @@ create table if not exists users (
     email varchar not null unique,
     password varchar not null,
     creation_date timestamp with time zone not null default now(),
-    isActive boolean default true,
+    is_active boolean not null default true,
     role varchar not null
 );
 
