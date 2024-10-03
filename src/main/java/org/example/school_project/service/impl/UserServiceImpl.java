@@ -9,6 +9,12 @@ import org.example.school_project.service.UserService;
 import org.example.school_project.util.exception.AlreadyExistException;
 import org.example.school_project.util.exception.ObjectNotFoundException;
 import org.example.school_project.util.mapper.UserMapper;
+
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,7 +22,8 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class UserServiceImpl implements UserService {
+
+public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
 
@@ -43,6 +50,12 @@ public class UserServiceImpl implements UserService {
                 .orElseThrow(() -> new ObjectNotFoundException("User"));
         return userMapper.entityToDto(user);
 
+    }
+
+
+    public User getUsername(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ObjectNotFoundException("User"));
     }
 
     @Override
@@ -95,5 +108,20 @@ public class UserServiceImpl implements UserService {
                 .password(user.getPassword())
                 .roleSet(user.getRoleSet())
                 .build();
+    }
+
+    public UserDto getCurrentUser() {
+        var username = SecurityContextHolder.getContext().getAuthentication().getName();
+        return getByUsername(username);
+    }
+
+    public UserDetailsService userDetailsService() {
+        return this::getUsername;
+    }
+
+    @Override
+    public User loadUserByUsername(String username) throws UsernameNotFoundException {
+        return this.userRepository.findByUsername(username)
+                .orElseThrow(() -> new UsernameNotFoundException(username));
     }
 }
