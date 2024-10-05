@@ -9,12 +9,13 @@ import org.example.school_project.service.UserService;
 import org.example.school_project.util.exception.AlreadyExistException;
 import org.example.school_project.util.exception.ObjectNotFoundException;
 import org.example.school_project.util.mapper.UserMapper;
-
+<<<<<<<<< Temporary merge branch 1
+=========
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-
+>>>>>>>>> Temporary merge branch 2
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -22,7 +23,6 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
@@ -52,21 +52,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     }
 
-
     public User getUsername(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new ObjectNotFoundException("User"));
     }
 
     @Override
-    public UserDto createUser(User user) {
+    public void createUser(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new AlreadyExistException("username");
         }
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new RuntimeException("email");
         }
-        return save(user);
+        save(user);
     }
 
     public UserDto save(User user) {

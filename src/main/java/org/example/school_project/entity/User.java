@@ -17,7 +17,6 @@ import java.util.stream.Collectors;
 import java.time.LocalDateTime;
 import java.util.Set;
 
-
 @Entity
 @Table(name = "users")
 @Builder(toBuilder = true)
@@ -61,6 +60,7 @@ public class User implements UserDetails {
     @PrePersist
     private void prePersist() {
         creationDate = LocalDateTime.now();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

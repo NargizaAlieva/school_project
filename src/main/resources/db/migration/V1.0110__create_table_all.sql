@@ -60,7 +60,7 @@ create table if not exists announcements (
 create table if not exists schedules (
     id bigserial primary key,
     day_of_week varchar not null,
-    quarter smallint not null,
+    quarter int not null,
     due_time varchar not null,
     year varchar not null,
     subject_id bigint references subjects(id),
