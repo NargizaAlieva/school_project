@@ -61,7 +61,7 @@ public class User implements UserDetails {
     private List<Message> receiverOfMessages;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "authorReview")
-    private List<Reviews> authorOfReviews;
+    private List<Review> authorOfReviews;
 
     @PrePersist
     private void prePersist() {

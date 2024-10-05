@@ -9,7 +9,7 @@ public interface UserService {
     UserDto getById(Long id);
     UserDto getByUsername(String username);
     UserDto getByEmail(String mail);
-    UserDto createUser(User user);
+    void createUser(User user);
     List<UserDto> getAllUser();
     void deleteUser(Long id);
     UserDto updateUser(User user);

@@ -35,7 +35,7 @@ public class Student {
     private Parent parent;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "studentReview")
-    private List<Reviews> reviewList;
+    private List<Review> reviewList;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "studentHW")
     private List<Homework> homeworkList;

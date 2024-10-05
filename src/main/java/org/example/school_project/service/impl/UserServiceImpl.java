@@ -10,7 +10,6 @@ import org.example.school_project.util.exception.AlreadyExistException;
 import org.example.school_project.util.exception.ObjectNotFoundException;
 import org.example.school_project.util.mapper.UserMapper;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
@@ -55,14 +54,14 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public UserDto createUser(User user) {
+    public void createUser(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
             throw new AlreadyExistException("username");
         }
         if (userRepository.existsByEmail(user.getEmail())) {
             throw new RuntimeException("email");
         }
-        return save(user);
+        save(user);
     }
 
     public UserDto save(User user) {
