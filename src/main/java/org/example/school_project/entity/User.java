@@ -48,10 +48,20 @@ public class User implements UserDetails {
     @JsonBackReference
     private Set<Role> roleSet;
 
-    public User setRoleSet(Set<Role> roleSet) {
-        this.roleSet = roleSet;
-        return this;
-    }
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "authorOfAssignments")
+    private List<Assignment> authorOfAssignments;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "receiverOfAssignments")
+    private List<Assignment> receiverOfAssignments;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "authorMessage")
+    private List<Message> authorOfMessages;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "receiverMessage")
+    private List<Message> receiverOfMessages;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "authorReview")
+    private List<Reviews> authorOfReviews;
 
     @PrePersist
     private void prePersist() {
