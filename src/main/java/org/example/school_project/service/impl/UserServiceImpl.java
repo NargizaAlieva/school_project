@@ -9,13 +9,9 @@ import org.example.school_project.service.UserService;
 import org.example.school_project.util.exception.AlreadyExistException;
 import org.example.school_project.util.exception.ObjectNotFoundException;
 import org.example.school_project.util.mapper.UserMapper;
-<<<<<<<<< Temporary merge branch 1
-=========
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
->>>>>>>>> Temporary merge branch 2
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -36,13 +32,20 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userMapper.entityToDto(user);
     }
 
+    public User getEntityById(Long id) {
+        if (id == null) {
+            return null;
+        }
+        return userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("User"));
+    }
+
     @Override
     public UserDto getByEmail(String mail) {
         User user = userRepository.findByEmail(mail)
                 .orElseThrow(() -> new ObjectNotFoundException("User"));
         return userMapper.entityToDto(user);
-
     }
+
 
     @Override
     public UserDto getByUsername(String username) {

@@ -1,5 +1,6 @@
 package org.example.school_project.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
@@ -26,7 +27,6 @@ public class Role {
     @JoinTable(name = "m2m_users_roles",
             joinColumns = @JoinColumn(name = "role_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "user_id", referencedColumnName = "id"))
-    @JsonManagedReference
-    @JsonIgnore
+    @JsonBackReference
     private Set<User> userSet;
 }

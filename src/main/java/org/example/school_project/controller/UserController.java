@@ -7,6 +7,7 @@ import org.example.school_project.dto.UserDto;
 import org.example.school_project.entity.User;
 import org.example.school_project.service.UserService;
 import org.example.school_project.util.exception.ObjectNotFoundException;
+import org.example.school_project.util.mapper.UserMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import java.util.List;
 @Slf4j
 public class UserController {
     private final UserService userService;
+    private final UserMapper userMapper;
 
     @PostMapping(value = "/create")
     public ResponseEntity<Response> createUser(@RequestBody User request) {
@@ -53,7 +55,7 @@ public class UserController {
     @GetMapping("/get-user/{id}")
     public ResponseEntity<Response> getById(@PathVariable Long id) {
         try {
-            return ResponseEntity.ok(new Response("Successfully got task with id", userService.getById(id)));
+            return ResponseEntity.ok(new Response("Successfully got task with id", userMapper.entityToDto(userService.getEntityById(id))));
         } catch (ObjectNotFoundException exception) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
         }

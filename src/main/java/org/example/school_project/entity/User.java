@@ -1,9 +1,10 @@
 package org.example.school_project.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -13,9 +14,6 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
-
-import java.time.LocalDateTime;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -49,13 +47,23 @@ public class User implements UserDetails {
     private Boolean isActive = true;
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "userSet")
-    @JsonBackReference
+    @JsonManagedReference
     private Set<Role> roleSet;
 
-    public User setRoleSet(Set<Role> roleSet) {
-        this.roleSet = roleSet;
-        return this;
-    }
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "authorOfAssignments")
+    private List<Assignment> authorOfAssignments;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "receiverOfAssignments")
+    private List<Assignment> receiverOfAssignments;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "authorMessage")
+    private List<Message> authorOfMessages;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "receiverMessage")
+    private List<Message> receiverOfMessages;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "authorReview")
+    private List<Review> authorOfReviews;
 
     @PrePersist
     private void prePersist() {

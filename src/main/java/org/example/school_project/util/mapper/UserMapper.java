@@ -25,4 +25,5 @@ public class UserMapper {
 
     public List<UserDto> entityToDtoList(List<User> tasks) {
         return tasks.stream().map(this::entityToDto).collect(Collectors.toList());
-    }}
+    }
+}

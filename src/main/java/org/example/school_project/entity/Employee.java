@@ -1,6 +1,8 @@
 package org.example.school_project.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -24,7 +26,7 @@ public class Employee {
     @Column(name = "salary")
     private Integer salary;
 
-    @OneToOne(cascade = CascadeType.ALL)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
 
@@ -41,6 +43,5 @@ public class Employee {
     private List<Schedule> scheduleList;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "teachersSet")
-    @JsonBackReference
     private Set<Subject> subjectSet;
 }

@@ -40,10 +40,10 @@ VALUES
     ('2007-05-10', 2, 11, 2, 'FATHER'),
     ('2007-05-10', 2, 12, 3, 'MOTHER');
 
-INSERT INTO subjects (subject_title, description)
+INSERT INTO subjects (subject_title, description, is_active)
 VALUES
-    ('Mathematics', 'Study of numbers and calculations'),
-    ('History', 'Study of past events');
+    ('Mathematics', 'Study of numbers and calculations', true),
+    ('History', 'Study of past events', true);
 
 INSERT INTO announcements (title, description, employee_id)
 VALUES

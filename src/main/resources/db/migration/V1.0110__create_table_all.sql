@@ -45,7 +45,8 @@ create table if not exists students (
 create table if not exists subjects (
     id bigserial primary key,
     subject_title varchar not null unique,
-    description text
+    description text,
+    is_active boolean default true
 );
 
 -- объявления
