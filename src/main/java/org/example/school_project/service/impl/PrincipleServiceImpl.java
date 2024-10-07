@@ -1,118 +1,105 @@
 package org.example.school_project.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.example.school_project.dto.EmployeeDto;
-import org.example.school_project.dto.UserDto;
+import org.example.school_project.dto.*;
 import org.example.school_project.entity.*;
-import org.example.school_project.repository.*;
-import org.example.school_project.service.PrincipleService;
-import org.example.school_project.service.UserService;
-import org.example.school_project.util.exception.ObjectNotFoundException;
-import org.example.school_project.util.mapper.EmployeeMapper;
+import org.example.school_project.service.*;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
 @RequiredArgsConstructor
 public class PrincipleServiceImpl implements PrincipleService {
-    private final UserService userService;
-    private final ScheduleRepository scheduleRepository;
-    private final EmployeeRepository employeeRepository;
-    private final SubjectRepository subjectRepository;
-    private final CharterRepository charterRepository;
-
-    private final EmployeeMapper employeeMapper;
+    private final ScheduleService scheduleService;
+    private final CharterService charterService;
+    private final EmployeeService employeeService;
+    private final SubjectService subjectService;
+    private final AssignmentService assignmentService;
 
     @Override
-    public Schedule getScheduleById(Long id) {
-        if (id == null) return null;
-        Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Schedule"));
-        return schedule;
+    public ScheduleDto getScheduleById(Long id) {
+        return scheduleService.getScheduleById(id);
     }
 
     @Override
-    public Schedule approveSchedule(Long id) {
-        if (id == null) return null;
-        Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Schedule"));
-        schedule.setIsApprove(true);
-        return scheduleRepository.save(schedule);
+    public ScheduleDto approveSchedule(Long id) {
+        return scheduleService.approveSchedule(id);
     }
 
     @Override
-    public List<Schedule> getAllSchedule() {
-        return scheduleRepository.findAll();
+    public List<ScheduleDto> getAllSchedule() {
+        return scheduleService.getAllSchedule();
     }
 
     @Override
-    public List<Schedule> getAllUnApprovedSchedule() {
-        List<Schedule> allSchedule = scheduleRepository.findAll();
-        List<Schedule> unapprovedSchedule = new ArrayList<>();
-        for (Schedule sch : allSchedule) {
-            if(!sch.getIsApprove()) unapprovedSchedule.add(sch);
-        }
-        return unapprovedSchedule;
+    public List<ScheduleDto> getAllUnApprovedSchedule() {
+        return scheduleService.getAllUnApprovedSchedule();
     }
 
     @Override
-    public EmployeeDto hireEmployee(Employee employee) {
-        User user = userService.getEntityById(employee.getUser().getId());
-        userService.createUser(user);
-        return employeeMapper.entityToDto(employeeRepository.save(employee));
+    public EmployeeDto hireEmployee(EmployeeDroRequest employeeDtoR) {
+        return employeeService.createEmployee(employeeDtoR);
     }
 
     @Override
-    public EmployeeDto updateEmployee(Employee employee) {
-        User user = userService.getEntityById(employee.getUser().getId());
-        Employee newEmployee = new Employee();
-        newEmployee.toBuilder()
-                .id(employee.getId())
-                .position(employee.getPosition())
-                .salary(employee.getSalary())
-                .user(employee.getUser());
-        return employeeMapper.entityToDto(employeeRepository.save(newEmployee));
+    public EmployeeDto updateEmployee(EmployeeDroRequest employeeDtoR) {
+        return employeeService.updateEmployee(employeeDtoR);
     }
 
     @Override
     public List<EmployeeDto> getAllEmployee() {
-        return employeeMapper.entityToDtoList(employeeRepository.findAll());
+        return employeeService.getAllEmployee();
+    }
+
+    @Override
+    public List<EmployeeDto> getAllActiveEmployee() {
+        return employeeService.getAllActiveEmployee();
     }
 
     @Override
     public void fireEmployee(Long id) {
-        Employee employee = employeeRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Employee"));
-        User user = employee.getUser();
-        user.setIsActive(false);
-        userService.updateUser(user);
+        employeeService.deleteEmployee(id);
     }
 
     @Override
-    public Subject addSubject(Subject subject) {
-        return subjectRepository.save(subject);
+    public SubjectDto addSubject(SubjectDtoRequest subjectDtoRequest) {
+        return subjectService.addSubject(subjectDtoRequest);
     }
 
     @Override
-    public Subject updateSubject(Subject subject) {
-        Subject newSubject = new Subject();
-        newSubject.toBuilder()
-                .id(subject.getId())
-                .title(subject.getTitle())
-                .description(subject.getDescription())
-                .isActive(subject.getIsActive())
-                .build();
-        return subjectRepository.save(newSubject);
+    public SubjectDto updateSubject(SubjectDtoRequest subjectDtoRequest) {
+        return subjectService.updateSubject(subjectDtoRequest);
     }
 
     @Override
     public void deleteSubject(Long id) {
-        Subject subject = subjectRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Employee"));
-        subject.setIsActive(false);
-        subjectRepository.save(subject);
+        subjectService.deleteSubject(id);
     }
 
     @Override
-    public Charter createCharter(Charter charter) {
-        return charterRepository.save(charter);
+    public CharterDto createCharter(CharterDtoRequest charterDtoR) {
+        return charterService.createCharter(charterDtoR);
     }
+
+    @Override
+    public CharterDto updateCharter(CharterDtoRequest charterDtoR) {
+        return charterService.updateCharter(charterDtoR);
+    }
+
+    @Override
+    public AssignmentDto createAssignment(AssignmentDtoRequest assignmentDtoRequest) {
+        return assignmentService.createAssigment(assignmentDtoRequest);
+    }
+
+//    @Override
+//    public AssignmentDto createAssignmentToSecretary(AssignmentDtoRequest assignmentDtoRequest) {
+//        return assignmentService.createToSecreter(assignmentDtoRequest);
+//    }
+
+    @Override
+    public AssignmentDto updateAssignment(AssignmentDtoRequest assignmentDtoRequest) {
+        return assignmentService.updateAssignment(assignmentDtoRequest);
+    }
+
 }

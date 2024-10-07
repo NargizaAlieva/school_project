@@ -3,6 +3,7 @@ package org.example.school_project.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.school_project.dto.UserDto;
+import org.example.school_project.entity.Role;
 import org.example.school_project.entity.User;
 import org.example.school_project.repository.UserRepository;
 import org.example.school_project.service.UserService;
@@ -15,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -60,6 +62,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .orElseThrow(() -> new ObjectNotFoundException("User"));
     }
 
+    public User getUsernameEntity(String username) {
+        return userRepository.findByUsername(username)
+                .orElseThrow(() -> new ObjectNotFoundException("User"));
+    }
+
     @Override
     public void createUser(User user) {
         if (userRepository.existsByUsername(user.getUsername())) {
@@ -79,6 +86,10 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public List<UserDto> getAllUser() {
         List<User> userList = userRepository.findAll();
         return userMapper.entityToDtoList(userList);
+    }
+
+    public List<User> getAllUserEntity() {
+        return userRepository.findAll();
     }
 
     @Override
@@ -112,9 +123,22 @@ public class UserServiceImpl implements UserService, UserDetailsService {
                 .build();
     }
 
-    public UserDto getCurrentUser() {
+    public User getUserWithRole(String role) {
+        List<User> userList = getAllUserEntity();
+        for (User user: userList) {
+            Set<Role> roleSet = user.getRoleSet();
+            for (Role r : roleSet) {
+                if(r.equals(role)) {
+                    return user;
+                }
+            }
+        }
+        return null;
+    }
+
+    public User getCurrentUser() {
         var username = SecurityContextHolder.getContext().getAuthentication().getName();
-        return getByUsername(username);
+        return getUsernameEntity(username);
     }
 
     public UserDetailsService userDetailsService() {

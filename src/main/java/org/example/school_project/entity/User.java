@@ -50,9 +50,6 @@ public class User implements UserDetails {
     @JsonManagedReference
     private Set<Role> roleSet;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "authorOfAssignments")
-    private List<Assignment> authorOfAssignments;
-
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "receiverOfAssignments")
     private List<Assignment> receiverOfAssignments;
 

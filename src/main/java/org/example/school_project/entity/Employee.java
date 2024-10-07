@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -36,6 +37,9 @@ public class Employee {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "authorOfCharter")
     private List<Charter> authOfCharters;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "authorOfAssignments")
+    private List<Assignment> authorOfAssignments;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "classTeacher")
     private List<Grade> homeGrades;
 
@@ -43,5 +47,5 @@ public class Employee {
     private List<Schedule> scheduleList;
 
     @ManyToMany(fetch = FetchType.LAZY, mappedBy = "teachersSet")
-    private Set<Subject> subjectSet;
+    private Set<Subject> subjectSet = new HashSet<>();
 }

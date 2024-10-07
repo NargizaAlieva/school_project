@@ -1,8 +1,7 @@
 package org.example.school_project.controller;
 
 import lombok.AllArgsConstructor;
-import org.example.school_project.dto.EmployeeDto;
-import org.example.school_project.dto.Response;
+import org.example.school_project.dto.*;
 import org.example.school_project.entity.*;
 import org.example.school_project.service.PrincipleService;
 import org.example.school_project.util.exception.ObjectNotFoundException;
@@ -35,16 +34,16 @@ public class PrincipleController {
         }
     }
     @GetMapping("/get-all-schedule")
-    public List<Schedule> getAllSchedule() {
+    public List<ScheduleDto> getAllSchedule() {
         return principleService.getAllSchedule();
     }
     @GetMapping("/get-all-unapproved-schedule")
-    public List<Schedule> getAllUnapprovedSchedule() {
+    public List<ScheduleDto> getAllUnapprovedSchedule() {
         return principleService.getAllUnApprovedSchedule();
     }
 
     @PostMapping(value = "/hire-employee")
-    public ResponseEntity<Response> createEmployee(@RequestBody Employee request) {
+    public ResponseEntity<Response> createEmployee(@RequestBody EmployeeDroRequest request) {
         try {
             principleService.hireEmployee(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Successfully added", request));
@@ -54,7 +53,7 @@ public class PrincipleController {
     }
 
     @PutMapping(value = "/update-employee")
-    public ResponseEntity<Response> updateEmployee(@RequestBody Employee request) {
+    public ResponseEntity<Response> updateEmployee(@RequestBody EmployeeDroRequest request) {
         try {
             EmployeeDto createEmployee = principleService.updateEmployee(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Updated successfully", createEmployee));
@@ -65,6 +64,11 @@ public class PrincipleController {
     @GetMapping("/get-all-employee")
     public List<EmployeeDto> getAllEmployee() {
         return principleService.getAllEmployee();
+    }
+
+    @GetMapping("/get-all-active-employee")
+    public List<EmployeeDto> getAllActiveEmployee() {
+        return principleService.getAllActiveEmployee();
     }
 
     @DeleteMapping(value = "/fire-employee/{id}")
@@ -78,7 +82,7 @@ public class PrincipleController {
     }
 
     @PostMapping(value = "/create-subject")
-    public ResponseEntity<Response> createSubject(@RequestBody Subject request) {
+    public ResponseEntity<Response> createSubject(@RequestBody SubjectDtoRequest request) {
         try {
             principleService.addSubject(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Successfully added", request));
@@ -87,9 +91,9 @@ public class PrincipleController {
         }
     }
     @PutMapping(value = "/update-subject")
-    public ResponseEntity<Response> updateSubject(@RequestBody Subject request) {
+    public ResponseEntity<Response> updateSubject(@RequestBody SubjectDtoRequest request) {
         try {
-            Subject createSubject = principleService.updateSubject(request);
+            SubjectDto createSubject = principleService.updateSubject(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Updated successfully", createSubject));
         } catch (ObjectNotFoundException exception) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
@@ -106,12 +110,53 @@ public class PrincipleController {
     }
 
     @PostMapping(value = "/create-charter")
-    public ResponseEntity<Response> createSubject(@RequestBody Charter request) {
+    public ResponseEntity<Response> createCharter(@RequestBody CharterDtoRequest request) {
         try {
             principleService.createCharter(request);
             return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Successfully added", request));
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Charter is not saved" + exception.getMessage(), null));
+        }
+    }
+
+    @PutMapping(value = "/update-charter")
+    public ResponseEntity<Response> updateCharter(@RequestBody CharterDtoRequest request) {
+        try {
+            CharterDto createCharter = principleService.updateCharter(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Updated successfully", createCharter));
+        } catch (ObjectNotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
+        }
+    }
+
+
+    @PostMapping(value = "/create-assignment")
+    public ResponseEntity<Response> createAssignment(@RequestBody AssignmentDtoRequest request) {
+        try {
+            principleService.createAssignment(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Successfully added", request));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Charter is not saved" + exception.getMessage(), null));
+        }
+    }
+
+//    @PostMapping(value = "/create-assignment-to-secretary")
+//    public ResponseEntity<Response> createAssignmentToSecretary(@RequestBody AssignmentDtoRequest request) {
+//        try {
+//            principleService.createAssignmentToSecretary(request);
+//            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Successfully added", request));
+//        } catch (Exception exception) {
+//            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Charter is not saved" + exception.getMessage(), null));
+//        }
+//    }
+
+    @PutMapping(value = "/update-assignment")
+    public ResponseEntity<Response> updateAssignment(@RequestBody AssignmentDtoRequest request) {
+        try {
+            AssignmentDto createAssignment = principleService.updateAssignment(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Updated successfully", createAssignment));
+        } catch (ObjectNotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
         }
     }
 }

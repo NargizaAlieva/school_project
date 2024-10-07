@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Entity
@@ -31,6 +32,5 @@ public class Subject {
     @JoinTable(name = "m2m_subjects_teachers",
             joinColumns = @JoinColumn(name = "subject_id", referencedColumnName = "id"),
             inverseJoinColumns = @JoinColumn(name = "teacher_id", referencedColumnName = "id"))
-    @JsonBackReference
-    private Set<Employee> teachersSet;
+    private Set<Employee> teachersSet = new HashSet<>();
 }

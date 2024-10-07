@@ -2,19 +2,18 @@ package org.example.school_project.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.example.school_project.entity.*;
 
+import java.util.HashSet;
 import java.util.Set;
 
 @Data
 @AllArgsConstructor
-public class EmployeeDto {
+public class EmployeeDroRequest {
     private Long id;
     private String position;
     private Integer salary;
-    private UserDto userDto;
-    private String subjectSet;
+    private Long userId;
+    private Set<Long> subjectSet = new HashSet<>();
 
-    public EmployeeDto(){}
-
+    public EmployeeDroRequest(){}
 }

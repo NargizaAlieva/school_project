@@ -1,32 +1,36 @@
 package org.example.school_project.service;
 
-import org.example.school_project.dto.EmployeeDto;
-import org.example.school_project.entity.Charter;
-import org.example.school_project.entity.Employee;
-import org.example.school_project.entity.Schedule;
-import org.example.school_project.entity.Subject;
+import org.example.school_project.dto.*;
+import org.example.school_project.entity.*;
 
 import java.util.List;
 
 public interface PrincipleService {
     // methods connected with schedule
-    Schedule getScheduleById(Long id);
-    Schedule approveSchedule(Long id);
-    List<Schedule> getAllSchedule();
-    List<Schedule> getAllUnApprovedSchedule();
+    ScheduleDto getScheduleById(Long id);
+    ScheduleDto approveSchedule(Long id);
+    List<ScheduleDto> getAllSchedule();
+    List<ScheduleDto> getAllUnApprovedSchedule();
 
-    // methods connected with employee
-    EmployeeDto hireEmployee(Employee employee);
-    EmployeeDto updateEmployee(Employee employee);
+    //methods connected with employee
+    EmployeeDto hireEmployee(EmployeeDroRequest employeeDtoR);
+    EmployeeDto updateEmployee(EmployeeDroRequest employeeDtoR);
     List<EmployeeDto> getAllEmployee();
+    List<EmployeeDto> getAllActiveEmployee();
     void fireEmployee(Long id);
 
     // methods connected with subject
-    Subject addSubject(Subject subject);
-    Subject updateSubject(Subject subject);
+    SubjectDto addSubject(SubjectDtoRequest subjectDtoRequest);
+    SubjectDto updateSubject(SubjectDtoRequest subjectDtoRequest);
     void deleteSubject(Long id);
 
     // methods connected with charter
-    Charter createCharter(Charter charter);
+    CharterDto createCharter(CharterDtoRequest charterDtoR);
+    CharterDto updateCharter(CharterDtoRequest charterDtoR);
+
+    // methods connected with assignment
+    AssignmentDto createAssignment(AssignmentDtoRequest assignmentDtoRequest);
+//    AssignmentDto createAssignmentToSecretary(AssignmentDtoRequest assignmentDtoRequest);
+    AssignmentDto updateAssignment(AssignmentDtoRequest assignmentDtoRequest);
 
 }

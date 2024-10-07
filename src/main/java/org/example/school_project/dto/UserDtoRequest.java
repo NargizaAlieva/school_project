@@ -1,7 +1,7 @@
 package org.example.school_project.dto;
 
-import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import org.example.school_project.entity.Role;
 
 import java.time.LocalDateTime;
@@ -9,7 +9,7 @@ import java.util.Set;
 
 @Data
 @AllArgsConstructor
-public class UserDto {
+public class UserDtoRequest {
     private Long id;
     private String username;
     private String firstName;
@@ -17,9 +17,9 @@ public class UserDto {
     private String middleName;
     private String phone;
     private String email;
+    private String password;
     private LocalDateTime creationDate;
-    private Boolean isActive;
-    private Set<Role> roleSet;
+    private Set<Long> roleSet;
 
-    public UserDto() {}
+    public UserDtoRequest(){}
 }

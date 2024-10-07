@@ -23,11 +23,11 @@ public class Assignment {
     @Column(name = "is_done")
     private Boolean isDone = false;
     @Column(name = "creation_date", nullable = false)
-    private Timestamp creationDate;
+    private Timestamp creationDate = Timestamp.valueOf(LocalDateTime.now());
 
     @ManyToOne
     @JoinColumn(name = "author_id", referencedColumnName = "id")
-    private User authorOfAssignments;
+    private Employee authorOfAssignments;
 
     @ManyToOne
     @JoinColumn(name = "receiver_id", referencedColumnName = "id")
