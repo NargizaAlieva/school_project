@@ -17,7 +17,6 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(name = "message", nullable = false)
     private String message;
     @Column(name = "is_read")

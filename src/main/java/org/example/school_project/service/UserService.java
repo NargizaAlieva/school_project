@@ -7,6 +7,7 @@ import org.example.school_project.entity.User;
 import java.util.List;
 
 public interface UserService {
+    UserDto save(User user);
     User getCurrentUser();
     User getUserWithRole(String role);
     UserDto getById(Long id);

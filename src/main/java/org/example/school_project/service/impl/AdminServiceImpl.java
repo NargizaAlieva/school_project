@@ -2,8 +2,12 @@ package org.example.school_project.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.school_project.dto.*;
+import org.example.school_project.entity.Role;
+import org.example.school_project.entity.User;
 import org.example.school_project.service.*;
 import org.springframework.stereotype.Service;
+
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -12,6 +16,37 @@ public class AdminServiceImpl implements AdminService {
     private final EmployeeService employeeService;
     private final StudentService studentService;
     private final ParentService parentService;
+    private final RoleService roleService;
+
+    @Override
+    public UserDto addRoleToUser(RoleDto roleDto) {
+        User user = userService.getEntityById(roleDto.getUserId());
+
+        Set<Role> roleSet = user.getRoleSet();
+        Set<Long> roleIdSet = roleDto.getRoleIdSet();
+        for (Long r : roleIdSet) {
+            Role role = roleService.findById(r);
+            roleService.addUser(role, user);
+            roleSet.add(role);
+        }
+        user.setRoleSet(roleSet);
+        return userService.save(user);
+    }
+
+    @Override
+    public UserDto removeRoleFromUser(RoleDto roleDto) {
+        User user = userService.getEntityById(roleDto.getUserId());
+
+        Set<Role> roleSet = user.getRoleSet();
+        Set<Long> roleIdSet = roleDto.getRoleIdSet();
+        for (Long r : roleIdSet) {
+            Role role = roleService.findById(r);
+            roleService.removeUser(role, user);
+            roleSet.remove(roleService.findById(r));
+        }
+        user.setRoleSet(roleSet);
+        return userService.saveUser(user);
+    }
 
     @Override
     public UserDto createUser(UserDtoRequest userDtoRequest) {

@@ -44,8 +44,7 @@ public class User implements UserDetails {
     @Column(name = "is_active", nullable = false)
     private Boolean isActive = true;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "userSet")
-    @JsonManagedReference
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, mappedBy = "userSet")
     private Set<Role> roleSet = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "receiverOfAssignments")
@@ -63,8 +62,8 @@ public class User implements UserDetails {
     @PrePersist
     private void prePersist() {
         creationDate = LocalDateTime.now();
-    }
 
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roleSet.stream()

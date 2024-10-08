@@ -3,6 +3,7 @@ package org.example.school_project.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -22,5 +23,5 @@ public class Parent {
     private User user;
 
     @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
-    private List<Student> childrenList;
+    private List<Student> childrenList = new ArrayList<>();
 }

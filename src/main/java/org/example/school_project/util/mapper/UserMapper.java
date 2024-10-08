@@ -19,6 +19,13 @@ import java.util.stream.Collectors;
 public class UserMapper {
     private final RoleService roleService;
     public UserDto entityToDto(User user) {
+        Set<Role> roleSet = user.getRoleSet();
+        Set<String> roleTitleSet = new HashSet<>();
+
+        for(Role r : roleSet) {
+            roleTitleSet.add(r.getTitle());
+        }
+
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());
         userDto.setUsername(user.getUsername());
@@ -29,7 +36,7 @@ public class UserMapper {
         userDto.setPhone(user.getPhone());
         userDto.setIsActive(user.getIsActive());
         userDto.setCreationDate(user.getCreationDate());
-        userDto.setRoleSet(user.getRoleSet());
+        userDto.setRoleSet(roleTitleSet);
         return userDto;
     }
 

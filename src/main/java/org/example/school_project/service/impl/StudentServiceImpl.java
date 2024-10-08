@@ -31,6 +31,6 @@ public class StudentServiceImpl implements StudentService {
         newStudent.setParent(oldStudent.getParent());
         newStudent.setGrade(oldStudent.getGrade());
         newStudent.setUser(oldStudent.getUser());
-        return null;
+        return studentMapper.entityToDto(studentRepository.save(newStudent));
     }
 }

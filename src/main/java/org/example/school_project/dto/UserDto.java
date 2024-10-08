@@ -18,7 +18,7 @@ public class UserDto {
     private String email;
     private LocalDateTime creationDate;
     private Boolean isActive;
-    private Set<Role> roleSet;
+    private Set<String> roleSet;
 
     public UserDto() {}
 }
