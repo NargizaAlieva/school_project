@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 public class AssignmentDto {
+    private Long id;
     private String assignment;
     private Boolean isDone;
     private LocalDateTime creationDate;

@@ -85,10 +85,14 @@ VALUES
     ('Prepare the annual report', 2, 1),
     ('Organize the parent-teacher meeting', 1, 2);
 
-INSERT INTO messages (message, author_id, receiver_id)
+INSERT INTO messages (message, theme, title, author_id, receiver_id)
 VALUES
-    ('Please review the report', 2, 1),
-    ('Meeting at 3 PM', 1, 2);
+    ('Please review the report','ADMISSION', 'Title1', 2, 1),
+    ('Please review the report','ADMISSION', 'Title1', 2, 1),
+    ('Please review the report','APPEAL', 'Title1', 2, 1),
+    ('Please review the report','NORMAL', 'Title1', 2, 1),
+    ('Please review the report','APPEAL', 'Title1', 2, 1),
+    ('Please review the report','NORMAL', 'Title1', 2, 1);
 
 INSERT INTO charters (title, description, employee_id)
 VALUES

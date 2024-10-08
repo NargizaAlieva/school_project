@@ -44,7 +44,8 @@ public class User implements UserDetails {
     @Column(name = "is_active", nullable = false)
     private Boolean isActive = true;
 
-    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, mappedBy = "userSet")
+    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "userSet")
+    @JsonBackReference
     private Set<Role> roleSet = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "receiverOfAssignments")

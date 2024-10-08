@@ -69,6 +69,7 @@ public class AssignmentServiceImpl implements AssignmentService{
     public AssignmentDto markAsDone(Long id) {
         Assignment assignment = assignmentRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Assignment"));
         assignment.setIsDone(true);
+        save(assignment);
         return assignmentMapper.entityToDto(assignment);
     }
 
@@ -86,5 +87,9 @@ public class AssignmentServiceImpl implements AssignmentService{
             if(!assignmentDto.getIsDone()) undoneAssignment.add(assignmentDto);
         }
         return undoneAssignment;
+    }
+
+    public void save(Assignment assignment) {
+        assignmentRepository.save(assignment);
     }
 }

@@ -2,6 +2,7 @@ package org.example.school_project.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.school_project.enums.MessageTheme;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -17,6 +18,11 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "theme", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private MessageTheme theme;
+    @Column(name = "title")
+    private String title;
     @Column(name = "message", nullable = false)
     private String message;
     @Column(name = "is_read")

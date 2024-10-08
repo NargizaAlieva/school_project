@@ -15,4 +15,6 @@ public class MessageDto {
     private Boolean isRead = false;
     private LocalDateTime creationDate;
     private String authorName;
+
+    public MessageDto(){}
 }
