@@ -3,6 +3,7 @@ package org.example.school_project.service.impl;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.school_project.dto.UserDto;
+import org.example.school_project.dto.UserDtoRequest;
 import org.example.school_project.entity.Role;
 import org.example.school_project.entity.User;
 import org.example.school_project.repository.UserRepository;
@@ -34,6 +35,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userMapper.entityToDto(user);
     }
 
+    @Override
+    public UserDto saveUser(User user) {
+        return userMapper.entityToDto(userRepository.save(user));
+    }
+
     public User getEntityById(Long id) {
         if (id == null) {
             return null;
@@ -57,7 +63,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
 
     }
 
-    public User getUsername(String username) {
+    public User getByUsernameEntity(String username) {
         return userRepository.findByUsername(username)
                 .orElseThrow(() -> new ObjectNotFoundException("User"));
     }
@@ -68,14 +74,8 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
-    public void createUser(User user) {
-        if (userRepository.existsByUsername(user.getUsername())) {
-            throw new AlreadyExistException("username");
-        }
-        if (userRepository.existsByEmail(user.getEmail())) {
-            throw new RuntimeException("email");
-        }
-        save(user);
+    public UserDto createUser(UserDtoRequest userDtoRequest) {
+        return userMapper.entityToDto(userRepository.save(userMapper.dtoToEntity(userDtoRequest)));
     }
 
     public UserDto save(User user) {
@@ -99,15 +99,27 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         }
         User user = userRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("User"));
         user.setIsActive(false);
-        updateUser(user);
+        userRepository.save(user);
     }
 
     @Override
-    public UserDto updateUser(User request) throws ObjectNotFoundException {
-        User user = userRepository.findById(request.getId()).orElseThrow(() -> new ObjectNotFoundException("User"));
-        user = buildUser(request, user);
-        userRepository.save(user);
-        return userMapper.entityToDto(user);
+    public UserDto updateUser(UserDtoRequest request) throws ObjectNotFoundException {
+        User oldUser = userMapper.dtoToEntity(request);
+        User newUser = userRepository.findById(request.getId()).orElseThrow(() -> new ObjectNotFoundException("User"));
+
+        newUser.setId(oldUser.getId());
+        newUser.setUsername(oldUser.getUsername());
+        newUser.setFirstName(oldUser.getFirstName());
+        newUser.setLastName(oldUser.getLastName());
+        newUser.setMiddleName(oldUser.getMiddleName());
+        newUser.setEmail(oldUser.getEmail());
+        newUser.setPhone(oldUser.getPhone());
+        newUser.setPassword(oldUser.getPassword());
+        newUser.setIsActive(oldUser.getIsActive());
+        newUser.setCreationDate(oldUser.getCreationDate());
+        newUser.setRoleSet(oldUser.getRoleSet());
+
+        return userMapper.entityToDto(userRepository.save(newUser));
     }
 
     private User buildUser(User user, User newUser) {
@@ -142,7 +154,7 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     public UserDetailsService userDetailsService() {
-        return this::getUsername;
+        return this::getByUsernameEntity;
     }
 
     @Override

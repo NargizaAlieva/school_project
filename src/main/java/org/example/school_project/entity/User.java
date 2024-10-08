@@ -10,9 +10,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Entity
@@ -48,19 +46,19 @@ public class User implements UserDetails {
 
     @ManyToMany(fetch = FetchType.EAGER, mappedBy = "userSet")
     @JsonManagedReference
-    private Set<Role> roleSet;
+    private Set<Role> roleSet = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "receiverOfAssignments")
-    private List<Assignment> receiverOfAssignments;
+    private List<Assignment> receiverOfAssignments = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "authorMessage")
-    private List<Message> authorOfMessages;
+    private List<Message> authorOfMessages = new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "receiverMessage")
-    private List<Message> receiverOfMessages;
+    private List<Message> receiverOfMessages= new ArrayList<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "authorReview")
-    private List<Review> authorOfReviews;
+    private List<Review> authorOfReviews = new ArrayList<>();
 
     @PrePersist
     private void prePersist() {

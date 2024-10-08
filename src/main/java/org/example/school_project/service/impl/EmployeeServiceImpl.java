@@ -82,6 +82,6 @@ public class EmployeeServiceImpl implements EmployeeService{
         Employee employee = employeeRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Employee"));
         User user = employee.getUser();
         user.setIsActive(false);
-        userService.updateUser(user);
+        userService.saveUser(user);
     }
 }

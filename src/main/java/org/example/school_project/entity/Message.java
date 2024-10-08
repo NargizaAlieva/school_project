@@ -23,7 +23,7 @@ public class Message {
     @Column(name = "is_read")
     private Boolean isRead = false;
     @Column(name = "creation_date", nullable = false)
-    private Timestamp creationDate;
+    private LocalDateTime creationDate;
 
     @ManyToOne
     @JoinColumn(name = "author_id", referencedColumnName = "id")
@@ -35,6 +35,6 @@ public class Message {
 
     @PrePersist
     private void prePersist() {
-        creationDate = Timestamp.valueOf(LocalDateTime.now());
+        creationDate = LocalDateTime.now();
     }
 }

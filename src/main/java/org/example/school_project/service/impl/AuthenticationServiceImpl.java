@@ -33,7 +33,7 @@ public class AuthenticationServiceImpl {
                 .roleSet(request.getRoleSet())
                 .build();
 
-        userService.createUser(user);
+        userService.saveUser(user);
 
         var jwt = jwtService.generateToken(user);
         return new JwtAuthenticationResponse(jwt);

@@ -10,6 +10,7 @@ import org.example.school_project.service.EmployeeService;
 import org.springframework.stereotype.Component;
 
 import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -26,7 +27,7 @@ public class CharterMapper {
         charterDto.setTitle(charter.getTitle());
         charterDto.setDescription(charter.getDescription());
         charterDto.setAuthorName(authorFullName);
-        charterDto.setCreationDate(Timestamp.valueOf(author.getCreationDate()));
+        charterDto.setCreationDate(author.getCreationDate());
         return charterDto;
     }
     public List<CharterDto> entityToDtoList(List<Charter> charters) {
@@ -34,6 +35,7 @@ public class CharterMapper {
     }
 
     public Charter dtoToEntity(CharterDtoRequest charterDtoRequest) {
+        if(charterDtoRequest.getCreationDate() == null) charterDtoRequest.setCreationDate(LocalDateTime.now());
         Employee employee = employeeService.findByIdEntity(charterDtoRequest.getAuthorId());
         Charter charter = new Charter();
         charter.setTitle(charterDtoRequest.getTitle());

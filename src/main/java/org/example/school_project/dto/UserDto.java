@@ -1,6 +1,5 @@
 package org.example.school_project.dto;
 
-import jakarta.persistence.*;
 import lombok.*;
 import org.example.school_project.entity.Role;
 

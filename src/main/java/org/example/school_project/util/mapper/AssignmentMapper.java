@@ -8,6 +8,7 @@ import org.example.school_project.service.EmployeeService;
 import org.example.school_project.service.UserService;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -39,9 +40,11 @@ public class AssignmentMapper {
     }
 
     public Assignment dtoToEntityForSecretary(AssignmentDtoRequest assignmentDtoRequest) {
+        if(assignmentDtoRequest.getCreationDate() == null) assignmentDtoRequest.setCreationDate(LocalDateTime.now());
         Assignment assignment = new Assignment();
         assignment.setId(assignmentDtoRequest.getId());
         assignment.setAssignment(assignmentDtoRequest.getAssignment());
+        assignment.setCreationDate(assignmentDtoRequest.getCreationDate());
         assignment.setIsDone(assignmentDtoRequest.getIsDone());
         return assignment;
     }

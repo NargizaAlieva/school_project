@@ -8,6 +8,7 @@ import org.example.school_project.entity.User;
 import org.example.school_project.service.RoleService;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -44,6 +45,8 @@ public class UserMapper {
             roleSet.add(roleService.findById(r));
         }
 
+        if(userDtoRequest.getCreationDate() == null) userDtoRequest.setCreationDate(LocalDateTime.now());
+
         User user = new User();
         user.setId(userDtoRequest.getId());
         user.setUsername(userDtoRequest.getUsername());
@@ -51,7 +54,9 @@ public class UserMapper {
         user.setLastName(userDtoRequest.getLastName());
         user.setMiddleName(userDtoRequest.getMiddleName());
         user.setEmail(userDtoRequest.getEmail());
+        user.setPassword(userDtoRequest.getPassword());
         user.setPhone(userDtoRequest.getPhone());
+        user.setCreationDate(userDtoRequest.getCreationDate());
         user.setRoleSet(roleSet);
         return user;
     }

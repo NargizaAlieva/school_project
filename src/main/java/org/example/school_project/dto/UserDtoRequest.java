@@ -2,7 +2,6 @@ package org.example.school_project.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.example.school_project.entity.Role;
 
 import java.time.LocalDateTime;
 import java.util.Set;
@@ -20,6 +19,4 @@ public class UserDtoRequest {
     private String password;
     private LocalDateTime creationDate;
     private Set<Long> roleSet;
-
-    public UserDtoRequest(){}
 }
