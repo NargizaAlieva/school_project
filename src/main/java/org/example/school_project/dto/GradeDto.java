@@ -7,12 +7,11 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class CharterDtoRequest {
+public class GradeDto {
     private Long id;
     private String title;
-    private String description;
     private LocalDateTime creationDate;
-    private Long authorId;
-
-    public CharterDtoRequest(){}
+    private String classTeacher;
+    private Integer studentCount;
+    public GradeDto(){}
 }

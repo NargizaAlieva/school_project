@@ -28,7 +28,7 @@ public class ParentServiceImpl implements ParentService {
 
     @Override
     public ParentDto updateParent(ParentDtoRequest parentDtoRequest) {
-        Parent newParent = new Parent();
+        Parent newParent = getByIdEntity(parentDtoRequest.getId());
         Parent oldParent = parentMapping.dtoToEntity(parentDtoRequest);
 
         newParent.setId(oldParent.getId());

@@ -22,6 +22,7 @@ public class CharterMapper {
         User author = charter.getAuthorOfCharter().getUser();
         String authorFullName = author.getFirstName() + " " + author.getLastName();
         if (author.getMiddleName() != null) authorFullName = " " + author.getMiddleName();
+
         CharterDto charterDto = new CharterDto();
         charterDto.setId(charter.getId());
         charterDto.setTitle(charter.getTitle());
@@ -38,6 +39,7 @@ public class CharterMapper {
         if(charterDtoRequest.getCreationDate() == null) charterDtoRequest.setCreationDate(LocalDateTime.now());
         Employee employee = employeeService.findByIdEntity(charterDtoRequest.getAuthorId());
         Charter charter = new Charter();
+        charter.setId(charterDtoRequest.getId());
         charter.setTitle(charterDtoRequest.getTitle());
         charter.setDescription(charterDtoRequest.getDescription());
         charter.setAuthorOfCharter(employee);

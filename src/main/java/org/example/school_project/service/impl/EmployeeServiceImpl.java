@@ -51,7 +51,7 @@ public class EmployeeServiceImpl implements EmployeeService{
             throw new ObjectNotFoundException("User");
         }
         Employee oldEmployee = employeeMapper.dtoToEntity(employeeDtoR);
-        Employee newEmployee = new Employee();
+        Employee newEmployee = findByIdEntity(employeeDtoR.getUserId());
 
         newEmployee.setId(oldEmployee.getId());
         newEmployee.setPosition(oldEmployee.getPosition());
