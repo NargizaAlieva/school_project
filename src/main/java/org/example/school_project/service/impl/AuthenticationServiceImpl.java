@@ -20,7 +20,6 @@ public class AuthenticationServiceImpl {
 
     // Регистрация пользователя
     public JwtAuthenticationResponse signUp(SignUpRequest request) {
-
         var user = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
@@ -30,10 +29,9 @@ public class AuthenticationServiceImpl {
                 .middleName(request.getMiddleName())
                 .phone(request.getPhone())
                 .isActive(request.getIsActive())
-                .roleSet(request.getRoleSet())
                 .build();
 
-        userService.createUser(user);
+        userService.saveUser(user);
 
         var jwt = jwtService.generateToken(user);
         return new JwtAuthenticationResponse(jwt);

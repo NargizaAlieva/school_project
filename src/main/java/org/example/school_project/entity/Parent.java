@@ -3,6 +3,9 @@ package org.example.school_project.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Table(name = "parents")
 @Builder(toBuilder = true)
@@ -18,4 +21,7 @@ public class Parent {
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id", referencedColumnName = "id")
     private User user;
+
+    @OneToMany(mappedBy = "parent", fetch = FetchType.LAZY)
+    private List<Student> childrenList = new ArrayList<>();
 }

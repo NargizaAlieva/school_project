@@ -1,6 +1,5 @@
 package org.example.school_project.dto;
 
-import jakarta.persistence.*;
 import lombok.*;
 import org.example.school_project.entity.Role;
 
@@ -17,10 +16,9 @@ public class UserDto {
     private String middleName;
     private String phone;
     private String email;
-    private String password;
     private LocalDateTime creationDate;
     private Boolean isActive;
-    private Set<Role> roleSet;
+    private Set<String> roleSet;
 
     public UserDto() {}
 }

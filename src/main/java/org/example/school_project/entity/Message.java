@@ -17,13 +17,12 @@ public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(name = "message", nullable = false)
     private String message;
     @Column(name = "is_read")
     private Boolean isRead = false;
     @Column(name = "creation_date", nullable = false)
-    private Timestamp creationDate;
+    private LocalDateTime creationDate;
 
     @ManyToOne
     @JoinColumn(name = "author_id", referencedColumnName = "id")
@@ -35,6 +34,6 @@ public class Message {
 
     @PrePersist
     private void prePersist() {
-        creationDate = Timestamp.valueOf(LocalDateTime.now());
+        creationDate = LocalDateTime.now();
     }
 }

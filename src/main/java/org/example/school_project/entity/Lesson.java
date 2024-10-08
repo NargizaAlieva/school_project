@@ -3,7 +3,6 @@ package org.example.school_project.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,7 +22,7 @@ public class Lesson {
     @Column(name = "homework")
     private String homework;
     @Column(name = "creation_date", nullable = false)
-    private Timestamp creationDate;
+    private LocalDateTime creationDate;
 
     @ManyToOne
     @JoinColumn(name = "schedule_id", referencedColumnName = "id")
@@ -38,6 +37,6 @@ public class Lesson {
 
     @PrePersist
     private void prePersist() {
-        creationDate = Timestamp.valueOf(LocalDateTime.now());
+        creationDate = LocalDateTime.now();
     }
 }

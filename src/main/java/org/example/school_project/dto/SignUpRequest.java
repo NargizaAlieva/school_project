@@ -30,7 +30,6 @@ public class SignUpRequest {
     private String phone;
     private LocalDateTime creationDate;
     private Boolean isActive = true;
-    private Set<Role> roleSet;
 }
 
 

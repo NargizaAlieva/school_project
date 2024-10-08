@@ -1,21 +1,17 @@
 package org.example.school_project.entity;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
-
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.time.LocalDateTime;
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
-
-import java.time.LocalDateTime;
-import java.util.Set;
 
 @Entity
 @Table(name = "users")
@@ -48,20 +44,26 @@ public class User implements UserDetails {
     @Column(name = "is_active", nullable = false)
     private Boolean isActive = true;
 
-    @ManyToMany(fetch = FetchType.EAGER, mappedBy = "userSet")
-    @JsonBackReference
-    private Set<Role> roleSet;
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER, mappedBy = "userSet")
+    private Set<Role> roleSet = new HashSet<>();
 
-    public User setRoleSet(Set<Role> roleSet) {
-        this.roleSet = roleSet;
-        return this;
-    }
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "receiverOfAssignments")
+    private List<Assignment> receiverOfAssignments = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "authorMessage")
+    private List<Message> authorOfMessages = new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "receiverMessage")
+    private List<Message> receiverOfMessages= new ArrayList<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "authorReview")
+    private List<Review> authorOfReviews = new ArrayList<>();
 
     @PrePersist
     private void prePersist() {
         creationDate = LocalDateTime.now();
-    }
 
+    }
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roleSet.stream()

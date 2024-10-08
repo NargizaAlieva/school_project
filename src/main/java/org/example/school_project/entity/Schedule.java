@@ -22,7 +22,7 @@ public class Schedule {
     @Column(name = "quarter", nullable = false)
     private Integer quarter;
     @Column(name = "due_time", nullable = false)
-    private String due_time;
+    private String dueTime;
     @Column(name = "year", nullable = false)
     private String year;
     @Column(name = "is_approve")

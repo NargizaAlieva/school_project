@@ -3,7 +3,6 @@ package org.example.school_project.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
 @Entity
@@ -23,11 +22,11 @@ public class Assignment {
     @Column(name = "is_done")
     private Boolean isDone = false;
     @Column(name = "creation_date", nullable = false)
-    private Timestamp creationDate;
+    private LocalDateTime creationDate;
 
     @ManyToOne
     @JoinColumn(name = "author_id", referencedColumnName = "id")
-    private User authorOfAssignments;
+    private Employee authorOfAssignments;
 
     @ManyToOne
     @JoinColumn(name = "receiver_id", referencedColumnName = "id")
@@ -35,6 +34,6 @@ public class Assignment {
 
     @PrePersist
     private void prePersist() {
-        creationDate = Timestamp.valueOf(LocalDateTime.now());
+        creationDate = LocalDateTime.now();
     }
 }
