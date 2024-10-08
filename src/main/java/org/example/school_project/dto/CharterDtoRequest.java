@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 public class CharterDtoRequest {
+    private Long id;
     private String title;
     private String description;
     private LocalDateTime creationDate;

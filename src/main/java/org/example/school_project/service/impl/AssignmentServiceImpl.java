@@ -25,6 +25,10 @@ public class AssignmentServiceImpl implements AssignmentService{
     private final UserService userService;
     private final EmployeeService employeeService;
 
+    public Assignment getAssignmentByIdEntity(Long id) {
+        return assignmentRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Assignment"));
+    }
+
     @Override
     public AssignmentDto createAssigment(AssignmentDtoRequest assignmentDtoRequest) {
         return assignmentMapper.entityToDto(assignmentRepository.save(assignmentMapper.dtoToEntity(assignmentDtoRequest)));
@@ -55,7 +59,8 @@ public class AssignmentServiceImpl implements AssignmentService{
     @Override
     public AssignmentDto updateAssignment(AssignmentDtoRequest assignmentDtoRequest) {
         Assignment oldAssignment = assignmentMapper.dtoToEntity(assignmentDtoRequest);
-        Assignment newAssignment = new Assignment();
+        Assignment newAssignment = getAssignmentByIdEntity(assignmentDtoRequest.getId());
+
         newAssignment.setId(oldAssignment.getId());
         newAssignment.setAssignment(oldAssignment.getAssignment());
         newAssignment.setIsDone(oldAssignment.getIsDone());
@@ -69,6 +74,7 @@ public class AssignmentServiceImpl implements AssignmentService{
     public AssignmentDto markAsDone(Long id) {
         Assignment assignment = assignmentRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Assignment"));
         assignment.setIsDone(true);
+        save(assignment);
         return assignmentMapper.entityToDto(assignment);
     }
 
@@ -86,5 +92,9 @@ public class AssignmentServiceImpl implements AssignmentService{
             if(!assignmentDto.getIsDone()) undoneAssignment.add(assignmentDto);
         }
         return undoneAssignment;
+    }
+
+    public void save(Assignment assignment) {
+        assignmentRepository.save(assignment);
     }
 }

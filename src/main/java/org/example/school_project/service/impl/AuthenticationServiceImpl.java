@@ -10,6 +10,8 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
+
 @Service
 @RequiredArgsConstructor
 public class AuthenticationServiceImpl {
@@ -29,6 +31,7 @@ public class AuthenticationServiceImpl {
                 .middleName(request.getMiddleName())
                 .phone(request.getPhone())
                 .isActive(request.getIsActive())
+                .roleSet(new HashSet<>())
                 .build();
 
         userService.saveUser(user);

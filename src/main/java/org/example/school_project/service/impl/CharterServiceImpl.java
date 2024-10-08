@@ -19,6 +19,10 @@ public class CharterServiceImpl implements CharterService {
     private final CharterRepository charterRepository;
     private final CharterMapper charterMapper;
     private final EmployeeService employeeService;
+
+    public Charter getCharterByIdEntity(Long id) {
+        return charterRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Charter"));
+    }
     @Override
     public CharterDto createCharter(CharterDtoRequest charterDtoR) {
         if(employeeService.findByIdEntity(charterDtoR.getAuthorId()) == null)
@@ -28,9 +32,11 @@ public class CharterServiceImpl implements CharterService {
 
     @Override
     public CharterDto updateCharter(CharterDtoRequest charterDtoR) {
+        if (getCharterByIdEntity(charterDtoR.getId()) == null) return null;
+
         Charter oldCharter = charterMapper.dtoToEntity(charterDtoR);
-        if (charterRepository.findById(oldCharter.getId()).isEmpty()) throw new ObjectNotFoundException("Charter");;
-        Charter newCharter = new Charter();
+        Charter newCharter = getCharterByIdEntity(charterDtoR.getId());
+
         newCharter.setId(oldCharter.getId());
         newCharter.setTitle(oldCharter.getTitle());
         newCharter.setDescription(oldCharter.getDescription());

@@ -123,6 +123,8 @@ create table if not exists assignments (
 create table if not exists messages (
     id bigserial primary key,
     message varchar not null,
+    theme varchar not null,
+    title varchar,
     author_id bigint references employees(id),
     receiver_id bigint references users(id),
     creation_date timestamp not null default now(),

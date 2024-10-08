@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -29,10 +31,10 @@ public class Grade {
     private Employee classTeacher;
 
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "grade")
-    private Set<Student> studentSet;
+    private Set<Student> studentSet = new HashSet<>();
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "gradeSchedule")
-    private List<Schedule> scheduleList;
+    private List<Schedule> scheduleList = new ArrayList<>();
 
     @PrePersist
     private void prePersist() {

@@ -19,6 +19,7 @@ public class AssignmentMapper {
     private final EmployeeService employeeService;
     public AssignmentDto entityToDto(Assignment assignment) {
         AssignmentDto assignmentDto = new AssignmentDto();
+        assignmentDto.setId(assignment.getId());
         assignmentDto.setAssignment(assignment.getAssignment());
         assignmentDto.setIsDone(assignment.getIsDone());
         assignmentDto.setCreationDate(assignment.getCreationDate());

@@ -9,7 +9,7 @@ import org.example.school_project.enums.DaysOfWeek;
 @AllArgsConstructor
 public class ScheduleDtoRequest {
     private Long id;
-    private DaysOfWeek dayOfWeek;
+    private String dayOfWeek;
     private Integer quarter;
     private String dueTime;
     private String year;

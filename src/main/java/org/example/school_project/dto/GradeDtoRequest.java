@@ -7,11 +7,9 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class AssignmentDto {
+public class GradeDtoRequest {
     private Long id;
-    private String assignment;
-    private Boolean isDone;
+    private String title;
     private LocalDateTime creationDate;
-
-    public AssignmentDto(){}
+    private Long classTeacherId;
 }

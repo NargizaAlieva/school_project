@@ -27,11 +27,12 @@ public class SubjectServiceImpl implements SubjectService {
 
     @Override
     public SubjectDto updateSubject(SubjectDtoRequest subjectDtoRequest) {
-        if(subjectRepository.findById(subjectDtoRequest.getId()).isEmpty()){
+        if(findByIdEntity(subjectDtoRequest.getId()) == null){
             throw new ObjectNotFoundException("Subject");
         }
         Subject oldSubject = subjectMapper.dtoToEntity(subjectDtoRequest);
-        Subject newSubject = new Subject();
+        Subject newSubject = findByIdEntity(subjectDtoRequest.getId());
+
         newSubject.setId(oldSubject.getId());
         newSubject.setTitle(oldSubject.getTitle());
         newSubject.setDescription(oldSubject.getDescription());
