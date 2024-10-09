@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.school_project.dto.EmployeeDroRequest;
 import org.example.school_project.dto.EmployeeDto;
 import org.example.school_project.entity.Employee;
+import org.example.school_project.entity.Grade;
 import org.example.school_project.entity.User;
 import org.example.school_project.repository.EmployeeRepository;
 import org.example.school_project.service.EmployeeService;
@@ -28,13 +29,22 @@ public class EmployeeServiceImpl implements EmployeeService{
     }
 
     @Override
-    public EmployeeDto getByUserId(Long id) {
-        List<EmployeeDto> allEmployee = getAllEmployee();
-        for (EmployeeDto employee : allEmployee) {
-            if (employee.getUserDto().getId().equals(id))
+    public Employee getByUserId(Long id) {
+        List<Employee> allEmployee = getAllEmployeeEntity();
+        for (Employee employee : allEmployee) {
+            if (employee.getUser().getId().equals(id))
                 return employee;
         }
         throw new ObjectNotFoundException("Employee");
+    }
+
+    @Override
+    public List<Long> getHomeClassesId() {
+        Employee employee = getByUserId(userService.getCurrentUser().getId());
+        List<Long> homeGradeId = new ArrayList<>();
+        for (Grade g : employee.getHomeGrades())
+            homeGradeId.add(g.getId());
+        return homeGradeId;
     }
 
     @Override
@@ -83,5 +93,8 @@ public class EmployeeServiceImpl implements EmployeeService{
         User user = employee.getUser();
         user.setIsActive(false);
         userService.saveUser(user);
+    }
+    public List<Employee> getAllEmployeeEntity() {
+        return employeeRepository.findAll();
     }
 }

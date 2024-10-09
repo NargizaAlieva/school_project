@@ -23,7 +23,6 @@ public class AssignmentServiceImpl implements AssignmentService{
     private final AssignmentRepository assignmentRepository;
     private final AssignmentMapper assignmentMapper;
     private final UserService userService;
-    private final EmployeeService employeeService;
 
     public Assignment getAssignmentByIdEntity(Long id) {
         return assignmentRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Assignment"));
@@ -86,12 +85,60 @@ public class AssignmentServiceImpl implements AssignmentService{
     @Override
     public List<AssignmentDto> getAllUndoneAssignment() {
         List<AssignmentDto> undoneAssignment = new ArrayList<>();
-        List<AssignmentDto> allAssignment = getAllAssignment();
 
-        for (AssignmentDto assignmentDto : allAssignment) {
+        for (AssignmentDto assignmentDto : getAllAssignment()) {
             if(!assignmentDto.getIsDone()) undoneAssignment.add(assignmentDto);
         }
         return undoneAssignment;
+    }
+
+    @Override
+    public List<AssignmentDto> getAllDoneAssignment() {
+        List<AssignmentDto> doneAssignment = new ArrayList<>();
+
+        for (AssignmentDto assignmentDto : getAllAssignment()) {
+            if(assignmentDto.getIsDone()) doneAssignment.add(assignmentDto);
+        }
+        return doneAssignment;
+    }
+
+    @Override
+    public List<AssignmentDto> getAllAssignmentFromReceiver(List<Long> receiverIds) {
+        List<AssignmentDto> assignmentList = new ArrayList<>();
+        for (AssignmentDto a : getAllAssignment())
+            for (Long id : receiverIds)
+                if (a.getReceiverId().equals(id))
+                    assignmentList.add(a);
+        return assignmentList;
+    }
+
+    @Override
+    public List<AssignmentDto> getAllAssignmentFromReceiver(Long id) {
+        List<AssignmentDto> assignmentList = new ArrayList<>();
+        for (AssignmentDto a : getAllAssignment())
+            if (a.getReceiverId().equals(id))
+                assignmentList.add(a);
+        return assignmentList;
+    }
+
+    @Override
+    public List<AssignmentDto> getAllUndoneAssignmentFrom(List<Long> ids) {
+        List<AssignmentDto> undoneAssignment = new ArrayList<>();
+
+        for (AssignmentDto assignmentDto : getAllAssignmentFromReceiver(ids)) {
+            if(!assignmentDto.getIsDone()) undoneAssignment.add(assignmentDto);
+        }
+        return undoneAssignment;
+    }
+
+    @Override
+    public List<AssignmentDto> getAllDoneAssignmentFrom(List<Long> ids) {
+        List<AssignmentDto> doneAssignment = new ArrayList<>();
+
+        for (AssignmentDto assignmentDto : getAllAssignmentFromReceiver(ids)) {
+            if(assignmentDto.getIsDone()) doneAssignment.add(assignmentDto);
+        }
+        return doneAssignment;
     }
 
     public void save(Assignment assignment) {

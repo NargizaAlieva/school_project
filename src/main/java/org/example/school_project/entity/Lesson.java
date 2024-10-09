@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "lessons")
@@ -28,12 +30,12 @@ public class Lesson {
     @JoinColumn(name = "schedule_id", referencedColumnName = "id")
     private Schedule schedule;
 
-//    @OneToMany(mappedBy = "lessonMark")
-//    private List<Mark> markList;
-//    @OneToMany(mappedBy = "lessonAttendance")
-//    private List<Attendance> attendanceList;
-//    @OneToMany(mappedBy = "lessonHW")
-//    private List<Homework> homeworkList;
+    @OneToMany(mappedBy = "lessonMark")
+    private List<Mark> markList = new ArrayList<>();
+    @OneToMany(mappedBy = "lessonAttendance")
+    private List<Attendance> attendanceList = new ArrayList<>();
+    @OneToMany(mappedBy = "lessonHW")
+    private List<Homework> homeworkList = new ArrayList<>();
 
     @PrePersist
     private void prePersist() {

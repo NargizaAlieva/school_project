@@ -11,7 +11,8 @@ VALUES
     ('noahking', 'Noah', 'King', 'James', '+1654890123', 'noah.king@example.com', 'password606', 'PARENT'),
     ('avawilson', 'Ava', 'Wilson', 'Rose', '+1765901234', 'ava.wilson@example.com', 'password707', 'STUDENT'),
     ('ethanmartin', 'Ethan', 'Martin', 'Robert', '+1876012345', 'ethan.martin@example.com', 'password808', 'STUDENT'),
-    ('isabellajones', 'Isabella', 'Jones', NULL, '+1987123456', 'isabella.jones@example.com', 'password909', 'CLASS_REPRESENTATIVE');
+    ('isabellajones', 'Isabella', 'Jones', NULL, '+1987123456', 'isabella.jones@example.com', 'password909', 'CLASS_REPRESENTATIVE'),
+    ('gremma', 'Isabella', 'Jones', NULL, '+1987123456', 'gremma@example.com', 'qwerty123', 'CLASS_REPRESENTATIVE');
 
 INSERT INTO employees (position, salary, user_id)
 VALUES
@@ -45,10 +46,10 @@ VALUES
     ('Mathematics', 'Study of numbers and calculations', true),
     ('History', 'Study of past events', true);
 
-INSERT INTO announcements (title, description, employee_id)
+INSERT INTO announcements (title, description, for_whom, employee_id)
 VALUES
-    ('Meeting Reminder', 'All teachers should attend the meeting on Friday', 2),
-    ('New Policy', 'New grading policies are implemented starting next semester', 3);
+    ('Meeting Reminder', 'All teachers should attend the meeting on Friday', 'ALL', 2),
+    ('New Policy', 'New grading policies are implemented starting next semester', 'STUDENT', 3);
 
 INSERT INTO schedules (day_of_week, quarter, due_time, year, subject_id, teacher_id, grade_id)
 VALUES

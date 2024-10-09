@@ -3,12 +3,8 @@ package org.example.school_project.util.mapper;
 import lombok.RequiredArgsConstructor;
 import org.example.school_project.dto.GradeDto;
 import org.example.school_project.dto.GradeDtoRequest;
-import org.example.school_project.dto.MessageDto;
-import org.example.school_project.dto.MessageDtoRequest;
 import org.example.school_project.entity.Grade;
-import org.example.school_project.entity.Message;
 import org.example.school_project.entity.User;
-import org.example.school_project.enums.MessageTheme;
 import org.example.school_project.service.EmployeeService;
 import org.springframework.stereotype.Component;
 

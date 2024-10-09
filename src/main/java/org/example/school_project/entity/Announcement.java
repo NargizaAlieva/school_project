@@ -2,6 +2,7 @@ package org.example.school_project.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.example.school_project.enums.CanSeeOnly;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -22,8 +23,11 @@ public class Announcement {
     private String title;
     @Column(name = "description", nullable = false)
     private String description;
+    @Column(name = "forWhom", nullable = false)
+    @Enumerated(EnumType.STRING)
+    private CanSeeOnly forWhom;
     @Column(name = "creation_date", nullable = false)
-    private Timestamp creationDate;
+    private LocalDateTime creationDate;
 
     @ManyToOne
     @JoinColumn(name = "employee_id", referencedColumnName = "id")
@@ -31,6 +35,6 @@ public class Announcement {
 
     @PrePersist
     private void prePersist() {
-        creationDate = Timestamp.valueOf(LocalDateTime.now());
+        creationDate = LocalDateTime.now();
     }
 }

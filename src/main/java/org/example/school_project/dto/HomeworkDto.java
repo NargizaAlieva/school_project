@@ -7,15 +7,16 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class AssignmentDto {
+public class HomeworkDto {
     private Long id;
-    private String assignment;
+    private Integer mark;
+    private String teacherReview;
     private Boolean isDone;
-    private Long receiverId;
-    private String receiverName;
-    private Long authorId;
-    private String authorName;
     private LocalDateTime creationDate;
+    private Long lessonId;
+    private String lessonTopic;
+    private Long studentId;
+    private String studentName;
 
-    public AssignmentDto(){}
+    public HomeworkDto(){}
 }

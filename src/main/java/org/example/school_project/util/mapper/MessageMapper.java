@@ -17,9 +17,11 @@ import java.util.stream.Collectors;
 public class MessageMapper {
     private final UserService userService;
     public MessageDto entityToDto(Message message) {
+        MessageDto messageDto = new MessageDto();
+
         String authorFullName = message.getAuthorMessage().getFirstName() + " " + message.getAuthorMessage().getLastName();
         if(message.getAuthorMessage().getMiddleName() != null) authorFullName += " " + message.getAuthorMessage().getMiddleName();
-        MessageDto messageDto = new MessageDto();
+
         messageDto.setId(message.getId());
         messageDto.setTheme(message.getTheme().name());
         messageDto.setTitle(message.getTitle());

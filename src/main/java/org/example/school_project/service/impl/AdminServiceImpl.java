@@ -5,6 +5,7 @@ import org.example.school_project.dto.*;
 import org.example.school_project.entity.Role;
 import org.example.school_project.entity.User;
 import org.example.school_project.service.*;
+import org.example.school_project.util.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.Set;
@@ -16,36 +17,16 @@ public class AdminServiceImpl implements AdminService {
     private final EmployeeService employeeService;
     private final StudentService studentService;
     private final ParentService parentService;
-    private final RoleService roleService;
+    private final UserMapper userMapper;
 
     @Override
     public UserDto addRoleToUser(RoleDto roleDto) {
-        User user = userService.getEntityById(roleDto.getUserId());
-
-        Set<Role> roleSet = user.getRoleSet();
-        Set<Long> roleIdSet = roleDto.getRoleIdSet();
-        for (Long r : roleIdSet) {
-            Role role = roleService.findById(r);
-            roleService.addUser(role, user);
-            roleSet.add(role);
-        }
-        user.setRoleSet(roleSet);
-        return userService.save(user);
+        return userMapper.entityToDto(userService.addRoleToUser(roleDto));
     }
 
     @Override
     public UserDto removeRoleFromUser(RoleDto roleDto) {
-        User user = userService.getEntityById(roleDto.getUserId());
-
-        Set<Role> roleSet = user.getRoleSet();
-        Set<Long> roleIdSet = roleDto.getRoleIdSet();
-        for (Long r : roleIdSet) {
-            Role role = roleService.findById(r);
-            roleService.removeUser(role, user);
-            roleSet.remove(roleService.findById(r));
-        }
-        user.setRoleSet(roleSet);
-        return userService.saveUser(user);
+        return userMapper.entityToDto(userService.removeRoleFromUser(roleDto));
     }
 
     @Override

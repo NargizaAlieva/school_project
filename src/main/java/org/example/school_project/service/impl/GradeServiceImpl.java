@@ -3,21 +3,27 @@ package org.example.school_project.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.example.school_project.dto.GradeDto;
 import org.example.school_project.dto.GradeDtoRequest;
+import org.example.school_project.dto.StudentDto;
 import org.example.school_project.entity.Grade;
+import org.example.school_project.entity.Role;
+import org.example.school_project.entity.Student;
 import org.example.school_project.repository.GradeRepository;
 import org.example.school_project.service.GradeService;
+import org.example.school_project.service.StudentService;
 import org.example.school_project.util.exception.ObjectNotFoundException;
 import org.example.school_project.util.mapper.GradeMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class GradeServiceImpl implements GradeService {
     private final GradeRepository gradeRepository;
     private final GradeMapper gradeMapper;
+
     @Override
     public Grade getByIdEntity(Long id) {
         return gradeRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Grade"));

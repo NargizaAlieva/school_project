@@ -8,7 +8,8 @@ import java.util.List;
 
 public interface EmployeeService {
     Employee findByIdEntity(Long id);
-    EmployeeDto getByUserId(Long id);
+    Employee getByUserId(Long id);
+    List<Long> getHomeClassesId();
     EmployeeDto createEmployee(EmployeeDroRequest employeeDtoR);
     EmployeeDto updateEmployee(EmployeeDroRequest employeeDtoR);
     List<EmployeeDto> getAllEmployee();
