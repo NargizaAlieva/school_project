@@ -54,6 +54,7 @@ create table if not exists announcements (
     id bigserial primary key,
     title varchar not null,
     description text not null,
+    for_whom varchar not null,
     employee_id bigint references employees(id),
     creation_date timestamp not null default now()
 );

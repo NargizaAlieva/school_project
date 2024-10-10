@@ -2,11 +2,13 @@ package org.example.school_project.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.example.school_project.dto.RoleDto;
 import org.example.school_project.dto.UserDto;
 import org.example.school_project.dto.UserDtoRequest;
 import org.example.school_project.entity.Role;
 import org.example.school_project.entity.User;
 import org.example.school_project.repository.UserRepository;
+import org.example.school_project.service.RoleService;
 import org.example.school_project.service.UserService;
 import org.example.school_project.util.exception.AlreadyExistException;
 import org.example.school_project.util.exception.ObjectNotFoundException;
@@ -25,6 +27,7 @@ import java.util.Set;
 public class UserServiceImpl implements UserService, UserDetailsService {
     private final UserRepository userRepository;
     private final UserMapper userMapper;
+    private final RoleService roleService;
 
     @Override
     public UserDto getById(Long id) {
@@ -78,8 +81,37 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         return userMapper.entityToDto(userRepository.save(userMapper.dtoToEntity(userDtoRequest)));
     }
 
-    public UserDto save(User user) {
-        return userMapper.entityToDto(userRepository.save(user));
+    @Override
+    public User addRoleToUser(RoleDto roleDto) {
+        User user = getEntityById(roleDto.getUserId());
+
+        Set<Role> roleSet = user.getRoleSet();
+        Set<Long> roleIdSet = roleDto.getRoleIdSet();
+        for (Long r : roleIdSet) {
+            Role role = roleService.findById(r);
+            roleService.addUser(role, user);
+            roleSet.add(role);
+        }
+        user.setRoleSet(roleSet);
+        return save(user);
+    }
+
+    @Override
+    public User removeRoleFromUser(RoleDto roleDto) {
+        User user = getEntityById(roleDto.getUserId());
+        Set<Role> roleSet = user.getRoleSet();
+        Set<Long> roleIdSet = roleDto.getRoleIdSet();
+        for (Long r : roleIdSet) {
+            Role role = roleService.findById(r);
+            roleService.removeUser(role, user);
+            roleSet.remove(roleService.findById(r));
+        }
+        user.setRoleSet(roleSet);
+        return save(user);
+    }
+
+    public User save (User user) {
+        return userRepository.save(user);
     }
 
     @Override

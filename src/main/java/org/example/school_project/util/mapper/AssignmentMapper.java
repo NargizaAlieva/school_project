@@ -19,10 +19,21 @@ public class AssignmentMapper {
     private final EmployeeService employeeService;
     public AssignmentDto entityToDto(Assignment assignment) {
         AssignmentDto assignmentDto = new AssignmentDto();
+
+        String authorFullName = assignment.getAuthorOfAssignments().getUser().getFirstName() + " " + assignment.getAuthorOfAssignments().getUser().getLastName();
+        if (assignment.getAuthorOfAssignments().getUser().getMiddleName() != null) authorFullName = " " + assignment.getAuthorOfAssignments().getUser().getMiddleName();
+
+        String receiverFullName = assignment.getReceiverOfAssignments().getFirstName() + " " + assignment.getReceiverOfAssignments().getLastName();
+        if (assignment.getReceiverOfAssignments().getMiddleName() != null) receiverFullName = " " + assignment.getReceiverOfAssignments().getMiddleName();
+
         assignmentDto.setId(assignment.getId());
         assignmentDto.setAssignment(assignment.getAssignment());
         assignmentDto.setIsDone(assignment.getIsDone());
         assignmentDto.setCreationDate(assignment.getCreationDate());
+        assignmentDto.setAuthorId(assignment.getAuthorOfAssignments().getId());
+        assignmentDto.setAuthorName(authorFullName);
+        assignmentDto.setReceiverId(assignment.getAuthorOfAssignments().getId());
+        assignmentDto.setReceiverName(receiverFullName);
         return assignmentDto;
     }
 

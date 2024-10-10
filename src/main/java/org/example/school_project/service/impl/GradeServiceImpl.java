@@ -3,6 +3,7 @@ package org.example.school_project.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.example.school_project.dto.GradeDto;
 import org.example.school_project.dto.GradeDtoRequest;
+import org.example.school_project.dto.LessonDto;
 import org.example.school_project.entity.Grade;
 import org.example.school_project.repository.GradeRepository;
 import org.example.school_project.service.GradeService;
@@ -18,6 +19,7 @@ import java.util.List;
 public class GradeServiceImpl implements GradeService {
     private final GradeRepository gradeRepository;
     private final GradeMapper gradeMapper;
+
     @Override
     public Grade getByIdEntity(Long id) {
         return gradeRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Grade"));
@@ -59,6 +61,16 @@ public class GradeServiceImpl implements GradeService {
 //            if (g.getIsActive) activeGrades.add(g);
         }
         return activeGrades;
+    }
+
+    @Override
+    public List<GradeDto> getAllTeacherGrade(List<LessonDto> lessonDtoList) {
+        List<GradeDto> gradeDtoList = new ArrayList<>();
+        for (LessonDto l : lessonDtoList)
+            for (GradeDto g : getAllGrade())
+                if(l.getGradeId().equals(g.getId()))
+                    gradeDtoList.add(g);
+        return gradeDtoList;
     }
 
     @Override

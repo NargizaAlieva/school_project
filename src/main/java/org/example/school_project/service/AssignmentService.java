@@ -15,4 +15,9 @@ public interface AssignmentService {
     AssignmentDto markAsDone(Long id);
     List<AssignmentDto> getAllAssignment();
     List<AssignmentDto> getAllUndoneAssignment();
+    List<AssignmentDto> getAllUndoneAssignmentFrom(List<Long> ids);
+    List<AssignmentDto> getAllDoneAssignmentFrom(List<Long> ids);
+    List<AssignmentDto> getAllDoneAssignment();
+    List<AssignmentDto> getAllAssignmentFromReceiver(List<Long> receiverIds);
+    List<AssignmentDto> getAllAssignmentFromReceiver(Long Id);
 }

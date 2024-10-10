@@ -6,7 +6,6 @@ import org.example.school_project.dto.ScheduleDtoRequest;
 import org.example.school_project.entity.Schedule;
 import org.example.school_project.entity.User;
 import org.example.school_project.enums.DaysOfWeek;
-import org.example.school_project.enums.MessageTheme;
 import org.example.school_project.service.EmployeeService;
 import org.example.school_project.service.GradeService;
 import org.example.school_project.service.SubjectService;

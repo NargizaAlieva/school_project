@@ -10,4 +10,6 @@ import java.util.Set;
 public class RoleDto {
     private Long userId;
     private Set<Long> roleIdSet;
+
+    public RoleDto(){}
 }

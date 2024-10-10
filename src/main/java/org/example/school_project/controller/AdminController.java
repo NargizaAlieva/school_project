@@ -15,25 +15,6 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class AdminController {
     private final AdminService adminService;
-    @PutMapping(value = "/add-role")
-    public ResponseEntity<Response> addRoleToUser(@RequestBody RoleDto request) {
-        try {
-            UserDto addRole = adminService.addRoleToUser(request);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Added successfully", addRole));
-        } catch (ObjectNotFoundException exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
-        }
-    }
-
-    @PutMapping(value = "/remove-role")
-    public ResponseEntity<Response> removeRoleFromUser(@RequestBody RoleDto request) {
-        try {
-            UserDto removeRole = adminService.removeRoleFromUser(request);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Removed successfully", removeRole));
-        } catch (ObjectNotFoundException exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
-        }
-    }
 
     @PostMapping(value = "/create-user")
     public ResponseEntity<Response> createUser(@RequestBody UserDtoRequest request) {
@@ -119,6 +100,26 @@ public class AdminController {
             return ResponseEntity.ok("Deleted successfully");
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
+        }
+    }
+
+    @PutMapping(value = "/add-role")
+    public ResponseEntity<Response> addRoleToUser(@RequestBody RoleDto request) {
+        try {
+            UserDto addRole = adminService.addRoleToUser(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Added successfully", addRole));
+        } catch (ObjectNotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
+        }
+    }
+
+    @PutMapping(value = "/remove-role")
+    public ResponseEntity<Response> removeRoleFromUser(@RequestBody RoleDto request) {
+        try {
+            UserDto removeRole = adminService.removeRoleFromUser(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Removed successfully", removeRole));
+        } catch (ObjectNotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
         }
     }
 }
