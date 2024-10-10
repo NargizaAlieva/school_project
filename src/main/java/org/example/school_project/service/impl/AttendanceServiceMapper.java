@@ -7,6 +7,7 @@ import org.example.school_project.dto.LessonDto;
 import org.example.school_project.entity.Attendance;
 import org.example.school_project.repository.AttendanceRepository;
 import org.example.school_project.service.AttendanceService;
+import org.example.school_project.util.exception.AlreadyExistException;
 import org.example.school_project.util.exception.ObjectNotFoundException;
 import org.example.school_project.util.mapper.AttendanceMapper;
 import org.springframework.stereotype.Service;
@@ -38,6 +39,8 @@ public class AttendanceServiceMapper implements AttendanceService {
 
     @Override
     public AttendanceDto createAttendance(AttendanceDtoRequest attendanceDtoRequest) {
+        if (attendanceRepository.existsById(attendanceDtoRequest.getId()))
+            throw new AlreadyExistException("Attendance", "'id'");
         return attendanceMapper.entityToDto(save(attendanceMapper.dtoToEntity(attendanceDtoRequest)));
     }
 

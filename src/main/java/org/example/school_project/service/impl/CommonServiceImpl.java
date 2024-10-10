@@ -35,7 +35,8 @@ public class CommonServiceImpl implements CommonService {
 
     @Override
     public AssignmentDto createAssignment(AssignmentDtoRequest assignmentDtoRequest) {
-        return assignmentService.createAssigment(assignmentDtoRequest);
+//        return assignmentService.createAssigment(assignmentDtoRequest);
+        return null;
     }
 
 //    @Override
@@ -45,7 +46,8 @@ public class CommonServiceImpl implements CommonService {
 
     @Override
     public AssignmentDto updateAssignment(AssignmentDtoRequest assignmentDtoRequest) {
-        return assignmentService.updateAssignment(assignmentDtoRequest);
+//        return assignmentService.updateAssignment(assignmentDtoRequest);
+        return null;
     }
 
     @Override

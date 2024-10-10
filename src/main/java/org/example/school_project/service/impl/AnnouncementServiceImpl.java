@@ -7,6 +7,7 @@ import org.example.school_project.entity.Announcement;
 import org.example.school_project.enums.CanSeeOnly;
 import org.example.school_project.repository.AnnouncementRepository;
 import org.example.school_project.service.AnnouncementService;
+import org.example.school_project.util.exception.AlreadyExistException;
 import org.example.school_project.util.exception.ObjectNotFoundException;
 import org.example.school_project.util.mapper.AnnouncementMapper;
 import org.springframework.stereotype.Service;
@@ -35,6 +36,8 @@ public class AnnouncementServiceImpl implements AnnouncementService {
 
     @Override
     public AnnouncementDto createAnnouncement(AnnouncementDtoRequest announcementDtoRequest) {
+        if (announcementRepository.existsById(announcementDtoRequest.getId()))
+            throw new AlreadyExistException("Announcement", "'id'");
         return announcementMapper.entityToDto(save(announcementMapper.dtoToEntity(announcementDtoRequest)));
     }
 

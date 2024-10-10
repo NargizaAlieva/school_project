@@ -30,6 +30,7 @@ public class ReviewMapper {
         reviewDto.setCreationDate(review.getCreationDate());
         reviewDto.setAuthorId(authorFullName);
         reviewDto.setStudentId(studentFullName);
+        reviewDto.setIsActive(review.getIsActive());
         return reviewDto;
     }
 

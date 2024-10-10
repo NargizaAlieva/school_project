@@ -8,11 +8,7 @@ import java.util.List;
 
 public interface AssignmentService {
     AssignmentDto createAssigment(AssignmentDtoRequest assignmentDtoRequest, Long authorId);
-    AssignmentDto createAssigment(AssignmentDtoRequest assignmentDtoRequest);
-
     AssignmentDto updateAssignment(AssignmentDtoRequest assignmentDtoRequest, Long authorId);
-
-    AssignmentDto updateAssignment(AssignmentDtoRequest assignmentDtoRequest);
 
     AssignmentDto deleteAssignment(Long id, Long authorId);
     AssignmentDto restoreAssignment(Long id, Long authorId);

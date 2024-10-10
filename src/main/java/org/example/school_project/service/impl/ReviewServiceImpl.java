@@ -1,12 +1,12 @@
 package org.example.school_project.service.impl;
 
-import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.example.school_project.dto.ReviewDto;
 import org.example.school_project.dto.ReviewDtoRequest;
 import org.example.school_project.entity.Review;
 import org.example.school_project.repository.ReviewRepository;
 import org.example.school_project.service.ReviewService;
+import org.example.school_project.util.exception.AlreadyExistException;
 import org.example.school_project.util.exception.ObjectNotFoundException;
 import org.example.school_project.util.mapper.ReviewMapper;
 import org.springframework.stereotype.Service;
@@ -19,6 +19,14 @@ import java.util.List;
 public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final ReviewMapper reviewMapper;
+    private Long id;
+
+    public List<Review> getAllReview() {
+        return reviewRepository.findAll();
+    }
+    public Review save(Review review) {
+        return reviewRepository.save(review);
+    }
 
     @Override
     public Review getByIdReviewEntity(Long id) {
@@ -28,6 +36,20 @@ public class ReviewServiceImpl implements ReviewService {
     @Override
     public ReviewDto getByIdReview(Long id) {
         return reviewMapper.entityToDto(getByIdReviewEntity(id));
+    }
+
+    @Override
+    public ReviewDto deleteReview(Long id) {
+        Review review = getByIdReviewEntity(id);
+        review.setIsActive(false);
+        return reviewMapper.entityToDto(save(review));
+    }
+
+    @Override
+    public ReviewDto restoreReview(Long id) {
+        Review review = getByIdReviewEntity(id);
+        review.setIsActive(true);
+        return reviewMapper.entityToDto(save(review));
     }
 
     @Override
@@ -57,6 +79,8 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public ReviewDto createReview(ReviewDtoRequest reviewDtoRequest) {
+        if (reviewRepository.existsById(reviewDtoRequest.getId()))
+            throw new AlreadyExistException("Review", "'id'");
         return reviewMapper.entityToDto(save(reviewMapper.dtoToEntity(reviewDtoRequest)));
     }
 
@@ -71,12 +95,5 @@ public class ReviewServiceImpl implements ReviewService {
         newReview.setAuthorReview(oldReview.getAuthorReview());
         newReview.setStudentReview(oldReview.getStudentReview());
         return reviewMapper.entityToDto(save(newReview));
-    }
-
-    public List<Review> getAllReview() {
-        return reviewRepository.findAll();
-    }
-    public Review save(Review review) {
-        return reviewRepository.save(review);
     }
 }

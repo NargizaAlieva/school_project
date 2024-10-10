@@ -38,13 +38,6 @@ public class AssignmentServiceImpl implements AssignmentService{
     }
 
     @Override
-    public AssignmentDto createAssigment(AssignmentDtoRequest assignmentDtoRequest) {
-        if(assignmentRepository.existsById(assignmentDtoRequest.getId()))
-            throw new AlreadyExistException("Assignment", "id");
-        return assignmentMapper.entityToDto(save(assignmentMapper.dtoToEntity(assignmentDtoRequest)));
-    }
-
-    @Override
     public AssignmentDto updateAssignment(AssignmentDtoRequest assignmentDtoRequest, Long authorId) {
         assignmentDtoRequest.setAuthorId(authorId);
         if (!assignmentDtoRequest.getAuthorId().equals(authorId))
@@ -53,19 +46,6 @@ public class AssignmentServiceImpl implements AssignmentService{
         Assignment oldAssignment = assignmentMapper.dtoToEntity(assignmentDtoRequest);
         Assignment newAssignment = getAssignmentByIdEntity(assignmentDtoRequest.getId());
 
-        newAssignment.setAssignment(oldAssignment.getAssignment());
-        newAssignment.setIsDone(oldAssignment.getIsDone());
-        newAssignment.setCreationDate(oldAssignment.getCreationDate());
-        newAssignment.setAuthorOfAssignments(oldAssignment.getAuthorOfAssignments());
-        newAssignment.setReceiverOfAssignments(oldAssignment.getReceiverOfAssignments());
-        return assignmentMapper.entityToDto(save(newAssignment));
-    }
-    @Override
-    public AssignmentDto updateAssignment(AssignmentDtoRequest assignmentDtoRequest) {
-        Assignment oldAssignment = assignmentMapper.dtoToEntity(assignmentDtoRequest);
-        Assignment newAssignment = getAssignmentByIdEntity(assignmentDtoRequest.getId());
-
-        newAssignment.setId(oldAssignment.getId());
         newAssignment.setAssignment(oldAssignment.getAssignment());
         newAssignment.setIsDone(oldAssignment.getIsDone());
         newAssignment.setCreationDate(oldAssignment.getCreationDate());

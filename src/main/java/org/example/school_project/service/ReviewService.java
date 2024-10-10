@@ -9,6 +9,10 @@ import java.util.List;
 public interface ReviewService {
     Review getByIdReviewEntity(Long id);
     ReviewDto getByIdReview(Long id);
+
+    ReviewDto deleteReview(Long id);
+    ReviewDto restoreReview(Long id);
+
     List<ReviewDto> getReviewByStudentId(Long id);
     List<ReviewDto> getReviewByAuthorId(Long id);
     List<ReviewDto> getReviewByAuthorId(List<Long> id);

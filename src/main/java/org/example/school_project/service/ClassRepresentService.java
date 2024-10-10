@@ -17,4 +17,8 @@ public interface ClassRepresentService {
     ReviewDto createReview(ReviewDtoRequest reviewDtoRequest);
 
     ReviewDto updateReview(ReviewDtoRequest reviewDtoRequest);
+
+    ReviewDto deleteReview(Long id);
+
+    ReviewDto restoreReview(Long id);
 }

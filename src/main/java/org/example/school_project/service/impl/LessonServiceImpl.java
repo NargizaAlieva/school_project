@@ -8,6 +8,7 @@ import org.example.school_project.entity.Lesson;
 import org.example.school_project.repository.LessonRepository;
 import org.example.school_project.service.LessonService;
 import org.example.school_project.service.ScheduleService;
+import org.example.school_project.util.exception.AlreadyExistException;
 import org.example.school_project.util.exception.ObjectNotFoundException;
 import org.example.school_project.util.mapper.LessonMapper;
 import org.springframework.stereotype.Component;
@@ -33,6 +34,8 @@ public class LessonServiceImpl implements LessonService {
 
     @Override
     public LessonDto createLesson(LessonDtoRequest lessonDtoRequest) {
+        if (lessonRepository.existsById(lessonDtoRequest.getId()))
+            throw new AlreadyExistException("Lesson", "'id'");
         return lessonMapper.entityToDto(save(lessonMapper.dtoToEntity(lessonDtoRequest)));
     }
 

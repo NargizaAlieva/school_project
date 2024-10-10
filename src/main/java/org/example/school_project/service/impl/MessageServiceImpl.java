@@ -7,6 +7,7 @@ import org.example.school_project.entity.Message;
 import org.example.school_project.enums.MessageTheme;
 import org.example.school_project.repository.MessageRepository;
 import org.example.school_project.service.MessageService;
+import org.example.school_project.util.exception.AlreadyExistException;
 import org.example.school_project.util.exception.DontHaveAccessException;
 import org.example.school_project.util.exception.ObjectNotFoundException;
 import org.example.school_project.util.exception.WasDeletedException;
@@ -45,7 +46,7 @@ public class MessageServiceImpl implements MessageService {
 
     @Override
     public MessageDto getMessageById(Long id, Long currentUserId) {
-        MessageDto messageDto = messageMapper.entityToDto(messageRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Message")));
+        MessageDto messageDto = messageMapper.entityToDto(getMessageByIdEntity(id));
         if (!messageDto.getIsActive())
             throw new WasDeletedException("Message");
         if (messageDto.getReceiverId().equals(currentUserId) || messageDto.getAuthorId().equals(currentUserId))
@@ -55,6 +56,8 @@ public class MessageServiceImpl implements MessageService {
     }
     @Override
     public MessageDto createMessage(MessageDtoRequest messageDtoRequest) {
+        if (messageRepository.existsById(messageDtoRequest.getId()))
+            throw new AlreadyExistException("Message", "'id'");
         return messageMapper.entityToDto(save(messageMapper.dtoToEntity(messageDtoRequest)));
     }
 
