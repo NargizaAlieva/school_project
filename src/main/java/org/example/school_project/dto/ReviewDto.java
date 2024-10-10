@@ -18,6 +18,7 @@ public class ReviewDto {
     private LocalDateTime creationDate;
     private String authorId;
     private String studentId;
+    private Boolean isActive;
 
     public ReviewDto(){}
 }

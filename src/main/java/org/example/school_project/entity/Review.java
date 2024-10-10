@@ -19,6 +19,8 @@ public class Review {
 
     @Column(name = "review", nullable = false)
     private String review;
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true;
     @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;
 

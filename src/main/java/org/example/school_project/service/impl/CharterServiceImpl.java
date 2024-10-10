@@ -7,10 +7,12 @@ import org.example.school_project.entity.Charter;
 import org.example.school_project.repository.CharterRepository;
 import org.example.school_project.service.CharterService;
 import org.example.school_project.service.EmployeeService;
+import org.example.school_project.util.exception.AlreadyExistException;
 import org.example.school_project.util.exception.ObjectNotFoundException;
 import org.example.school_project.util.mapper.CharterMapper;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -23,30 +25,64 @@ public class CharterServiceImpl implements CharterService {
     public Charter getCharterByIdEntity(Long id) {
         return charterRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Charter"));
     }
+
+    public Charter save (Charter charter) {
+        return charterRepository.save(charter);
+    }
     @Override
-    public CharterDto createCharter(CharterDtoRequest charterDtoR) {
-        if(employeeService.findByIdEntity(charterDtoR.getAuthorId()) == null)
-            throw new ObjectNotFoundException("Employee");
-        return charterMapper.entityToDto(charterRepository.save(charterMapper.dtoToEntity(charterDtoR)));
+    public CharterDto createCharter(CharterDtoRequest charterDtoR, Long authorId) {
+        if(charterRepository.existsById(charterDtoR.getId()))
+            throw new AlreadyExistException("Charter", "'id'");
+        charterDtoR.setAuthorId(authorId);
+        return charterMapper.entityToDto(save(charterMapper.dtoToEntity(charterDtoR)));
     }
 
     @Override
-    public CharterDto updateCharter(CharterDtoRequest charterDtoR) {
-        if (getCharterByIdEntity(charterDtoR.getId()) == null) return null;
-
+    public CharterDto updateCharter(CharterDtoRequest charterDtoR, Long authorId) {
+        charterDtoR.setAuthorId(authorId);
         Charter oldCharter = charterMapper.dtoToEntity(charterDtoR);
         Charter newCharter = getCharterByIdEntity(charterDtoR.getId());
 
-        newCharter.setId(oldCharter.getId());
         newCharter.setTitle(oldCharter.getTitle());
         newCharter.setDescription(oldCharter.getDescription());
         newCharter.setCreationDate(oldCharter.getCreationDate());
         newCharter.setAuthorOfCharter(oldCharter.getAuthorOfCharter());
-        return charterMapper.entityToDto(charterRepository.save(newCharter));
+        return charterMapper.entityToDto(save(newCharter));
+    }
+
+    @Override
+    public CharterDto deleteCharter(Long id) {
+        Charter charter = getCharterByIdEntity(id);
+        charter.setIsActive(false);
+        return charterMapper.entityToDto(save(charter));
+    }
+    @Override
+    public CharterDto restoreCharter(Long id) {
+        Charter charter = getCharterByIdEntity(id);
+        charter.setIsActive(true);
+        return charterMapper.entityToDto(save(charter));
     }
 
     @Override
     public List<CharterDto> getAllCharter() {
         return charterMapper.entityToDtoList(charterRepository.findAll());
+    }
+
+    @Override
+    public List<CharterDto> getAllCharterByAuthor(Long authorId) {
+        List<CharterDto> charterDtoList = new ArrayList<>();
+        for (CharterDto c : getAllCharter())
+            if (c.getAuthorId().equals(authorId))
+                charterDtoList.add(c);
+        return charterDtoList;
+    }
+
+    @Override
+    public List<CharterDto> filterActiveCharter(List<CharterDto> charterDtoList) {
+        List<CharterDto> activeCharter = new ArrayList<>();
+        for (CharterDto c : getAllCharter())
+            if (c.getIsActive())
+                charterDtoList.add(c);
+        return activeCharter;
     }
 }

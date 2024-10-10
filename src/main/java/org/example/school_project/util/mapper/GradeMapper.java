@@ -27,6 +27,7 @@ public class GradeMapper {
         gradeDto.setClassTeacher(teacherFullName);
         gradeDto.setStudentCount(grade.getStudentSet().size());
         gradeDto.setCreationDate(grade.getCreationDate());
+        gradeDto.setIsActive(grade.getIsActive());
         return gradeDto;
     }
 

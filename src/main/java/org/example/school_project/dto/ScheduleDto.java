@@ -16,6 +16,7 @@ public class ScheduleDto {
     private String subjectSchedule;
     private String teacherName;
     private String gradeName;
+    private Boolean isActive;
 
     public ScheduleDto(){}
 }

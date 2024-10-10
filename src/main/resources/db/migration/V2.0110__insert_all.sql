@@ -53,8 +53,8 @@ VALUES
 
 INSERT INTO schedules (day_of_week, quarter, due_time, year, subject_id, teacher_id, grade_id)
 VALUES
-    ('Monday', 1, '08:00', '2024', 1, 1, 1),
-    ('Tuesday', 1, '09:00', '2024', 2, 1, 2);
+    ('MONDAY', 1, '08:00', '2024', 1, 1, 1),
+    ('TUESDAY', 1, '09:00', '2024', 2, 1, 2);
 
 INSERT INTO lessons (topic, homework, schedule_id)
 VALUES

@@ -22,17 +22,21 @@ public class CommonServiceImpl implements CommonService {
 
     @Override
     public CharterDto createCharter(CharterDtoRequest charterDtoR) {
-        return charterService.createCharter(charterDtoR);
+//        return charterService.createCharter(charterDtoR);
+        return null;
     }
 
     @Override
     public CharterDto updateCharter(CharterDtoRequest charterDtoR) {
-        return charterService.updateCharter(charterDtoR);
+
+//        return charterService.updateCharter(charterDtoR);
+        return null;
     }
 
     @Override
     public AssignmentDto createAssignment(AssignmentDtoRequest assignmentDtoRequest) {
-        return assignmentService.createAssigment(assignmentDtoRequest);
+//        return assignmentService.createAssigment(assignmentDtoRequest);
+        return null;
     }
 
 //    @Override
@@ -42,7 +46,8 @@ public class CommonServiceImpl implements CommonService {
 
     @Override
     public AssignmentDto updateAssignment(AssignmentDtoRequest assignmentDtoRequest) {
-        return assignmentService.updateAssignment(assignmentDtoRequest);
+//        return assignmentService.updateAssignment(assignmentDtoRequest);
+        return null;
     }
 
     @Override

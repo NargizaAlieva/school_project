@@ -26,6 +26,8 @@ public class Announcement {
     @Column(name = "forWhom", nullable = false)
     @Enumerated(EnumType.STRING)
     private CanSeeOnly forWhom;
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true;
     @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;
 

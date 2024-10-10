@@ -7,6 +7,7 @@ import org.example.school_project.dto.MarkDtoRequest;
 import org.example.school_project.entity.Mark;
 import org.example.school_project.repository.MarkRepository;
 import org.example.school_project.service.MarkService;
+import org.example.school_project.util.exception.AlreadyExistException;
 import org.example.school_project.util.exception.ObjectNotFoundException;
 import org.example.school_project.util.mapper.MarkMapper;
 import org.springframework.stereotype.Service;
@@ -36,6 +37,8 @@ public class MarkServiceImpl implements MarkService {
 
     @Override
     public MarkDto createMark(MarkDtoRequest markDtoRequest) {
+        if (markRepository.existsById(markDtoRequest.getId()))
+            throw new AlreadyExistException("Mark", "'id'");
         return markMapper.entityToDto(save(markMapper.dtoToEntity(markDtoRequest)));
     }
 

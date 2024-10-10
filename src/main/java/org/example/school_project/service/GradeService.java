@@ -12,6 +12,9 @@ public interface GradeService {
     GradeDto createGrade(GradeDtoRequest gradeDtoRequest);
     GradeDto updateGrade(GradeDtoRequest gradeDtoRequest);
     GradeDto deleteGrade(Long id);
+
+    GradeDto restoreGrade(Long id);
+
     List<GradeDto> getAllActiveGrade();
 
     List<GradeDto> getAllTeacherGrade(List<LessonDto> lessonDtoList);

@@ -7,6 +7,7 @@ import org.example.school_project.dto.LessonDto;
 import org.example.school_project.entity.Homework;
 import org.example.school_project.repository.HomeworkRepository;
 import org.example.school_project.service.HomeworkService;
+import org.example.school_project.util.exception.AlreadyExistException;
 import org.example.school_project.util.exception.ObjectNotFoundException;
 import org.example.school_project.util.mapper.HomeworkMapper;
 import org.springframework.stereotype.Service;
@@ -39,6 +40,8 @@ public class HomeworkServiceImpl implements HomeworkService {
 
     @Override
     public HomeworkDto createHw(HomeworkDtoRequest homeworkDtoRequest) {
+        if (homeworkRepository.existsById(homeworkDtoRequest.getId()))
+            throw new AlreadyExistException("Homework", "'id'");
         return homeworkMapper.entityToDto(save(homeworkMapper.dtoToEntity(homeworkDtoRequest)));
     }
 

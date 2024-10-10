@@ -14,7 +14,10 @@ public class MessageDto {
     private String message;
     private Boolean isRead = false;
     private LocalDateTime creationDate;
+    private Long receiverId;
+    private Long authorId;
     private String authorName;
+    private Boolean isActive = true;
 
     public MessageDto(){}
 }

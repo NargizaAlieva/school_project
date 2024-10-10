@@ -24,7 +24,7 @@ public class ParentMapping {
         String fullName;
         for (Student s : studentList) {
             fullName = s.getUser().getFirstName() + " " + s.getUser().getLastName();
-            if (!s.getUser().getMiddleName().isEmpty())
+            if (s.getUser().getMiddleName() != null)
                 fullName += " " + s.getUser().getMiddleName();
             childrenName.add(fullName);
         }

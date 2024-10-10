@@ -4,10 +4,11 @@ import lombok.RequiredArgsConstructor;
 import org.example.school_project.dto.*;
 import org.example.school_project.service.*;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
-@Component
+@Service
 @RequiredArgsConstructor
 public class TeacherServiceImpl implements TeacherService {
     private final ScheduleService scheduleService;

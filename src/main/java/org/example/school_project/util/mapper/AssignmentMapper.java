@@ -42,22 +42,14 @@ public class AssignmentMapper {
     }
 
     public Assignment dtoToEntity(AssignmentDtoRequest assignmentDtoRequest) {
-        Assignment assignment = new Assignment();
-        assignment.setId(assignmentDtoRequest.getId());
-        assignment.setAssignment(assignmentDtoRequest.getAssignment());
-        assignment.setIsDone(assignmentDtoRequest.getIsDone());
-        assignment.setAuthorOfAssignments(employeeService.findByIdEntity(assignmentDtoRequest.getAuthorId()));
-        assignment.setReceiverOfAssignments(userService.getEntityById(assignmentDtoRequest.getReceiverId()));
-        return assignment;
-    }
-
-    public Assignment dtoToEntityForSecretary(AssignmentDtoRequest assignmentDtoRequest) {
         if(assignmentDtoRequest.getCreationDate() == null) assignmentDtoRequest.setCreationDate(LocalDateTime.now());
         Assignment assignment = new Assignment();
         assignment.setId(assignmentDtoRequest.getId());
         assignment.setAssignment(assignmentDtoRequest.getAssignment());
-        assignment.setCreationDate(assignmentDtoRequest.getCreationDate());
         assignment.setIsDone(assignmentDtoRequest.getIsDone());
+        assignment.setCreationDate(assignmentDtoRequest.getCreationDate());
+        assignment.setAuthorOfAssignments(employeeService.findByIdEntity(assignmentDtoRequest.getAuthorId()));
+        assignment.setReceiverOfAssignments(userService.getEntityById(assignmentDtoRequest.getReceiverId()));
         return assignment;
     }
 }

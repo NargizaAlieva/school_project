@@ -7,19 +7,21 @@ import org.example.school_project.entity.Student;
 import java.util.List;
 
 public interface StudentService {
-    Student getStudentByUserId(Long id);
     Student getStudentByIdEntity(Long id);
     StudentDto getStudentById(Long id);
+    Student getStudentByUserId(Long id);
+
     StudentDto createStudent(StudentDtoRequest studentDtoRequest);
     StudentDto updateStudent(StudentDtoRequest studentDtoRequest);
     StudentDto chooseClassRepresentative(Long id);
+
     StudentDto getGradeRepresentative(Long gradeId);
     List<StudentDto> getGradeRepresentative(List<Long> gradeId);
+
     StudentDto excludeStudent(Long id);
+
     List<StudentDto> getAllStudent();
     List<StudentDto> getAllActiveStudent();
-
     List<StudentDto> getAllStudentByGrade(Long id);
-
     List<StudentDto> getAllStudentByGrades(List<Long> gradeId);
 }

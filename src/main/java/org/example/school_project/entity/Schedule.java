@@ -27,6 +27,8 @@ public class Schedule {
     private String year;
     @Column(name = "is_approve")
     private Boolean isApprove = false;
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true;
 
     @ManyToOne
     @JoinColumn(name = "subject_id", referencedColumnName = "id")

@@ -7,6 +7,7 @@ import org.example.school_project.dto.LessonDto;
 import org.example.school_project.entity.Grade;
 import org.example.school_project.repository.GradeRepository;
 import org.example.school_project.service.GradeService;
+import org.example.school_project.util.exception.AlreadyExistException;
 import org.example.school_project.util.exception.ObjectNotFoundException;
 import org.example.school_project.util.mapper.GradeMapper;
 import org.springframework.stereotype.Service;
@@ -20,11 +21,14 @@ public class GradeServiceImpl implements GradeService {
     private final GradeRepository gradeRepository;
     private final GradeMapper gradeMapper;
 
+    public Grade save(Grade grade) {
+        return gradeRepository.save(grade);
+    }
+
     @Override
     public Grade getByIdEntity(Long id) {
         return gradeRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Grade"));
     }
-
     @Override
     public GradeDto getById(Long id) {
         return gradeMapper.entityToDto(getByIdEntity(id));
@@ -32,15 +36,15 @@ public class GradeServiceImpl implements GradeService {
 
     @Override
     public GradeDto createGrade(GradeDtoRequest gradeDtoRequest) {
+        if (gradeRepository.existsById(gradeDtoRequest.getId()))
+            throw new AlreadyExistException("Grade", "'id'");
         return gradeMapper.entityToDto(save(gradeMapper.dtoToEntity(gradeDtoRequest)));
     }
-
     @Override
     public GradeDto updateGrade(GradeDtoRequest gradeDtoRequest) {
         Grade oldGrade = gradeMapper.dtoToEntity(gradeDtoRequest);
         Grade newGrade = getByIdEntity(gradeDtoRequest.getId());
 
-        newGrade.setId(oldGrade.getId());
         newGrade.setTitle(oldGrade.getTitle());
         newGrade.setCreationDate(oldGrade.getCreationDate());
         newGrade.setClassTeacher(oldGrade.getClassTeacher());
@@ -50,7 +54,14 @@ public class GradeServiceImpl implements GradeService {
     @Override
     public GradeDto deleteGrade(Long id) {
         Grade grade = getByIdEntity(id);
-//        grade.setIsActive(false);
+        grade.setIsActive(false);
+        return gradeMapper.entityToDto(save(grade));
+    }
+
+    @Override
+    public GradeDto restoreGrade(Long id) {
+        Grade grade = getByIdEntity(id);
+        grade.setIsActive(true);
         return gradeMapper.entityToDto(save(grade));
     }
 
@@ -58,7 +69,7 @@ public class GradeServiceImpl implements GradeService {
     public List<GradeDto> getAllActiveGrade() {
         List<GradeDto> activeGrades = new ArrayList<>();
         for (GradeDto g : getAllGrade()) {
-//            if (g.getIsActive) activeGrades.add(g);
+            if (g.getIsActive()) activeGrades.add(g);
         }
         return activeGrades;
     }
@@ -76,9 +87,5 @@ public class GradeServiceImpl implements GradeService {
     @Override
     public List<GradeDto> getAllGrade() {
         return gradeMapper.entityToDtoList(gradeRepository.findAll());
-    }
-
-    public Grade save(Grade grade) {
-        return gradeRepository.save(grade);
     }
 }

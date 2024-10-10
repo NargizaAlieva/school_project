@@ -29,7 +29,8 @@ create table if not exists grades (
     id bigserial primary key,
     grade_title varchar not null,
     teacher_id bigint references employees(id),
-    creation_date timestamp with time zone not null default now()
+    creation_date timestamp with time zone not null default now(),
+    is_active boolean not null default true
 );
 
 create table if not exists students (
@@ -46,7 +47,7 @@ create table if not exists subjects (
     id bigserial primary key,
     subject_title varchar not null unique,
     description text,
-    is_active boolean default true
+    is_active boolean not null default true
 );
 
 -- объявления
@@ -56,7 +57,8 @@ create table if not exists announcements (
     description text not null,
     for_whom varchar not null,
     employee_id bigint references employees(id),
-    creation_date timestamp not null default now()
+    creation_date timestamp not null default now(),
+    is_active boolean not null default true
 );
 
 create table if not exists schedules (
@@ -68,7 +70,8 @@ create table if not exists schedules (
     subject_id bigint references subjects(id),
     teacher_id bigint references employees(id),
     grade_id bigint references grades(id),
-    is_approve boolean default false
+    is_approve boolean default false,
+    is_active boolean not null default true
 );
 
 --Урок
@@ -107,7 +110,8 @@ create table if not exists reviews (
     review varchar not null,
     student_id bigint references students(id),
     author_id bigint references users(id),
-    creation_date timestamp not null default now()
+    creation_date timestamp not null default now(),
+    is_active boolean not null default true
 );
 
 --поручения (директор-секретарь, класс.рук.-староста, зауч-класс.рук.)
@@ -117,7 +121,8 @@ create table if not exists assignments (
     author_id bigint references employees(id),
     receiver_id bigint references users(id),
     creation_date timestamp not null default now(),
-    is_done boolean default false
+    is_done boolean default false,
+    is_active boolean not null default true
 );
 
 --обмен сообщениями
@@ -129,7 +134,8 @@ create table if not exists messages (
     author_id bigint references employees(id),
     receiver_id bigint references users(id),
     creation_date timestamp not null default now(),
-    is_read boolean default false
+    is_read boolean default false,
+    is_active boolean not null default true
 );
 
 --уставы
@@ -138,7 +144,8 @@ create table if not exists charters (
     title varchar not null,
     description text not null,
     employee_id bigint references employees(id),
-    creation_date timestamp not null default now()
+    creation_date timestamp not null default now(),
+    is_active boolean not null default true
 );
 
 --домашнее задание
@@ -149,5 +156,6 @@ create table if not exists homeworks (
     is_done boolean default false,
     teacher_review text,
     mark int,
-    creation_date timestamp not null default now()
+    creation_date timestamp not null default now(),
+    is_active boolean not null default true
 );

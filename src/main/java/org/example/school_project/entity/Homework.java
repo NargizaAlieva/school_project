@@ -23,6 +23,8 @@ public class Homework {
     private String teacherReview;
     @Column(name = "is_done")
     private Boolean isChecked = false;
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true;
     @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;
 
