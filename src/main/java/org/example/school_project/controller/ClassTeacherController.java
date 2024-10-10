@@ -63,6 +63,7 @@ public class ClassTeacherController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
         }
     }
+    //Working remake
     @GetMapping("/get-all-done-assignment-from")
     public ResponseEntity<Response> getAllDoneAssignmentFrom() {
         try {
@@ -72,7 +73,7 @@ public class ClassTeacherController {
         }
     }
 
-
+    //Working
     @PutMapping(value = "/choose-grade-represent/{id}")
     public ResponseEntity<Response> updateGrade(@PathVariable Long id) {
         try {
@@ -83,15 +84,17 @@ public class ClassTeacherController {
         }
     }
 
+    //Working
     @GetMapping("/get-all-class-student")
     public ResponseEntity<Response> studentsFromClass() {
         try {
-            return ResponseEntity.ok(new Response("Successfully got all class student", classTeacherService.getAllUndoneAssignment()));
+            return ResponseEntity.ok(new Response("Successfully got all class student", classTeacherService.studentsFromClass()));
         } catch (ObjectNotFoundException exception) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
         }
     }
 
+    //Working
     @GetMapping("/get-review-student/{id}")
     public ResponseEntity<Response> getReviewByStudentId(@PathVariable Long id) {
         try {
@@ -100,6 +103,7 @@ public class ClassTeacherController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
         }
     }
+    //Working
     @GetMapping("/get-review-author/{id}")
     public ResponseEntity<Response> getReviewByAuthorId(@PathVariable Long id) {
         try {
@@ -108,15 +112,18 @@ public class ClassTeacherController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
         }
     }
+
+    //Working
     @GetMapping("/get-review-class-represent")
     public ResponseEntity<Response> getReviewByClassRepresent() {
         try {
+            classTeacherService.getReviewByClassRepresent();
             return ResponseEntity.ok(new Response("Successfully got all class student", classTeacherService.getReviewByClassRepresent()));
         } catch (ObjectNotFoundException exception) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
         }
     }
-
+    //Working
     @PostMapping(value = "/create-review")
     public ResponseEntity<Response> createGrade(@RequestBody ReviewDtoRequest request) {
         try {
@@ -126,6 +133,7 @@ public class ClassTeacherController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Employee is not saved" + exception.getMessage(), null));
         }
     }
+    //Working
     @PutMapping(value = "/update-review")
     public ResponseEntity<Response> updateReview(@RequestBody ReviewDtoRequest request) {
         try {

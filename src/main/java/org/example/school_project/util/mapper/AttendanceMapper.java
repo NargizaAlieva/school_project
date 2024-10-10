@@ -2,6 +2,7 @@ package org.example.school_project.util.mapper;
 
 import lombok.RequiredArgsConstructor;
 import org.example.school_project.dto.AttendanceDto;
+import org.example.school_project.dto.AttendanceDtoRequest;
 import org.example.school_project.entity.Attendance;
 import org.example.school_project.service.LessonService;
 import org.example.school_project.service.StudentService;
@@ -42,12 +43,12 @@ public class AttendanceMapper {
         return attendances.stream().map(this::entityToDto).collect(Collectors.toList());
     }
 
-    public Attendance dtoToEntity(AttendanceDto attendanceDto) {
+    public Attendance dtoToEntity(AttendanceDtoRequest attendanceDtoRequest) {
         Attendance attendance = new Attendance();
-        attendance.setId(attendanceDto.getId());
-        attendance.setIsAttended(attendanceDto.getIsAttended());
-        attendance.setStudentAttendance(studentService.getStudentByIdEntity(attendanceDto.getStudentId()));
-        attendance.setLessonAttendance(lessonService.getLessonByIdEntity(attendanceDto.getLessonId()));
+        attendance.setId(attendanceDtoRequest.getId());
+        attendance.setIsAttended(attendanceDtoRequest.getIsAttended());
+        attendance.setStudentAttendance(studentService.getStudentByIdEntity(attendanceDtoRequest.getStudentId()));
+        attendance.setLessonAttendance(lessonService.getLessonByIdEntity(attendanceDtoRequest.getLessonId()));
         return attendance;
     }
 }

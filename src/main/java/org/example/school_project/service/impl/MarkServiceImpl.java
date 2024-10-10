@@ -48,7 +48,7 @@ public class MarkServiceImpl implements MarkService {
         newMark.setMark(oldMark.getMark());
         newMark.setStudentMark(oldMark.getStudentMark());
         newMark.setLessonMark(oldMark.getLessonMark());
-        return markMapper.entityToDto(newMark);
+        return markMapper.entityToDto(save(newMark));
     }
 
     @Override
@@ -67,6 +67,18 @@ public class MarkServiceImpl implements MarkService {
         for (LessonDto l : ids) {
             for (MarkDto m : getAllMark())
                 if (l.getId().equals(m.getLessonId()))
+                    allMarks.add(m);
+
+        }
+        return allMarks;
+    }
+
+    @Override
+    public List<MarkDto> filterMark(List<LessonDto> ids, Long studentId) {
+        List<MarkDto> allMarks = new ArrayList<>();
+        for (LessonDto l : ids) {
+            for (MarkDto m : getAllMark())
+                if (l.getId().equals(m.getLessonId()) && m.getStudentId().equals(studentId))
                     allMarks.add(m);
 
         }

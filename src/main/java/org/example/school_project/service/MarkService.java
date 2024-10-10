@@ -15,7 +15,9 @@ public interface MarkService {
     List<MarkDto> getAllMark();
 
     List<MarkDto> getAllMarkByStudent(Long id);
-    List<MarkDto> filterMark(List<LessonDto> id);
+    List<MarkDto> filterMark(List<LessonDto> ids);
+
+    List<MarkDto> filterMark(List<LessonDto> ids, Long studentId);
 
     Double getAverage(List<MarkDto> markDtoList);
 }

@@ -71,7 +71,7 @@ public class ClassTeacherServiceImpl implements ClassTeacherService {
         List<StudentDto> gradeRepresent = studentService.getGradeRepresentative(employeeService.getHomeClassesId());
         List<Long> gradeRepresentId = new ArrayList<>();
             for (StudentDto s : gradeRepresent)
-                gradeRepresentId.add(s.getId());
+                gradeRepresentId.add(s.getUser().getId());
         return reviewService.getReviewByAuthorId(gradeRepresentId);
     }
 

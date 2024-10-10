@@ -1,6 +1,7 @@
 package org.example.school_project.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.example.school_project.dto.HomeworkDto;
 import org.example.school_project.dto.LessonDto;
 import org.example.school_project.dto.LessonDtoRequest;
 import org.example.school_project.entity.Lesson;
@@ -56,9 +57,10 @@ public class LessonServiceImpl implements LessonService {
     @Override
     public List<LessonDto> getAllLessonByTeacherId(Long id) {
         List<LessonDto> teacherLesson = new ArrayList<>();
-        for (LessonDto l : getAllLesson())
+        for (LessonDto l : getAllLesson()) {
             if (l.getTeacherId().equals(id))
                 teacherLesson.add(l);
+        }
         return teacherLesson;
     }
 
@@ -87,6 +89,24 @@ public class LessonServiceImpl implements LessonService {
             if (scheduleService.getScheduleById(l.getScheduleId()).getYear().equals(year))
                 subjectLesson.add(l);
         return subjectLesson;
+    }
+
+    @Override
+    public List<LessonDto> getAllTeacherGrade(Long teacherId, Long gradeId) {
+        List<LessonDto> teacherLesson = new ArrayList<>();
+        for (LessonDto l : getAllLessonByTeacherId(teacherId))
+            if (l.getGradeId().equals(gradeId))
+                teacherLesson.add(l);
+        return teacherLesson;
+    }
+
+    @Override
+    public List<LessonDto> getAllSubjectGrade(Long subjectId, Long gradeId) {
+        List<LessonDto> gradeLesson = new ArrayList<>();
+        for (LessonDto l : getAllLessonBySubjectId(subjectId))
+            if (l.getGradeId().equals(gradeId))
+                gradeLesson.add(l);
+        return gradeLesson;
     }
 
     @Override
@@ -198,6 +218,34 @@ public class LessonServiceImpl implements LessonService {
             if (l.getGradeId().equals(gradeId))
                 subjectLesson.add(l);
         return subjectLesson;
+    }
+
+    @Override
+    public List<LessonDto> getUndoneHwByStudent(List<HomeworkDto> homeworkDtoList, Long studentId) {
+        List<LessonDto> allHw = new ArrayList<>();
+        for (LessonDto l : getAllLesson()) {
+            Boolean isDone = false;
+            for (HomeworkDto h : homeworkDtoList) {
+                if (l.getId().equals(h.getLessonId()) && h.getStudentId().equals(studentId))
+                    isDone = true;
+            }
+            if (!isDone) allHw.add(l);
+        }
+        return allHw;
+    }
+
+    @Override
+    public List<LessonDto> getUndoneHwByStudent(List<HomeworkDto> homeworkDtoList, Long studentId, Long subjectId) {
+        List<LessonDto> allHw = new ArrayList<>();
+        for (LessonDto l : getAllLessonBySubjectId(studentId)) {
+            Boolean isDone = false;
+            for (HomeworkDto h : homeworkDtoList) {
+                if (l.getId().equals(h.getLessonId()) && h.getStudentId().equals(studentId))
+                    isDone = true;
+            }
+            if (!isDone) allHw.add(l);
+        }
+        return allHw;
     }
 
     public Lesson save(Lesson lesson) {

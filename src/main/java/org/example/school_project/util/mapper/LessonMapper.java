@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.example.school_project.dto.LessonDto;
 import org.example.school_project.dto.LessonDtoRequest;
 import org.example.school_project.entity.Lesson;
+import org.example.school_project.service.AttendanceService;
 import org.example.school_project.service.ScheduleService;
 import org.springframework.stereotype.Component;
 
@@ -19,8 +20,8 @@ public class LessonMapper {
         LessonDto lessonDto = new LessonDto();
 
         lessonDto.setId(lesson.getId());
-        lessonDto.setTopic(lessonDto.getTopic());
-        lessonDto.setHomework(lessonDto.getHomework());
+        lessonDto.setTopic(lesson.getTopic());
+        lessonDto.setHomework(lesson.getHomework());
         lessonDto.setCreationDate(lesson.getCreationDate());
         lessonDto.setScheduleId(lesson.getSchedule().getId());
         lessonDto.setSubjectId(lesson.getSchedule().getSubjectSchedule().getId());
@@ -33,8 +34,6 @@ public class LessonMapper {
         lessonDto.setTeacherName(teacherFullName);
         lessonDto.setGradeId(lesson.getSchedule().getGradeSchedule().getId());
         lessonDto.setGradeTitle(lesson.getSchedule().getGradeSchedule().getTitle());
-
-        // To do
 
         return lessonDto;
     }

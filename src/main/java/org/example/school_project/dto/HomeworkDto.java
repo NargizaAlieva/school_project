@@ -11,7 +11,7 @@ public class HomeworkDto {
     private Long id;
     private Integer mark;
     private String teacherReview;
-    private Boolean isDone;
+    private Boolean isChecked;
     private LocalDateTime creationDate;
     private Long lessonId;
     private String lessonTopic;

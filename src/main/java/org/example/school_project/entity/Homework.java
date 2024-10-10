@@ -22,7 +22,7 @@ public class Homework {
     @Column(name = "teacher_review")
     private String teacherReview;
     @Column(name = "is_done")
-    private Boolean isDone = false;
+    private Boolean isChecked = false;
     @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;
 

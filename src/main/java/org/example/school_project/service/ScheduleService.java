@@ -14,5 +14,11 @@ public interface ScheduleService {
     ScheduleDto deleteSchedule(Long id);
     ScheduleDto approveSchedule(Long id);
     List<ScheduleDto> getAllSchedule();
+    List<ScheduleDto> getAllScheduleByTeacher(Long teacherId);
+    List<ScheduleDto> getAllScheduleByGrade(Long gradeId);
+
+    List<ScheduleDto> getAllScheduleByYear(String year);
+
+    List<ScheduleDto> getAllScheduleByStudent(Long studentId);
     List<ScheduleDto> getAllUnApprovedSchedule();
 }

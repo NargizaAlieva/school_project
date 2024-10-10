@@ -3,9 +3,6 @@ package org.example.school_project.service;
 import org.example.school_project.dto.*;
 
 public interface AdminService {
-    UserDto addRoleToUser(RoleDto roleDto);
-    UserDto removeRoleFromUser(RoleDto roleDto);
-
     UserDto createUser(UserDtoRequest userDtoRequest);
     EmployeeDto createEmployee(EmployeeDroRequest employeeDroRequest);
     StudentDto createStudent(StudentDtoRequest studentDtoRequest);
@@ -17,4 +14,7 @@ public interface AdminService {
     ParentDto updateParent(ParentDtoRequest parentDtoRequest);
 
     void deleteUser(Long id);
+
+    UserDto addRoleToUser(RoleDto roleDto);
+    UserDto removeRoleFromUser(RoleDto roleDto);
 }

@@ -6,6 +6,7 @@ import org.example.school_project.dto.ScheduleDtoRequest;
 import org.example.school_project.entity.Schedule;
 import org.example.school_project.repository.ScheduleRepository;
 import org.example.school_project.service.ScheduleService;
+import org.example.school_project.service.StudentService;
 import org.example.school_project.util.exception.ObjectNotFoundException;
 import org.example.school_project.util.mapper.ScheduleMapper;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.List;
 public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final ScheduleMapper scheduleMapper;
+    private final StudentService studentService;
     @Override
     public ScheduleDto getScheduleById(Long id) {
         if (id == null) return null;
@@ -31,6 +33,10 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
     public Schedule save(Schedule schedule) {
         return scheduleRepository.save(schedule);
+    }
+
+    public List<Schedule> getAllScheduleEntity() {
+        return scheduleRepository.findAll();
     }
 
     @Override
@@ -65,6 +71,42 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public List<ScheduleDto> getAllSchedule() {
         return scheduleMapper.entityToDtoList(scheduleRepository.findAll());
+    }
+
+    @Override
+    public List<ScheduleDto> getAllScheduleByTeacher(Long teacherId) {
+        List<Schedule> scheduleDtoList = new ArrayList<>();
+        for (Schedule s : getAllScheduleEntity())
+            if (s.getTeacherSchedule().getId().equals(teacherId))
+                scheduleDtoList.add(s);
+        return scheduleMapper.entityToDtoList(scheduleDtoList);
+    }
+
+    @Override
+    public List<ScheduleDto> getAllScheduleByGrade(Long gradeId) {
+        List<Schedule> scheduleDtoList = new ArrayList<>();
+        for (Schedule s : getAllScheduleEntity())
+            if (s.getGradeSchedule().getId().equals(gradeId))
+                scheduleDtoList.add(s);
+        return scheduleMapper.entityToDtoList(scheduleDtoList);
+    }
+
+    @Override
+    public List<ScheduleDto> getAllScheduleByYear(String year) {
+        List<Schedule> scheduleDtoList = new ArrayList<>();
+        for (Schedule s : getAllScheduleEntity())
+            if (s.getYear().equals(year))
+                scheduleDtoList.add(s);
+        return scheduleMapper.entityToDtoList(scheduleDtoList);
+    }
+
+    @Override
+    public List<ScheduleDto> getAllScheduleByStudent(Long studentId) {
+        List<Schedule> scheduleDtoList = new ArrayList<>();
+        for (Schedule s : getAllScheduleEntity())
+            if (s.getGradeSchedule().getId().equals(studentService.getStudentByIdEntity(studentId).getGrade().getId()))
+                scheduleDtoList.add(s);
+        return scheduleMapper.entityToDtoList(scheduleDtoList);
     }
 
     @Override

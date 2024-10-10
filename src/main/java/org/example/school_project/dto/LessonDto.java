@@ -19,9 +19,6 @@ public class LessonDto {
     private String teacherName;
     private Long gradeId;
     private String gradeTitle;
-    private Integer markCount;
-    private Integer attendedStudentCount;
-    private Integer madeHomeworkCount;
 
     public LessonDto(){}
 }

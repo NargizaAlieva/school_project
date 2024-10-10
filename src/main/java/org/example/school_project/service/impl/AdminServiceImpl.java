@@ -20,16 +20,6 @@ public class AdminServiceImpl implements AdminService {
     private final UserMapper userMapper;
 
     @Override
-    public UserDto addRoleToUser(RoleDto roleDto) {
-        return userMapper.entityToDto(userService.addRoleToUser(roleDto));
-    }
-
-    @Override
-    public UserDto removeRoleFromUser(RoleDto roleDto) {
-        return userMapper.entityToDto(userService.removeRoleFromUser(roleDto));
-    }
-
-    @Override
     public UserDto createUser(UserDtoRequest userDtoRequest) {
         return userService.createUser(userDtoRequest);
     }
@@ -72,5 +62,15 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public void deleteUser(Long id) {
         userService.deleteUser(id);
+    }
+
+    @Override
+    public UserDto addRoleToUser(RoleDto roleDto) {
+        return userMapper.entityToDto(userService.addRoleToUser(roleDto));
+    }
+
+    @Override
+    public UserDto removeRoleFromUser(RoleDto roleDto) {
+        return userMapper.entityToDto(userService.removeRoleFromUser(roleDto));
     }
 }

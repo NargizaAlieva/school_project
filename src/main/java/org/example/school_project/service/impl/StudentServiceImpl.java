@@ -6,6 +6,7 @@ import org.example.school_project.dto.StudentDto;
 import org.example.school_project.dto.StudentDtoRequest;
 import org.example.school_project.entity.Role;
 import org.example.school_project.entity.Student;
+import org.example.school_project.entity.User;
 import org.example.school_project.repository.StudentRepository;
 import org.example.school_project.service.StudentService;
 import org.example.school_project.service.UserService;
@@ -24,6 +25,15 @@ public class StudentServiceImpl implements StudentService {
     private final StudentRepository studentRepository;
     private final StudentMapper studentMapper;
     private final UserService userService;
+
+    @Override
+    public Student getStudentByUserId(Long id) {
+        for (Student s : getAllStudentEntity()) {
+            if (s.getUser().getId().equals(id))
+                return s;
+        }
+        throw new ObjectNotFoundException("Student");
+    }
 
     @Override
     public Student getStudentByIdEntity(Long id) {
@@ -56,13 +66,13 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public StudentDto chooseClassRepresentative(Long id) {
+        Set<Long> roleId = new HashSet<>();
+        roleId.add(7L);
         RoleDto roleDto = new RoleDto();
-        roleDto.setUserId(id);
-        roleDto.setRoleIdSet(new HashSet<>(7));
-
-        Student student = getStudentByIdEntity(id);
-        student.setUser(userService.addRoleToUser(roleDto));
-        return studentMapper.entityToDto(student);
+        roleDto.setUserId(getStudentByIdEntity(id).getUser().getId());
+        roleDto.setRoleIdSet(roleId);
+        userService.addRoleToUser(roleDto);
+        return studentMapper.entityToDto(getStudentByIdEntity(id));
     }
 
     @Override
@@ -80,7 +90,9 @@ public class StudentServiceImpl implements StudentService {
     public List<StudentDto> getGradeRepresentative(List<Long> gradesId) {
         List<StudentDto> classRepresents =  new ArrayList<>();
         for (StudentDto s : getAllStudentByGrades(gradesId)) {
-            Set<Role> roleSet = userService.getEntityById(s.getId()).getRoleSet();
+            User user = userService.getEntityById(s.getUser().getId());
+            Long id = user.getId();
+            Set<Role> roleSet = user.getRoleSet();
             for (Role r : roleSet) {
                 if (r.getId() == 7) classRepresents.add(s);
             }

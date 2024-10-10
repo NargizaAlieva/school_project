@@ -1,5 +1,6 @@
 package org.example.school_project.service;
 
+import org.example.school_project.dto.HomeworkDto;
 import org.example.school_project.dto.LessonDto;
 import org.example.school_project.dto.LessonDtoRequest;
 import org.example.school_project.entity.Lesson;
@@ -16,6 +17,8 @@ public interface LessonService {
     List<LessonDto> getAllLessonByGradeId(Long id);
     List<LessonDto> getAllLessonBySubjectId(Long id);
     List<LessonDto> getAllLessonByYear(String year);
+    List<LessonDto> getAllTeacherGrade(Long teacherId, Long gradeId);
+    List<LessonDto> getAllSubjectGrade(Long subjectId, Long gradeId);
     List<LessonDto> getAllLessonByYearTeacherId(String year, Long teacherId);
     List<LessonDto> getAllLessonByYearGradeId(String year, Long gradeId);
     List<LessonDto> getAllLessonByYearSubjectId(String year, Long subjectId);
@@ -30,4 +33,8 @@ public interface LessonService {
     List<LessonDto> getAllLessonByYearTeacherIdSubjectId(String year, Long teacherId, Long subjectId, Integer quarter);
     List<LessonDto> getAllLessonByYearTeacherIdGradeId(String year, Long teacherId, Long gradeId, Integer quarter);
     List<LessonDto> getAllLessonByYearSubjectIdGradeId(String year, Long subjectId, Long gradeId, Integer quarter);
+
+    List<LessonDto> getUndoneHwByStudent(List<HomeworkDto> homeworkDtoList, Long studentId);
+
+    List<LessonDto> getUndoneHwByStudent(List<HomeworkDto> homeworkDtoList, Long studentId, Long subjectId);
 }
