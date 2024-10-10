@@ -16,7 +16,7 @@ public interface AssignmentService {
 
     AssignmentDto deleteAssignment(Long id, Long authorId);
     AssignmentDto restoreAssignment(Long id, Long authorId);
-    AssignmentDto markAsDone(Long id);
+    AssignmentDto markAsDone(Long id, Long authorId);
 
     List<AssignmentDto> getAllAssignment();
     List<AssignmentDto> getAllAssignmentByAuthor(Long authorId);

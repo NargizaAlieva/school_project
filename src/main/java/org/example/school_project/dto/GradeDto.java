@@ -13,5 +13,6 @@ public class GradeDto {
     private LocalDateTime creationDate;
     private String classTeacher;
     private Integer studentCount;
+    private Boolean isActive;
     public GradeDto(){}
 }

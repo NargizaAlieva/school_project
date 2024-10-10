@@ -93,8 +93,10 @@ public class AssignmentServiceImpl implements AssignmentService{
     }
 
     @Override
-    public AssignmentDto markAsDone(Long id) {
+    public AssignmentDto markAsDone(Long id, Long authorId) {
         Assignment assignment = getAssignmentByIdEntity(id);
+        if (!assignment.getReceiverOfAssignments().getId().equals(authorId))
+            throw new DontHaveAccessException();
         assignment.setIsDone(true);
         save(assignment);
         return assignmentMapper.entityToDto(assignment);

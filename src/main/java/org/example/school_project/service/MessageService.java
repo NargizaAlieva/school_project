@@ -18,7 +18,7 @@ public interface MessageService {
     List<MessageDto> getAllAuthorMessages(List<MessageDto> messageDtoList, Long authorId);
     List<MessageDto> getAllUnreadMessages(List<MessageDto> messageDtoList);
 
-    List<MessageDto> getAllAdmissionApplication(List<MessageDto> messageDtoList, Long currentUserId);
-    List<MessageDto> getAllAppeal(List<MessageDto> messageDtoList, Long currentUserId);
-    List<MessageDto> getAllNormal(List<MessageDto> messageDtoList, Long currentUserId);
+    List<MessageDto> getAllAdmissionApplication(List<MessageDto> messageDtoList);
+    List<MessageDto> getAllAppeal(List<MessageDto> messageDtoList);
+    List<MessageDto> getAllNormal(List<MessageDto> messageDtoList);
 }

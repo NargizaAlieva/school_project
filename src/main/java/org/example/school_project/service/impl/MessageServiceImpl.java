@@ -131,7 +131,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<MessageDto> getAllAdmissionApplication(List<MessageDto> messageDtoList, Long currentUserId) {
+    public List<MessageDto> getAllAdmissionApplication(List<MessageDto> messageDtoList) {
         List<MessageDto> allAdmissionMessage = new ArrayList<>();
         for (MessageDto m : messageDtoList) {
             if (m.getTheme().equals(MessageTheme.ADMISSION.name())) allAdmissionMessage.add(m);
@@ -141,7 +141,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<MessageDto> getAllAppeal(List<MessageDto> messageDtoList, Long currentUserId) {
+    public List<MessageDto> getAllAppeal(List<MessageDto> messageDtoList) {
         List<MessageDto> allAppealMessage = new ArrayList<>();
         for (MessageDto m : messageDtoList) {
             if (m.getTheme().equals(MessageTheme.APPEAL.name())) allAppealMessage.add(m);
@@ -151,7 +151,7 @@ public class MessageServiceImpl implements MessageService {
     }
 
     @Override
-    public List<MessageDto> getAllNormal(List<MessageDto> messageDtoList, Long currentUserId) {
+    public List<MessageDto> getAllNormal(List<MessageDto> messageDtoList) {
         List<MessageDto> allAppealMessage = new ArrayList<>();
         for (MessageDto m : messageDtoList) {
             if (m.getTheme().equals(MessageTheme.NORMAL.name())) allAppealMessage.add(m);

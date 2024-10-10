@@ -147,7 +147,7 @@ public class StudentServiceImpl implements StudentService {
     public List<StudentDto> getAllStudentByGrade(Long gradeId) {
         List<Student> studentList = new ArrayList<>();
         for (Student s : getAllStudentEntity())
-            if (s.getGrade().getId().equals(gradeId))
+            if (s.getGrade().getId().equals(gradeId) && s.getUser().getIsActive())
                 studentList.add(s);
         return studentMapper.entityToDtoList(studentList);
     }
