@@ -2,13 +2,11 @@ package org.example.school_project.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.school_project.dto.*;
-import org.example.school_project.entity.Role;
-import org.example.school_project.entity.User;
 import org.example.school_project.service.*;
 import org.example.school_project.util.mapper.UserMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.Set;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -18,6 +16,51 @@ public class AdminServiceImpl implements AdminService {
     private final StudentService studentService;
     private final ParentService parentService;
     private final UserMapper userMapper;
+
+    @Override
+    public List<UserDto> getAllUser() {
+        return userService.getAllUser();
+    }
+
+    @Override
+    public List<UserDto> getAllActiveUser() {
+        return userService.getAllActiveUser();
+    }
+
+    @Override
+    public List<UserDto> getAllUserByRole(String role) {
+        return userMapper.entityToDtoList(userService.getUserListWithRole(role));
+    }
+
+    @Override
+    public List<EmployeeDto> getAllEmployee() {
+        return employeeService.getAllEmployee();
+    }
+
+    @Override
+    public List<EmployeeDto> getAllActiveEmployee() {
+        return employeeService.getAllActiveEmployee();
+    }
+
+    @Override
+    public List<ParentDto> getAllParent() {
+        return parentService.getAllParent();
+    }
+
+    @Override
+    public List<ParentDto> getAllActiveParent() {
+        return parentService.getAllActiveParent();
+    }
+
+    @Override
+    public List<StudentDto> getAllStudent() {
+        return studentService.getAllActiveStudent();
+    }
+
+    @Override
+    public List<StudentDto> getAllActiveStudent() {
+        return studentService.getAllActiveStudent();
+    }
 
     @Override
     public UserDto createUser(UserDtoRequest userDtoRequest) {
@@ -57,6 +100,11 @@ public class AdminServiceImpl implements AdminService {
     @Override
     public ParentDto updateParent(ParentDtoRequest parentDtoRequest) {
         return parentService.updateParent(parentDtoRequest);
+    }
+
+    @Override
+    public UserDto restoreUser(Long id) {
+        return userService.restoreUser(id);
     }
 
     @Override

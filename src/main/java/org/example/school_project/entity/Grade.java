@@ -23,6 +23,8 @@ public class Grade {
 
     @Column(name = "grade_title")
     private String title;
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true;
     @Column(name = "creation_date")
     private LocalDateTime creationDate;
 

@@ -27,6 +27,8 @@ public class Message {
     private String message;
     @Column(name = "is_read")
     private Boolean isRead = false;
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true;
     @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;
 

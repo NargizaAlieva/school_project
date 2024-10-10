@@ -35,6 +35,7 @@ public class ScheduleMapper {
         scheduleDto.setGradeName(schedule.getGradeSchedule().getTitle());
         scheduleDto.setTeacherName(teacherFullName);
         scheduleDto.setIsApprove(schedule.getIsApprove());
+        scheduleDto.setIsActive(schedule.getIsActive());
         return scheduleDto;
     }
 

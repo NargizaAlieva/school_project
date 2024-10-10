@@ -26,8 +26,10 @@ public class CharterMapper {
         charterDto.setId(charter.getId());
         charterDto.setTitle(charter.getTitle());
         charterDto.setDescription(charter.getDescription());
+        charterDto.setAuthorId(charter.getAuthorOfCharter().getId());
         charterDto.setAuthorName(authorFullName);
         charterDto.setCreationDate(author.getCreationDate());
+        charterDto.setIsActive(charter.getIsActive());
         return charterDto;
     }
     public List<CharterDto> entityToDtoList(List<Charter> charters) {

@@ -10,7 +10,7 @@ import java.time.LocalDateTime;
 public class AssignmentDtoRequest {
     private Long id;
     private String assignment;
-    private Boolean isDone;
+    private Boolean isDone = false;
     private LocalDateTime creationDate;
     private Long authorId;
     private Long receiverId;

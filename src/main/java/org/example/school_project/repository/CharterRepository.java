@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface CharterRepository extends JpaRepository<Charter, Long> {
+    boolean existsById(Long id);
 }

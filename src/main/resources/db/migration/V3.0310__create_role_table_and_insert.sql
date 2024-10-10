@@ -12,4 +12,5 @@ values ('ADMIN'),
        ('TEACHER'),
        ('CLASS_REPRESENTATIVE'),
        ('STUDENT'),
-       ('PARENT');
+       ('PARENT'),
+       ('USER');

@@ -2,10 +2,9 @@ package org.example.school_project.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.example.school_project.dto.Response;
-import org.example.school_project.dto.UserDto;
-import org.example.school_project.dto.UserDtoRequest;
+import org.example.school_project.dto.*;
 import org.example.school_project.entity.User;
+import org.example.school_project.service.UserRoleService;
 import org.example.school_project.service.UserService;
 import org.example.school_project.util.exception.ObjectNotFoundException;
 import org.example.school_project.util.mapper.UserMapper;
@@ -20,52 +19,93 @@ import java.util.List;
 @AllArgsConstructor
 @Slf4j
 public class UserController {
-    private final UserService userService;
-    private final UserMapper userMapper;
+    private final UserRoleService userRoleService;
 
-    @PostMapping(value = "/create")
-    public ResponseEntity<Response> createUser(@RequestBody UserDtoRequest request) {
+    @PostMapping(value = "/create-message")
+    public ResponseEntity<Response> createMessage(@RequestBody MessageDtoRequest request) {
         try {
-            log.info("create1");
-            userService.createUser(request);
-            log.info("create2");
-            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Created successfully", request));
+            MessageDto messageDto = userRoleService.createMessage(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Successfully added Message", messageDto));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Task is not created" + exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Message is not saved" + exception.getMessage(), null));
         }
     }
-//
-//    @PutMapping(value = "/update")
-//    public ResponseEntity<Response> updateUser(@RequestBody User request) {
-//        try {
-//            UserDto createUser = userService.updateUser(request);
-//            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Updated successfully", createUser));
-//        } catch (ObjectNotFoundException exception) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
-//        }
-//    }
-//
-//    @DeleteMapping(value = "/delete/{id}")
-//    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
-//        try {
-//            userService.deleteUser(id);
-//            return ResponseEntity.ok("Deleted successfully");
-//        } catch (Exception exception) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(exception.getMessage());
-//        }
-//    }
-//
-//    @GetMapping("/get-user/{id}")
-//    public ResponseEntity<Response> getById(@PathVariable Long id) {
-//        try {
-//            return ResponseEntity.ok(new Response("Successfully got task with id", userMapper.entityToDto(userService.getEntityById(id))));
-//        } catch (ObjectNotFoundException exception) {
-//            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
-//        }
-//    }
-//
-    @GetMapping("/get-all")
-    public List<UserDto> getAllUser() {
-        return userService.getAllUser();
+    @GetMapping(value = "/get-message-by-id/{id}")
+    public ResponseEntity<Response> getMessageById(@PathVariable Long id) {
+        try {
+            MessageDto messageDto = userRoleService.getMessageById(id);
+            return ResponseEntity.status(HttpStatus.OK).body(new Response("Message successfully updated", messageDto));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Message is not updated. " + exception.getMessage(), null));
+        }
+    }
+
+    @PutMapping(value = "/mark-as-read-message/{id}")
+    public ResponseEntity<Response> markAsUnread(@PathVariable Long id) {
+        try {
+            MessageDto messageDto = userRoleService.markAsUnread(id);
+            return ResponseEntity.status(HttpStatus.OK).body(new Response("Message successfully updated", messageDto));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Message is not updated. " + exception.getMessage(), null));
+        }
+    }
+    @DeleteMapping(value = "/delete-message/{id}")
+    public ResponseEntity<Response> deleteMessage(@PathVariable Long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(new Response("Deleted Message successfully", userRoleService.deleteMessage(id)));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+        }
+    }
+    @PutMapping(value = "/restore-message/{id}")
+    public ResponseEntity<Response> restoreAssignment(@PathVariable Long id) {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(new Response("Restored Message successfully", userRoleService.restoreMessage(id)));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping(value = "/get-all-message")
+    public ResponseEntity<Response> getAllMessages() {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(new Response("Successfully got all Message", userRoleService.getAllMessages()));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping(value = "/get-all-receiver-assignment")
+    public ResponseEntity<Response> getAllReceiverMessages() {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(new Response("Successfully got all receive Message", userRoleService.getAllReceiverMessages()));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping(value = "/get-all-author-assignment")
+    public ResponseEntity<Response> getAllAuthorMessages() {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(new Response("Successfully got all author Message", userRoleService.getAllAuthorMessages()));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
+        }
+    }
+    @GetMapping(value = "/get-all-receiver-unread-assignment")
+    public ResponseEntity<Response> getAllUnreadReceiverMessages() {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(new Response("Successfully got all receive unread Message", userRoleService.getAllUnreadReceiverMessages()));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
+        }
+    }
+    @GetMapping(value = "/get-all-author-unread-assignment")
+    public ResponseEntity<Response> getAllUnreadAuthorMessages() {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(new Response("Successfully got all author unread Message", userRoleService.getAllUnreadAuthorMessages()));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
+        }
     }
 }

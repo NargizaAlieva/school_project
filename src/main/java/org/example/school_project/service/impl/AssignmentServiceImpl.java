@@ -3,13 +3,11 @@ package org.example.school_project.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.example.school_project.dto.AssignmentDto;
 import org.example.school_project.dto.AssignmentDtoRequest;
-import org.example.school_project.dto.EmployeeDto;
 import org.example.school_project.entity.Assignment;
-import org.example.school_project.entity.User;
 import org.example.school_project.repository.AssignmentRepository;
 import org.example.school_project.service.AssignmentService;
-import org.example.school_project.service.EmployeeService;
-import org.example.school_project.service.UserService;
+import org.example.school_project.util.exception.AlreadyExistException;
+import org.example.school_project.util.exception.DontHaveAccessException;
 import org.example.school_project.util.exception.ObjectNotFoundException;
 import org.example.school_project.util.mapper.AssignmentMapper;
 import org.springframework.stereotype.Service;
@@ -22,39 +20,46 @@ import java.util.List;
 public class AssignmentServiceImpl implements AssignmentService{
     private final AssignmentRepository assignmentRepository;
     private final AssignmentMapper assignmentMapper;
-    private final UserService userService;
 
     public Assignment getAssignmentByIdEntity(Long id) {
         return assignmentRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Assignment"));
     }
 
-    @Override
-    public AssignmentDto createAssigment(AssignmentDtoRequest assignmentDtoRequest) {
-        return assignmentMapper.entityToDto(assignmentRepository.save(assignmentMapper.dtoToEntity(assignmentDtoRequest)));
+    public Assignment save(Assignment assignment) {
+        return assignmentRepository.save(assignment);
     }
 
-//    @Override
-//    public AssignmentDto createToSecreter(AssignmentDtoRequest assignmentDtoRequest) {
-//        Assignment assignment = assignmentMapper.dtoToEntityForSecretary(assignmentDtoRequest);
-//        User author = userService.getCurrentUser();
-//        EmployeeDto employeeDto = employeeService.getByUserId(author.getId());
-//        User secreter = userService.getUserWithRole("SECRETARY");
-//        assignment.setReceiverOfAssignments(secreter);
-//        assignment.setAuthorOfAssignments(employeeService.findByIdEntity(employeeDto.getId()));
-//        return assignmentMapper.entityToDto(assignmentRepository.save(assignment));
-//    }
-//
-//    @Override
-//    public AssignmentDto createToClassRepresent(AssignmentDtoRequest assignmentDtoRequest) {
-//        Assignment assignment = assignmentMapper.dtoToEntityForSecretary(assignmentDtoRequest);
-//        User author = userService.getCurrentUser();
-//        EmployeeDto employeeDto = employeeService.getByUserId(author.getId());
-//        User secreter = userService.getUserWithRole("CLASS_REPRESENTATIVE");
-//        assignment.setReceiverOfAssignments(secreter);
-//        assignment.setAuthorOfAssignments(employeeService.findByIdEntity(employeeDto.getId()));
-//        return assignmentMapper.entityToDto(assignmentRepository.save(assignment));
-//    }
+    @Override
+    public AssignmentDto createAssigment(AssignmentDtoRequest assignmentDtoRequest, Long authorId) {
+        if(assignmentRepository.existsById(assignmentDtoRequest.getId()))
+            throw new AlreadyExistException("Assignment", "id");
+        assignmentDtoRequest.setAuthorId(authorId);
+        return assignmentMapper.entityToDto(save(assignmentMapper.dtoToEntity(assignmentDtoRequest)));
+    }
 
+    @Override
+    public AssignmentDto createAssigment(AssignmentDtoRequest assignmentDtoRequest) {
+        if(assignmentRepository.existsById(assignmentDtoRequest.getId()))
+            throw new AlreadyExistException("Assignment", "id");
+        return assignmentMapper.entityToDto(save(assignmentMapper.dtoToEntity(assignmentDtoRequest)));
+    }
+
+    @Override
+    public AssignmentDto updateAssignment(AssignmentDtoRequest assignmentDtoRequest, Long authorId) {
+        assignmentDtoRequest.setAuthorId(authorId);
+        if (!assignmentDtoRequest.getAuthorId().equals(authorId))
+            throw new DontHaveAccessException();
+
+        Assignment oldAssignment = assignmentMapper.dtoToEntity(assignmentDtoRequest);
+        Assignment newAssignment = getAssignmentByIdEntity(assignmentDtoRequest.getId());
+
+        newAssignment.setAssignment(oldAssignment.getAssignment());
+        newAssignment.setIsDone(oldAssignment.getIsDone());
+        newAssignment.setCreationDate(oldAssignment.getCreationDate());
+        newAssignment.setAuthorOfAssignments(oldAssignment.getAuthorOfAssignments());
+        newAssignment.setReceiverOfAssignments(oldAssignment.getReceiverOfAssignments());
+        return assignmentMapper.entityToDto(save(newAssignment));
+    }
     @Override
     public AssignmentDto updateAssignment(AssignmentDtoRequest assignmentDtoRequest) {
         Assignment oldAssignment = assignmentMapper.dtoToEntity(assignmentDtoRequest);
@@ -66,12 +71,30 @@ public class AssignmentServiceImpl implements AssignmentService{
         newAssignment.setCreationDate(oldAssignment.getCreationDate());
         newAssignment.setAuthorOfAssignments(oldAssignment.getAuthorOfAssignments());
         newAssignment.setReceiverOfAssignments(oldAssignment.getReceiverOfAssignments());
-        return assignmentMapper.entityToDto(assignmentRepository.save(newAssignment));
+        return assignmentMapper.entityToDto(save(newAssignment));
+    }
+
+    @Override
+    public AssignmentDto deleteAssignment(Long id, Long authorId) {
+        Assignment assignment = getAssignmentByIdEntity(id);
+        if (!assignment.getAuthorOfAssignments().getId().equals(authorId))
+                throw new DontHaveAccessException();
+        assignment.setIsActive(false);
+        return assignmentMapper.entityToDto(save(assignment));
+    }
+
+    @Override
+    public AssignmentDto restoreAssignment(Long id, Long authorId) {
+        Assignment assignment = getAssignmentByIdEntity(id);
+        if (!assignment.getAuthorOfAssignments().getId().equals(authorId))
+            throw new DontHaveAccessException();
+        assignment.setIsActive(true);
+        return assignmentMapper.entityToDto(save(assignment));
     }
 
     @Override
     public AssignmentDto markAsDone(Long id) {
-        Assignment assignment = assignmentRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Assignment"));
+        Assignment assignment = getAssignmentByIdEntity(id);
         assignment.setIsDone(true);
         save(assignment);
         return assignmentMapper.entityToDto(assignment);
@@ -83,10 +106,29 @@ public class AssignmentServiceImpl implements AssignmentService{
     }
 
     @Override
-    public List<AssignmentDto> getAllUndoneAssignment() {
+    public List<AssignmentDto> getAllAssignmentByAuthor(Long authorId) {
+        List<AssignmentDto> assignmentDtoList = new ArrayList<>();
+        for (AssignmentDto a : getAllAssignment())
+            if (a.getAuthorId().equals(authorId))
+                assignmentDtoList.add(a);
+        return assignmentDtoList;
+    }
+
+    @Override
+    public List<AssignmentDto> getAllUndoneAssignment(List<AssignmentDto> assignmentDtoList) {
         List<AssignmentDto> undoneAssignment = new ArrayList<>();
 
-        for (AssignmentDto assignmentDto : getAllAssignment()) {
+        for (AssignmentDto assignmentDto : assignmentDtoList) {
+            if(!assignmentDto.getIsDone()) undoneAssignment.add(assignmentDto);
+        }
+        return undoneAssignment;
+    }
+
+    @Override
+    public List<AssignmentDto> getAllUndoneAssignmentFrom(List<Long> ids) {
+        List<AssignmentDto> undoneAssignment = new ArrayList<>();
+
+        for (AssignmentDto assignmentDto : getAllAssignmentFromReceiver(ids)) {
             if(!assignmentDto.getIsDone()) undoneAssignment.add(assignmentDto);
         }
         return undoneAssignment;
@@ -103,13 +145,13 @@ public class AssignmentServiceImpl implements AssignmentService{
     }
 
     @Override
-    public List<AssignmentDto> getAllAssignmentFromReceiver(List<Long> receiverIds) {
-        List<AssignmentDto> assignmentList = new ArrayList<>();
-        for (AssignmentDto a : getAllAssignment())
-            for (Long id : receiverIds)
-                if (a.getReceiverId().equals(id))
-                    assignmentList.add(a);
-        return assignmentList;
+    public List<AssignmentDto> getAllDoneAssignmentFrom(List<Long> ids) {
+        List<AssignmentDto> doneAssignment = new ArrayList<>();
+
+        for (AssignmentDto assignmentDto : getAllAssignmentFromReceiver(ids)) {
+            if(assignmentDto.getIsDone()) doneAssignment.add(assignmentDto);
+        }
+        return doneAssignment;
     }
 
     @Override
@@ -122,26 +164,12 @@ public class AssignmentServiceImpl implements AssignmentService{
     }
 
     @Override
-    public List<AssignmentDto> getAllUndoneAssignmentFrom(List<Long> ids) {
-        List<AssignmentDto> undoneAssignment = new ArrayList<>();
-
-        for (AssignmentDto assignmentDto : getAllAssignmentFromReceiver(ids)) {
-            if(!assignmentDto.getIsDone()) undoneAssignment.add(assignmentDto);
-        }
-        return undoneAssignment;
-    }
-
-    @Override
-    public List<AssignmentDto> getAllDoneAssignmentFrom(List<Long> ids) {
-        List<AssignmentDto> doneAssignment = new ArrayList<>();
-
-        for (AssignmentDto assignmentDto : getAllAssignmentFromReceiver(ids)) {
-            if(assignmentDto.getIsDone()) doneAssignment.add(assignmentDto);
-        }
-        return doneAssignment;
-    }
-
-    public void save(Assignment assignment) {
-        assignmentRepository.save(assignment);
+    public List<AssignmentDto> getAllAssignmentFromReceiver(List<Long> receiverIds) {
+        List<AssignmentDto> assignmentList = new ArrayList<>();
+        for (AssignmentDto a : getAllAssignment())
+            for (Long id : receiverIds)
+                if (a.getReceiverId().equals(id))
+                    assignmentList.add(a);
+        return assignmentList;
     }
 }

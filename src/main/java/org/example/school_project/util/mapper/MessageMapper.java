@@ -28,7 +28,10 @@ public class MessageMapper {
         messageDto.setCreationDate(message.getCreationDate());
         messageDto.setMessage(message.getMessage());
         messageDto.setIsRead(message.getIsRead());
+        messageDto.setReceiverId(message.getReceiverMessage().getId());
+        messageDto.setAuthorId(message.getAuthorMessage().getId());
         messageDto.setAuthorName(authorFullName);
+        messageDto.setIsActive(message.getIsActive());
         return messageDto;
     }
 

@@ -12,7 +12,9 @@ public class CharterDto {
     private String title;
     private String description;
     private LocalDateTime creationDate;
+    private Long authorId;
     private String authorName;
+    private Boolean isActive;
 
     public CharterDto(){}
 }

@@ -21,6 +21,8 @@ public class Charter {
     private String title;
     @Column(name = "description")
     private String description;
+    @Column(name = "is_active", nullable = false)
+    private Boolean isActive = true;
     @Column(name = "creation_date", nullable = false)
     private LocalDateTime creationDate;
 

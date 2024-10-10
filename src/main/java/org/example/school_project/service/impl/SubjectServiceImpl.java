@@ -7,6 +7,7 @@ import org.example.school_project.dto.SubjectDtoRequest;
 import org.example.school_project.entity.Subject;
 import org.example.school_project.repository.SubjectRepository;
 import org.example.school_project.service.SubjectService;
+import org.example.school_project.util.exception.AlreadyExistException;
 import org.example.school_project.util.exception.ObjectNotFoundException;
 import org.example.school_project.util.mapper.SubjectMapper;
 import org.springframework.stereotype.Service;
@@ -19,6 +20,10 @@ import java.util.List;
 public class SubjectServiceImpl implements SubjectService {
     private final SubjectRepository subjectRepository;
     private final SubjectMapper subjectMapper;
+
+    public Subject save(Subject subject) {
+        return subjectRepository.save(subject);
+    }
     @Override
     public Subject findByIdEntity(Long id) {
         return subjectRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Subject"));
@@ -37,14 +42,15 @@ public class SubjectServiceImpl implements SubjectService {
     }
     @Override
     public SubjectDto addSubject(SubjectDtoRequest subjectDtoRequest) {
-        return subjectMapper.entityToDto(subjectRepository.save(subjectMapper.dtoToEntity(subjectDtoRequest)));
+        if(subjectRepository.existsById(subjectDtoRequest.getId()))
+            throw new AlreadyExistException("Subject", "id");
+        if(subjectRepository.existsByTitle(subjectDtoRequest.getTitle()))
+            throw new AlreadyExistException("Subject", "title");
+        return subjectMapper.entityToDto(save(subjectMapper.dtoToEntity(subjectDtoRequest)));
     }
 
     @Override
     public SubjectDto updateSubject(SubjectDtoRequest subjectDtoRequest) {
-        if(findByIdEntity(subjectDtoRequest.getId()) == null){
-            throw new ObjectNotFoundException("Subject");
-        }
         Subject oldSubject = subjectMapper.dtoToEntity(subjectDtoRequest);
         Subject newSubject = findByIdEntity(subjectDtoRequest.getId());
 
@@ -53,13 +59,34 @@ public class SubjectServiceImpl implements SubjectService {
         newSubject.setDescription(oldSubject.getDescription());
         newSubject.setIsActive(oldSubject.getIsActive());
         newSubject.setTeachersSet(oldSubject.getTeachersSet());
-        return subjectMapper.entityToDto(subjectRepository.save(newSubject));
+        return subjectMapper.entityToDto(save(newSubject));
     }
 
     @Override
-    public void deleteSubject(Long id) {
-        Subject subject = subjectRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Subject"));
+    public SubjectDto deleteSubject(Long id) {
+        Subject subject = findByIdEntity(id);
         subject.setIsActive(false);
-        subjectRepository.save(subject);
+        return subjectMapper.entityToDto(save(subject));
+    }
+
+    @Override
+    public SubjectDto restoreSubject(Long id) {
+        Subject subject = findByIdEntity(id);
+        subject.setIsActive(true);
+        return subjectMapper.entityToDto(save(subject));
+    }
+
+    @Override
+    public List<SubjectDto> getAllSubject() {
+        return subjectMapper.entityToDtoList(subjectRepository.findAll());
+    }
+
+    @Override
+    public List<SubjectDto> getAllActiveSubject() {
+        List<SubjectDto> activeSubject = new ArrayList<>();
+        for (SubjectDto s : getAllSubject())
+            if (s.getIsActive())
+                activeSubject.add(s);
+        return activeSubject;
     }
 }

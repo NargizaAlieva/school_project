@@ -8,18 +8,27 @@ import org.example.school_project.entity.User;
 import java.util.List;
 
 public interface UserService {
-    User save(User user);
-    User getCurrentUser();
-    User getUserWithRole(String role);
+    User getEntityById(Long id);
     UserDto getById(Long id);
-    UserDto saveUser(User user);
     UserDto getByUsername(String username);
     UserDto getByEmail(String mail);
+    User getCurrentUser();
+
+    User getUserWithRole(String role);
+    List<User> getUserListWithRole(String role);
+
+    UserDto saveUser(User user);
     UserDto createUser(UserDtoRequest userDtoRequest);
+    UserDto updateUser(UserDtoRequest userDtoRequest);
+
     User addRoleToUser(RoleDto roleDto);
+
+    UserDto restoreUser(Long id);
+
+    void deleteUser(Long id);
+
     User removeRoleFromUser(RoleDto roleDto);
     List<UserDto> getAllUser();
-    void deleteUser(Long id);
-    UserDto updateUser(UserDtoRequest userDtoRequest);
-    User getEntityById(Long id);
+
+    List<UserDto> getAllActiveUser();
 }

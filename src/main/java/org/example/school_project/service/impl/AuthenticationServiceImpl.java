@@ -2,8 +2,10 @@ package org.example.school_project.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.school_project.dto.JwtAuthenticationResponse;
+import org.example.school_project.dto.RoleDto;
 import org.example.school_project.dto.SignInRequest;
 import org.example.school_project.dto.SignUpRequest;
+import org.example.school_project.entity.Role;
 import org.example.school_project.entity.User;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -11,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.HashSet;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +25,9 @@ public class AuthenticationServiceImpl {
 
     // Регистрация пользователя
     public JwtAuthenticationResponse signUp(SignUpRequest request) {
+        Set<Long> userRole = new HashSet<>();
+        userRole.add(10L);
+
         var user = User.builder()
                 .username(request.getUsername())
                 .email(request.getEmail())
@@ -35,6 +41,7 @@ public class AuthenticationServiceImpl {
                 .build();
 
         userService.saveUser(user);
+        userService.addRoleToUser(new RoleDto(user.getId(), userRole));
 
         var jwt = jwtService.generateToken(user);
         return new JwtAuthenticationResponse(jwt);

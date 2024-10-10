@@ -8,5 +8,7 @@ import java.util.Optional;
 
 @Repository
 public interface SubjectRepository extends JpaRepository<Subject, Long> {
+    boolean existsById(Long id);
+    boolean existsByTitle(String title);
     Optional<Subject> findByTitle(String title);
 }

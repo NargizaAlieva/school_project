@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface MarkRepository extends JpaRepository<Mark, Long> {
+    boolean existsById(Long id);
 }

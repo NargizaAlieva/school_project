@@ -29,30 +29,4 @@ public class SecretaryServiceImpl implements SecretaryService {
     public List<AssignmentDto> getAllUndoneAssignment() {
         return assignmentService.getAllUndoneAssignment();
     }
-
-
-    @Override
-    public MessageDto getMessageById(Long id) {
-        return messageService.getMessageById(id);
-    }
-
-    @Override
-    public List<MessageDto> getAllAdmissionApplication() {
-        return messageService.getAllAdmissionApplication();
-    }
-
-    @Override
-    public List<MessageDto> getAllUnreadAdmissionApplication() {
-        return messageService.getAllUnreadAdmissionApplication();
-    }
-
-    @Override
-    public List<MessageDto> getAllAppeal() {
-        return messageService.getAllAppeal();
-    }
-
-    @Override
-    public List<MessageDto> getAllUnreadAppeal() {
-        return messageService.getAllUnreadAppeal();
-    }
 }

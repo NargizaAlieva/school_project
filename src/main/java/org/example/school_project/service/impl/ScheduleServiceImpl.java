@@ -7,6 +7,8 @@ import org.example.school_project.entity.Schedule;
 import org.example.school_project.repository.ScheduleRepository;
 import org.example.school_project.service.ScheduleService;
 import org.example.school_project.service.StudentService;
+import org.example.school_project.util.exception.AlreadyExistException;
+import org.example.school_project.util.exception.IncorrectRequestException;
 import org.example.school_project.util.exception.ObjectNotFoundException;
 import org.example.school_project.util.mapper.ScheduleMapper;
 import org.springframework.stereotype.Service;
@@ -20,17 +22,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final ScheduleMapper scheduleMapper;
     private final StudentService studentService;
-    @Override
-    public ScheduleDto getScheduleById(Long id) {
-        if (id == null) return null;
-        Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Schedule"));
-        return scheduleMapper.entityToDto(schedule);
-    }
 
-    public Schedule getScheduleByIdEntity(Long id) {
-        if (id == null) return null;
-        return scheduleRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Schedule"));
-    }
     public Schedule save(Schedule schedule) {
         return scheduleRepository.save(schedule);
     }
@@ -40,16 +32,28 @@ public class ScheduleServiceImpl implements ScheduleService {
     }
 
     @Override
+    public Schedule getScheduleByIdEntity(Long id) {
+        if (id == null) throw new IncorrectRequestException("id");
+        return scheduleRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Schedule"));
+    }
+
+    @Override
+    public ScheduleDto getScheduleById(Long id) {
+        return scheduleMapper.entityToDto(getScheduleByIdEntity(id));
+    }
+
+    @Override
     public ScheduleDto createSchedule(ScheduleDtoRequest scheduleDtoRequest) {
-        return scheduleMapper.entityToDto(scheduleRepository.save(scheduleMapper.dtoToEntity(scheduleDtoRequest)));
+        if(scheduleRepository.existsById(scheduleDtoRequest.getId()))
+            throw new AlreadyExistException("Schedule", "'id'");
+        return scheduleMapper.entityToDto(save(scheduleMapper.dtoToEntity(scheduleDtoRequest)));
     }
 
     @Override
     public ScheduleDto updateSchedule(ScheduleDtoRequest scheduleDtoRequest) {
-        if (getScheduleById(scheduleDtoRequest.getId()) == null) return null;
         Schedule oldSchedule = scheduleMapper.dtoToEntity(scheduleDtoRequest);
         Schedule newSchedule = getScheduleByIdEntity(scheduleDtoRequest.getId());
-        newSchedule.setId(oldSchedule.getId());
+
         newSchedule.setDayOfWeek(oldSchedule.getDayOfWeek());
         newSchedule.setDueTime(oldSchedule.getDueTime());
         newSchedule.setQuarter(oldSchedule.getQuarter());
@@ -58,19 +62,44 @@ public class ScheduleServiceImpl implements ScheduleService {
         newSchedule.setGradeSchedule(oldSchedule.getGradeSchedule());
         newSchedule.setTeacherSchedule(oldSchedule.getTeacherSchedule());
         newSchedule.setIsApprove(oldSchedule.getIsApprove());
-        return scheduleMapper.entityToDto(scheduleRepository.save(newSchedule));
+        return scheduleMapper.entityToDto(save(newSchedule));
+    }
+
+    @Override
+    public ScheduleDto restoreSchedule(Long id) {
+        Schedule schedule = getScheduleByIdEntity(id);
+        schedule.setIsActive(true);
+        return scheduleMapper.entityToDto(save(schedule));
     }
 
     @Override
     public ScheduleDto deleteSchedule(Long id) {
         Schedule schedule = getScheduleByIdEntity(id);
-        //schedule.setIsActive(false);
+        schedule.setIsActive(false);
         return scheduleMapper.entityToDto(save(schedule));
     }
 
     @Override
     public List<ScheduleDto> getAllSchedule() {
-        return scheduleMapper.entityToDtoList(scheduleRepository.findAll());
+        return scheduleMapper.entityToDtoList(getAllScheduleEntity());
+    }
+
+    @Override
+    public List<ScheduleDto> getAllActiveSchedule() {
+        List<Schedule> activeSchedule = new ArrayList<>();
+        for (Schedule s : getAllScheduleEntity())
+            if (s.getIsActive())
+                activeSchedule.add(s);
+        return scheduleMapper.entityToDtoList(activeSchedule);
+    }
+
+    @Override
+    public List<ScheduleDto> filterActiveSchedule(List<ScheduleDto> scheduleDtoList) {
+        List<ScheduleDto> activeSchedule = new ArrayList<>();
+        for (ScheduleDto s : scheduleDtoList)
+            if (s.getIsActive())
+                activeSchedule.add(s);
+        return activeSchedule;
     }
 
     @Override
@@ -111,15 +140,21 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public ScheduleDto approveSchedule(Long id) {
-        if (id == null) return null;
-        Schedule schedule = scheduleRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Schedule"));
+        Schedule schedule = getScheduleByIdEntity(id);
         schedule.setIsApprove(true);
-        return scheduleMapper.entityToDto(scheduleRepository.save(schedule));
+        return scheduleMapper.entityToDto(save(schedule));
+    }
+
+    @Override
+    public ScheduleDto disapproveSchedule(Long id) {
+        Schedule schedule = getScheduleByIdEntity(id);
+        schedule.setIsApprove(false);
+        return scheduleMapper.entityToDto(save(schedule));
     }
 
     @Override
     public List<ScheduleDto> getAllUnApprovedSchedule() {
-        List<Schedule> allSchedule = scheduleRepository.findAll();
+        List<Schedule> allSchedule = getAllScheduleEntity();
         List<Schedule> unapprovedSchedule = new ArrayList<>();
         for (Schedule sch : allSchedule) {
             if(!sch.getIsApprove()) unapprovedSchedule.add(sch);

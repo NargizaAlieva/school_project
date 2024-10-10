@@ -9,10 +9,15 @@ import java.util.List;
 
 public interface SubjectService {
     Subject findByIdEntity(Long id);
-
     List<SubjectDto> getSubjectSchedule(List<ScheduleDto> scheduleDtoList);
 
     SubjectDto addSubject(SubjectDtoRequest subjectDtoRequest);
     SubjectDto updateSubject(SubjectDtoRequest subjectDtoRequest);
-    void deleteSubject(Long id);
+    SubjectDto deleteSubject(Long id);
+
+    SubjectDto restoreSubject(Long id);
+
+    List<SubjectDto> getAllSubject();
+
+    List<SubjectDto> getAllActiveSubject();
 }
