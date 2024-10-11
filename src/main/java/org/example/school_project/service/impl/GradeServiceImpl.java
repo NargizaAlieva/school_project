@@ -13,7 +13,9 @@ import org.example.school_project.util.mapper.GradeMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -75,8 +77,8 @@ public class GradeServiceImpl implements GradeService {
     }
 
     @Override
-    public List<GradeDto> getAllTeacherGrade(List<LessonDto> lessonDtoList) {
-        List<GradeDto> gradeDtoList = new ArrayList<>();
+    public Set<GradeDto> getAllTeacherGrade(List<LessonDto> lessonDtoList) {
+        Set<GradeDto> gradeDtoList = new HashSet<>();
         for (LessonDto l : lessonDtoList)
             for (GradeDto g : getAllGrade())
                 if(l.getGradeId().equals(g.getId()))

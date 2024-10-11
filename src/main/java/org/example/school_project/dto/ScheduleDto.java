@@ -13,8 +13,10 @@ public class ScheduleDto {
     private String dueTime;
     private String year;
     private Boolean isApprove;
-    private String subjectSchedule;
+    private Long subjectId;
+    private String subjectTitle;
     private String teacherName;
+    private Long gradeId;
     private String gradeName;
     private Boolean isActive;
 

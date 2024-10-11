@@ -18,6 +18,7 @@ public interface SubjectService {
     SubjectDto restoreSubject(Long id);
 
     List<SubjectDto> getAllSubject();
-
     List<SubjectDto> getAllActiveSubject();
+
+    List<SubjectDto> getSubjectForGrade(List<ScheduleDto> scheduleDtoList, Long gradeId, String year);
 }

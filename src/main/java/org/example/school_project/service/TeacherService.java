@@ -3,6 +3,7 @@ package org.example.school_project.service;
 import org.example.school_project.dto.*;
 
 import java.util.List;
+import java.util.Set;
 
 public interface TeacherService {
     List<ScheduleDto> getTeacherSchedule();
@@ -25,7 +26,7 @@ public interface TeacherService {
 
     List<GradeDto> getAllGrade();
 
-    List<GradeDto> getTeacherGrade();
+    Set<GradeDto> getTeacherGrade();
 
     List<StudentDto> getAllStudentByGrade(Long gradeId);
 
@@ -34,5 +35,12 @@ public interface TeacherService {
     ReviewDto updateReview(ReviewDtoRequest reviewDtoRequest);
 
     List<HomeworkDto> getAllHwByTeacher();
+
+    List<HomeworkDto> getUncheckedHw();
+
+    List<HomeworkDto> getAllUncheckedHwByTeacherLesson(Long lessonId);
+
     HomeworkDto markHw(Long hwId, Integer mark, String hwReview);
+
+    void sendToParentByStudentId(Long studentId, MessageDtoRequest messageDtoRequest);
 }

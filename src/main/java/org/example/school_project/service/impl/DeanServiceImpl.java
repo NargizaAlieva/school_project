@@ -88,11 +88,11 @@ public class DeanServiceImpl implements DeanService{
     }
     @Override
     public CharterDto deleteCharter(Long id) {
-        return charterService.deleteCharter(id);
+        return charterService.deleteCharter(id, getCurrentEmployee().getId());
     }
     @Override
     public CharterDto restoreCharter(Long id) {
-        return charterService.restoreCharter(id);
+        return charterService.restoreCharter(id, getCurrentEmployee().getId());
     }
     @Override
     public List<CharterDto> getAllCharter(){
@@ -114,6 +114,10 @@ public class DeanServiceImpl implements DeanService{
     @Override
     public StudentDto excludeStudent(Long id) {
         return studentService.excludeStudent(id);
+    }
+    @Override
+    public StudentDto restoreStudent(Long id) {
+        return studentService.restoreStudent(id);
     }
     @Override
     public List<StudentDto> getAllStudent() {
@@ -152,5 +156,10 @@ public class DeanServiceImpl implements DeanService{
     @Override
     public List<AssignmentDto> getAllUndoneAssigment(){
         return assignmentService.getAllUndoneAssignment(getAllAssignmentByAuthor());
+    }
+
+    @Override
+    public List<AssignmentDto> getAllDoneAssigment(){
+        return assignmentService.getAllDoneAssignment(getAllAssignmentByAuthor());
     }
 }

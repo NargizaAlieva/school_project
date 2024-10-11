@@ -13,7 +13,8 @@ public interface HomeworkService {
     HomeworkDto createHw(HomeworkDtoRequest homeworkDtoRequest);
     HomeworkDto updateHw(HomeworkDtoRequest homeworkDtoRequest);
 
-    List<HomeworkDto> filtHw(List<LessonDto> lessonDtoList);
+    List<HomeworkDto> getUncheckedHw(List<HomeworkDto> homeworklist);
+
     List<HomeworkDto> getHwByStudent(Long studentId);
 
     List<HomeworkDto> getHwByStudentSubject(Long studentId, Long subjectId);
@@ -24,5 +25,9 @@ public interface HomeworkService {
 
     List<HomeworkDto> getHwByLesson(Long id);
 
+    Double getGradeByMarkDto(List<HomeworkDto> homeworkDtoList);
+
     HomeworkDto leaveHwMarkReview(Long hwId, Integer mark, String hwReview);
+
+    List<HomeworkDto> convertToHw(List<LessonDto> lessonDtoList);
 }

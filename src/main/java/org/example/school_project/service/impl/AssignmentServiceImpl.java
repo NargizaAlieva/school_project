@@ -40,11 +40,11 @@ public class AssignmentServiceImpl implements AssignmentService{
     @Override
     public AssignmentDto updateAssignment(AssignmentDtoRequest assignmentDtoRequest, Long authorId) {
         assignmentDtoRequest.setAuthorId(authorId);
-        if (!assignmentDtoRequest.getAuthorId().equals(authorId))
-            throw new DontHaveAccessException();
-
         Assignment oldAssignment = assignmentMapper.dtoToEntity(assignmentDtoRequest);
         Assignment newAssignment = getAssignmentByIdEntity(assignmentDtoRequest.getId());
+
+        if (!oldAssignment.getAuthorOfAssignments().getId().equals(newAssignment.getAuthorOfAssignments().getId()))
+            throw new DontHaveAccessException();
 
         newAssignment.setAssignment(oldAssignment.getAssignment());
         newAssignment.setIsDone(oldAssignment.getIsDone());
@@ -73,9 +73,9 @@ public class AssignmentServiceImpl implements AssignmentService{
     }
 
     @Override
-    public AssignmentDto markAsDone(Long id, Long authorId) {
+    public AssignmentDto markAsDone(Long id, Long receiverId) {
         Assignment assignment = getAssignmentByIdEntity(id);
-        if (!assignment.getReceiverOfAssignments().getId().equals(authorId))
+        if (!assignment.getReceiverOfAssignments().getId().equals(receiverId))
             throw new DontHaveAccessException();
         assignment.setIsDone(true);
         save(assignment);
@@ -117,7 +117,7 @@ public class AssignmentServiceImpl implements AssignmentService{
     }
 
     @Override
-    public List<AssignmentDto> getAllDoneAssignment() {
+    public List<AssignmentDto> getAllDoneAssignment(List<AssignmentDto> assignmentDtoList) {
         List<AssignmentDto> doneAssignment = new ArrayList<>();
 
         for (AssignmentDto assignmentDto : getAllAssignment()) {

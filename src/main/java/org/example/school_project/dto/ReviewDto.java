@@ -16,8 +16,11 @@ public class ReviewDto {
     private Long id;
     private String review;
     private LocalDateTime creationDate;
-    private String authorId;
-    private String studentId;
+    private Long authorId;
+    private String authorName;
+    private Long studentId;
+    private String studentName;
+    private String gradeName;
     private Boolean isActive;
 
     public ReviewDto(){}

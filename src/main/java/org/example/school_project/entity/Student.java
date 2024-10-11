@@ -46,6 +46,9 @@ public class Student {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "studentAttendance")
     private List<Attendance> attendanceList;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "studentDuty")
+    private List<DutyList> dutyLists;
+
     @ManyToOne
     @JoinColumn(name = "grade_id", referencedColumnName = "id")
     private Grade grade;

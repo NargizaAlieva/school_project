@@ -131,6 +131,13 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public StudentDto restoreStudent(Long id) {
+        Student student = getStudentByIdEntity(id);
+        student.getUser().setIsActive(true);
+        return studentMapper.entityToDto(save(student));
+    }
+
+    @Override
     public List<StudentDto> getAllStudent() {
         return studentMapper.entityToDtoList(studentRepository.findAll());
     }

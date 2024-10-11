@@ -42,7 +42,7 @@ public class MessageMapper {
     public Message dtoToEntity(MessageDtoRequest messageDtoRequest) {
         Message message = new Message();
         for (MessageTheme m : MessageTheme.values()) {
-            if (messageDtoRequest.getTheme().equals(m.name()))
+            if (messageDtoRequest.getTheme().toUpperCase().equals(m.name()))
                 message.setTheme(m);
         }
         message.setId(messageDtoRequest.getId());

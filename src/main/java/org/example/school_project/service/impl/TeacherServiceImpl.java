@@ -2,11 +2,12 @@ package org.example.school_project.service.impl;
 
 import lombok.RequiredArgsConstructor;
 import org.example.school_project.dto.*;
+import org.example.school_project.entity.Employee;
 import org.example.school_project.service.*;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -21,14 +22,25 @@ public class TeacherServiceImpl implements TeacherService {
     private final EmployeeService employeeService;
     private final UserService userService;
     private final LessonService lessonService;
+    private final MessageService messageService;
 
-    public Long getCurrentTeacher() {
-        return employeeService.getByUserId(userService.getCurrentUser().getId()).getId();
+    public Employee getCurrentTeacher() {
+        return employeeService.getByUserId(userService.getCurrentUser().getId());
     }
 
     @Override
     public List<ScheduleDto> getTeacherSchedule() {
-        return scheduleService.getAllScheduleByTeacher(getCurrentTeacher());
+        return scheduleService.filterActiveSchedule(scheduleService.getAllScheduleByTeacher(getCurrentTeacher().getId()));
+    }
+
+    @Override
+    public ReviewDto createReview(ReviewDtoRequest reviewDtoRequest) {
+        return reviewService.createReview(reviewDtoRequest, getCurrentTeacher().getUser().getId());
+    }
+
+    @Override
+    public ReviewDto updateReview(ReviewDtoRequest reviewDtoRequest) {
+        return reviewService.updateReview(reviewDtoRequest, getCurrentTeacher().getUser().getId());
     }
 
     @Override
@@ -63,12 +75,15 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public List<MarkDto> getMarkTeacher() {
-        return markService.filterMark(lessonService.getAllLessonByTeacherId(getCurrentTeacher()));
+        return markService.filterMark(lessonService.getAllLessonByTeacherId(
+                lessonService.getAllLesson(), getCurrentTeacher().getId()));
     }
 
     @Override
     public List<MarkDto> getMarkTeacherByGrade(Long gradeId) {
-        return markService.filterMark(lessonService.getAllTeacherGrade(getCurrentTeacher(), gradeId));
+        return markService.filterMark(lessonService.getAllLessonByGradeId(
+                lessonService.getAllLessonByTeacherId(
+                        lessonService.getAllLesson(), getCurrentTeacher().getId()), gradeId));
     }
 
     @Override
@@ -77,8 +92,9 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public List<GradeDto> getTeacherGrade() {
-        return gradeService.getAllTeacherGrade(lessonService.getAllLessonByTeacherId(getCurrentTeacher()));
+    public Set<GradeDto> getTeacherGrade() {
+        return gradeService.getAllTeacherGrade(lessonService.getAllLessonByTeacherId(
+                lessonService.getAllLesson(), getCurrentTeacher().getId()));
     }
 
     @Override
@@ -87,22 +103,28 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public ReviewDto createReview(ReviewDtoRequest reviewDtoRequest) {
-        return reviewService.createReview(reviewDtoRequest);
-    }
-
-    @Override
-    public ReviewDto updateReview(ReviewDtoRequest reviewDtoRequest) {
-        return reviewService.updateReview(reviewDtoRequest);
-    }
-
-    @Override
     public List<HomeworkDto> getAllHwByTeacher() {
-        return homeworkService.filtHw(lessonService.getAllLessonByTeacherId(getCurrentTeacher()));
+        return homeworkService.convertToHw(lessonService.getAllLessonByTeacherId(
+                lessonService.getAllLesson(), getCurrentTeacher().getId()));
     }
 
+    @Override
+    public List<HomeworkDto> getUncheckedHw() {
+        return homeworkService.getUncheckedHw(getAllHwByTeacher());
+    }
+
+    @Override
+    public List<HomeworkDto> getAllUncheckedHwByTeacherLesson(Long lessonId) {
+        return homeworkService.getUncheckedHw(homeworkService.getHwByLesson(lessonId));
+    }
     @Override
     public HomeworkDto markHw(Long hwId, Integer mark, String hwReview) {
         return homeworkService.leaveHwMarkReview(hwId, mark, hwReview);
+    }
+
+    @Override
+    public void sendToParentByStudentId(Long studentId, MessageDtoRequest messageDtoRequest) {
+        messageDtoRequest.setReceiverId(studentService.getStudentById(studentId).getParentId());
+        messageService.createMessage(messageDtoRequest);
     }
 }

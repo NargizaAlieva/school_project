@@ -69,14 +69,14 @@ public class AttendanceServiceMapper implements AttendanceService {
     }
 
     @Override
-    public List<AttendanceDto> filterTrueAttendance(List<LessonDto> lessonDtoList) {
+    public List<AttendanceDto> filterTrueAttendance(List<LessonDto> lessonDtoList, Long studentId) {
         List<AttendanceDto> allAttendances = new ArrayList<>();
         for (LessonDto l : lessonDtoList) {
             for (AttendanceDto a : getAllAttendance())
                 if (l.getId().equals(a.getLessonId()))
-                    if (a.getIsAttended())
-                        allAttendances.add(a);
-
+                    if (a.getStudentId().equals(studentId))
+                        if (a.getIsAttended())
+                            allAttendances.add(a);
         }
         return allAttendances;
     }
@@ -87,14 +87,31 @@ public class AttendanceServiceMapper implements AttendanceService {
         for (LessonDto l : lessonDtoList) {
             for (AttendanceDto a : getAllAttendance())
                 if (l.getId().equals(a.getLessonId()) && a.getStudentId().equals(studentId))
-                    if (a.getIsAttended())
                         allAttendances.add(a);
-
         }
         return allAttendances;
     }
+
     @Override
-    public Long countAttendanceStudent(Long studentId, List<LessonDto> lessonDtoList) {
-        return (long) lessonDtoList.size();
+    public List<AttendanceDto> countAttendanceStudent(List<LessonDto> lessonDtoList, Long studentId) {
+        List<AttendanceDto> attendanceList = new ArrayList<>();
+        for (LessonDto l : lessonDtoList) {
+            for (AttendanceDto a : getAllAttendance())
+                if (l.getId().equals(a.getLessonId()) && a.getStudentId().equals(studentId)) {
+                    if (a.getIsAttended())
+                        attendanceList.add(a);
+                }
+        }
+        return attendanceList;
+    }
+
+    @Override
+    public Integer countAttend(List<AttendanceDto> attendanceDtoList) {
+        Integer attendCount = 0;
+        for (AttendanceDto a : attendanceDtoList) {
+            if (a.getIsAttended())
+                attendCount++;
+        }
+        return attendCount;
     }
 }

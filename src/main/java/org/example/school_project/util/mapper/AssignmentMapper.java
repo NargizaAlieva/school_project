@@ -32,7 +32,7 @@ public class AssignmentMapper {
         assignmentDto.setCreationDate(assignment.getCreationDate());
         assignmentDto.setAuthorId(assignment.getAuthorOfAssignments().getId());
         assignmentDto.setAuthorName(authorFullName);
-        assignmentDto.setReceiverId(assignment.getAuthorOfAssignments().getId());
+        assignmentDto.setReceiverId(assignment.getReceiverOfAssignments().getId());
         assignmentDto.setReceiverName(receiverFullName);
         return assignmentDto;
     }

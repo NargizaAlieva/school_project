@@ -37,7 +37,7 @@ public class SubjectServiceImpl implements SubjectService {
     public List<SubjectDto> getSubjectSchedule(List<ScheduleDto> scheduleDtoList) {
         List<Subject> subjectList = new ArrayList<>();
         for (ScheduleDto s : scheduleDtoList)
-            subjectList.add(findByTitle(s.getSubjectSchedule()));
+            subjectList.add(findByTitle(s.getSubjectTitle()));
         return subjectMapper.entityToDtoList(subjectList);
     }
     @Override
@@ -89,4 +89,14 @@ public class SubjectServiceImpl implements SubjectService {
                 activeSubject.add(s);
         return activeSubject;
     }
+
+    @Override
+    public List<SubjectDto> getSubjectForGrade(List<ScheduleDto> scheduleDtoList, Long gradeId, String year) {
+        List<SubjectDto> activeSubject = new ArrayList<>();
+        for (ScheduleDto s : scheduleDtoList)
+            if (s.getGradeId().equals(gradeId) && s.getYear().equals(year))
+                subjectMapper.entityToDto(findByIdEntity(s.getGradeId()));
+        return activeSubject;
+    }
+
 }

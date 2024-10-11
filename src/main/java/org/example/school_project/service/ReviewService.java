@@ -10,12 +10,13 @@ public interface ReviewService {
     Review getByIdReviewEntity(Long id);
     ReviewDto getByIdReview(Long id);
 
-    ReviewDto deleteReview(Long id);
-    ReviewDto restoreReview(Long id);
+    ReviewDto createReview(ReviewDtoRequest reviewDtoRequest, Long authorId);
+    ReviewDto updateReview(ReviewDtoRequest reviewDtoRequest,  Long authorId);
 
     List<ReviewDto> getReviewByStudentId(Long id);
     List<ReviewDto> getReviewByAuthorId(Long id);
     List<ReviewDto> getReviewByAuthorId(List<Long> id);
-    ReviewDto createReview(ReviewDtoRequest reviewDtoRequest);
-    ReviewDto updateReview(ReviewDtoRequest reviewDtoRequest);
+
+    ReviewDto deleteReview(Long id, Long authorId);
+    ReviewDto restoreReview(Long id, Long authorId);
 }
