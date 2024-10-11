@@ -13,9 +13,13 @@ public interface AttendanceService {
     AttendanceDto createAttendance(AttendanceDtoRequest attendanceDtoRequest);
     AttendanceDto updateAttendance(AttendanceDtoRequest attendanceDtoRequest);
     List<AttendanceDto> filterAttendance(List<LessonDto> lessonDtoList);
-    List<AttendanceDto> filterTrueAttendance(List<LessonDto> lessonDtoList);
+
+    List<AttendanceDto> filterTrueAttendance(List<LessonDto> lessonDtoList, Long studentId);
 
     List<AttendanceDto> getAllAttendanceStudent(List<LessonDto> lessonDtoList, Long studentId);
 
-    Long countAttendanceStudent(Long studentId, List<LessonDto> lessonDtoList);
+    List<AttendanceDto> countAttendanceStudent(List<LessonDto> lessonDtoList, Long studentId);
+
+    Integer countAttend(List<AttendanceDto> attendanceDtoList);
+
 }

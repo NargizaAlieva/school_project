@@ -53,21 +53,30 @@ public class ClassTeacherController {
         }
     }
 
-    @GetMapping(value = "/get-all-assignment")
+    @GetMapping(value = "/get-all-assignment-to-class-represent")
     public ResponseEntity<Response> getAllAssignmentByAuthor() {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Successfully got all Assignment", classTeacherService.getAllAssignmentByAuthor()));
+            return ResponseEntity.status(HttpStatus.OK).body(new Response("Successfully got all Assignment", classTeacherService.getAllAssignmentFromClassRepresent()));
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
         }
     }
 
-    @GetMapping(value = "/get-all-undone-assignment")
+    @GetMapping(value = "/get-all-undone-assignment-to-class-represent")
     public ResponseEntity<Response> getAllUndoneAssigment() {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Successfully got all undone Assignment", classTeacherService.getAllUndoneAssigment()));
+            return ResponseEntity.ok(new Response("Successfully got all undone Assignment", classTeacherService.getAllUndoneAssFromClassRepresent()));
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/get-all-done-assignment-to-class-represent")
+    public ResponseEntity<Response> getAllDoneAssignmentFrom() {
+        try {
+            return ResponseEntity.ok(new Response("Successfully got all done assignment", classTeacherService.getAllDoneAssFromClassRepresent()));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
         }
     }
 
@@ -81,30 +90,21 @@ public class ClassTeacherController {
         }
     }
 
-//    @GetMapping("/get-all-assignment")
-//    public ResponseEntity<Response> getAllAssignment() {
-//        try {
-//            return ResponseEntity.ok(new Response("Successfully got all Assignment", classTeacherService.getAllAssignment()));
-//        } catch (Exception exception) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
-//        }
-//    }
-//
-//    @GetMapping("/get-all-undone-assignment")
-//    public ResponseEntity<Response> getAllUndoneAssignment() {
-//        try {
-//            return ResponseEntity.ok(new Response("Successfully got all undone Assignment", classTeacherService.getAllUndoneAssignment()));
-//        } catch (Exception exception) {
-//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
-//        }
-//    }
-//
-    @GetMapping("/get-all-done-assignment-from")
-    public ResponseEntity<Response> getAllDoneAssignmentFrom() {
+    @GetMapping("/get-all-assignment-from-dean")
+    public ResponseEntity<Response> getAllAssignment() {
         try {
-            return ResponseEntity.ok(new Response("Successfully got all done assignment", classTeacherService.getAllDoneAssFromClassRepresent()));
+            return ResponseEntity.ok(new Response("Successfully got all Assignment", classTeacherService.getAllAssFromDean()));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/get-all-undone-assignment-from-dean")
+    public ResponseEntity<Response> getAllUndoneAssignment() {
+        try {
+            return ResponseEntity.ok(new Response("Successfully got all undone Assignment", classTeacherService.getAllUndoneAssFromDean()));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
         }
     }
 
@@ -122,7 +122,7 @@ public class ClassTeacherController {
     @GetMapping("/get-all-class-student")
     public ResponseEntity<Response> studentsFromClass() {
         try {
-            return ResponseEntity.ok(new Response("Successfully got all class student", classTeacherService.studentsFromClass()));
+            return ResponseEntity.ok(new Response("Successfully got all class student", classTeacherService.getAllStudentsFromClass()));
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
         }
@@ -232,6 +232,57 @@ public class ClassTeacherController {
             return ResponseEntity.status(HttpStatus.OK).body(new Response("Successfully updated Attendance", attendanceDto));
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Attendance is not saved. " + exception.getMessage(), null));
+        }
+    }
+
+    @PostMapping(value = "/send-to-parent-by-student/{id}")
+    public ResponseEntity<Response> sendToParentByStudentId(@PathVariable Long id,
+                                                            @RequestBody MessageDtoRequest request) {
+        try {
+            classTeacherService.sendToParentByStudentId(id, request);
+            return ResponseEntity.status(HttpStatus.OK).body(new Response("Sent successfully", null));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+        }
+    }
+    @PostMapping(value = "/send-message-to-home-grade-students-by-grade/{id}")
+    public ResponseEntity<Response> sendMessageForGradeStudentsByGrade(@PathVariable Long id,
+                                                                @RequestBody MessageDtoRequest request) {
+        try {
+            classTeacherService.sendMessageForGradeStudentsByGrade(id, request);
+            return ResponseEntity.status(HttpStatus.OK).body(new Response("Sent successfully", null));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+        }
+    }
+    @PostMapping(value = "/send-message-to-home-grade-parents-by-grade/{id}")
+    public ResponseEntity<Response> sendMessageForGradeParentsByGrade(@PathVariable Long id,
+                                                                @RequestBody MessageDtoRequest request) {
+        try {
+            classTeacherService.sendMessageForGradeParentsByGrade(id, request);
+            return ResponseEntity.status(HttpStatus.OK).body(new Response("Sent successfully", null));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+        }
+    }
+
+    @PostMapping(value = "/send-message-to-home-grade-students")
+    public ResponseEntity<Response> sendMessageForGradeStudents(@RequestBody MessageDtoRequest request) {
+        try {
+            classTeacherService.sendMessageForGradeStudents(request);
+            return ResponseEntity.status(HttpStatus.OK).body(new Response("Sent successfully", null));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
+        }
+    }
+
+    @PostMapping(value = "/send-message-to-home-grade-parent")
+    public ResponseEntity<Response> sendMessageForGradeParent(@RequestBody MessageDtoRequest request) {
+        try {
+            classTeacherService.sendMessageForGradeParent(request);
+            return ResponseEntity.status(HttpStatus.OK).body(new Response("Sent successfully", null));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
         }
     }
 }

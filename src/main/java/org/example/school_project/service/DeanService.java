@@ -32,6 +32,9 @@ public interface DeanService {
     StudentDto getStudentById(Long id);
     StudentDto updateStudent(StudentDtoRequest studentDtoRequest);
     StudentDto excludeStudent(Long id);
+
+    StudentDto restoreStudent(Long id);
+
     List<StudentDto> getAllStudent();
     List<StudentDto> getAllActiveStudent();
     List<StudentDto> getAllActiveStudentByGrade(Long gradeId);
@@ -42,4 +45,6 @@ public interface DeanService {
     AssignmentDto restoreAssignment(Long id);
     List<AssignmentDto> getAllAssignmentByAuthor();
     List<AssignmentDto> getAllUndoneAssigment();
+
+    List<AssignmentDto> getAllDoneAssigment();
 }

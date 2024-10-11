@@ -6,6 +6,7 @@ import org.example.school_project.dto.MarkDto;
 import org.example.school_project.dto.MarkDtoRequest;
 import org.example.school_project.entity.Mark;
 import org.example.school_project.repository.MarkRepository;
+import org.example.school_project.service.LessonService;
 import org.example.school_project.service.MarkService;
 import org.example.school_project.util.exception.AlreadyExistException;
 import org.example.school_project.util.exception.ObjectNotFoundException;
@@ -20,11 +21,12 @@ import java.util.List;
 public class MarkServiceImpl implements MarkService {
     private final MarkRepository markRepository;
     private final MarkMapper markMapper;
-
+    private final LessonService lessonService;
 
     public Mark save(Mark mark) {
         return markRepository.save(mark);
     }
+
     @Override
     public Mark getMarkByIdEntity(Long id) {
         return markRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Mark"));
@@ -60,26 +62,45 @@ public class MarkServiceImpl implements MarkService {
     }
 
     @Override
-    public List<MarkDto> getAllMarkByStudent(Long id) {
-        return null;
+    public List<MarkDto> getAllMarkByStudent(Long studentId) {
+        List<MarkDto> markDtoList = new ArrayList<>();
+        for (MarkDto m : getAllMark())
+            if (m.getStudentId().equals(studentId))
+                markDtoList.add(m);
+        return markDtoList;
     }
 
     @Override
-    public List<MarkDto> filterMark(List<LessonDto> ids) {
-        List<MarkDto> allMarks = new ArrayList<>();
-        for (LessonDto l : ids) {
+    public Double getGradeByMarkDto(List<MarkDto> markDtoList) {
+        Double sum = 0.0;
+        for (MarkDto m : markDtoList) sum += m.getMark();
+        return sum/markDtoList.size();
+    }
+
+    @Override
+    public Double getGradeByDouble(List<Double> markList) {
+        Double sum = 0.0;
+        for (Double m : markList)
+            sum += m;
+        return sum/markList.size();
+    }
+
+    @Override
+    public List<MarkDto> filterMark(List<LessonDto> lessonDtoList) {
+        List<MarkDto> markDtoList = new ArrayList<>();
+        for (LessonDto l : lessonDtoList) {
             for (MarkDto m : getAllMark())
                 if (l.getId().equals(m.getLessonId()))
-                    allMarks.add(m);
+                    markDtoList.add(m);
 
         }
-        return allMarks;
+        return markDtoList;
     }
 
     @Override
-    public List<MarkDto> filterMark(List<LessonDto> ids, Long studentId) {
+    public List<MarkDto> filterMark(List<LessonDto> lessonDtoList, Long studentId) {
         List<MarkDto> allMarks = new ArrayList<>();
-        for (LessonDto l : ids) {
+        for (LessonDto l : lessonDtoList) {
             for (MarkDto m : getAllMark())
                 if (l.getId().equals(m.getLessonId()) && m.getStudentId().equals(studentId))
                     allMarks.add(m);

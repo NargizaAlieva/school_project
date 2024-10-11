@@ -3,10 +3,12 @@ package org.example.school_project.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.example.school_project.dto.MessageDto;
 import org.example.school_project.dto.MessageDtoRequest;
+import org.example.school_project.dto.StudentDto;
 import org.example.school_project.entity.Message;
 import org.example.school_project.enums.MessageTheme;
 import org.example.school_project.repository.MessageRepository;
 import org.example.school_project.service.MessageService;
+import org.example.school_project.service.ParentService;
 import org.example.school_project.util.exception.AlreadyExistException;
 import org.example.school_project.util.exception.DontHaveAccessException;
 import org.example.school_project.util.exception.ObjectNotFoundException;
@@ -22,6 +24,7 @@ import java.util.List;
 public class MessageServiceImpl implements MessageService {
     private final MessageRepository messageRepository;
     private final MessageMapper messageMapper;
+    private final ParentService parentService;
 
     public Message getMessageByIdEntity(Long id) {
         return messageRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Message"));
@@ -58,7 +61,8 @@ public class MessageServiceImpl implements MessageService {
     public MessageDto createMessage(MessageDtoRequest messageDtoRequest) {
         if (messageRepository.existsById(messageDtoRequest.getId()))
             throw new AlreadyExistException("Message", "'id'");
-        return messageMapper.entityToDto(save(messageMapper.dtoToEntity(messageDtoRequest)));
+        Message message = save(messageMapper.dtoToEntity(messageDtoRequest));
+        return messageMapper.entityToDto(message);
     }
 
     @Override
@@ -161,5 +165,27 @@ public class MessageServiceImpl implements MessageService {
         }
         markAsRead(allAppealMessage);
         return allAppealMessage;
+    }
+
+    @Override
+    public void sendMessageForGradeStudents(List<StudentDto> studentDtoList, MessageDtoRequest messageDtoRequest) {
+        Long messageId = messageDtoRequest.getId();
+        for (StudentDto s : studentDtoList) {
+            messageDtoRequest.setId(messageId);
+            messageDtoRequest.setReceiverId(s.getUser().getId());
+            createMessage(messageDtoRequest);
+            messageId++;
+        }
+    }
+
+    @Override
+    public void sendMessageForGradeParent(List<StudentDto> studentDtoList, MessageDtoRequest messageDtoRequest) {
+        Long messageId = messageDtoRequest.getId();
+        for (StudentDto s : studentDtoList) {
+            messageDtoRequest.setId(messageId);
+            messageDtoRequest.setReceiverId(parentService.getByIdEntity(s.getParentId()).getUser().getId());
+            createMessage(messageDtoRequest);
+            messageId++;
+        }
     }
 }

@@ -36,13 +36,13 @@ public class ParentRoleServiceImpl implements ParentRoleService {
         return markService.getAllMarkByStudent(studentId);    }
 
     @Override
-    public List<MarkDto> getAllMarkBySubject(Long studentId, Long subjectId) {
-        return markService.filterMark(lessonService.getAllLessonBySubjectId(subjectId), studentId);
+    public List<MarkDto> getAllMarkBySubject(Long studentId, Long subject) {
+        return null;
     }
 
     @Override
     public List<MarkDto> getAllMarkBySubjectQuarter(Long studentId, String year, Long subjectId, Integer quarter) {
-        return markService.filterMark(lessonService.getAllLessonByYearSubjectId(year, subjectId, quarter), studentId);
+        return null;
     }
 
     @Override
@@ -52,18 +52,19 @@ public class ParentRoleServiceImpl implements ParentRoleService {
 
     @Override
     public List<AttendanceDto> getAttendanceSubject(Long studentId, Long subjectId) {
-        return attendanceService.getAllAttendanceStudent(lessonService.getAllLessonBySubjectId(subjectId), subjectId);
+        return null;
     }
 
     @Override
     public List<AttendanceDto> getAttendanceSubject(Long studentId, Long subjectId, String year) {
-        return attendanceService.getAllAttendanceStudent(lessonService.getAllLessonByYearSubjectId(year, subjectId), subjectId);
+        return null;
     }
 
     @Override
     public List<AttendanceDto> getAttendanceSubject(Long studentId, Long subjectId, String year, Integer quarter) {
-        return attendanceService.getAllAttendanceStudent(lessonService.getAllLessonByYearSubjectId(year, subjectId, quarter), subjectId);
+        return null;
     }
+
 
     @Override
     public List<HomeworkDto> getAllHomework(Long studentId) {

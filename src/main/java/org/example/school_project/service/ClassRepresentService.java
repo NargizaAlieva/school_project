@@ -1,24 +1,23 @@
 package org.example.school_project.service;
 
-import org.example.school_project.dto.AssignmentDto;
-import org.example.school_project.dto.ReviewDto;
-import org.example.school_project.dto.ReviewDtoRequest;
+import org.example.school_project.dto.*;
 
 import java.util.List;
 
 public interface ClassRepresentService {
-
+    ReviewDto createReview(ReviewDtoRequest reviewDtoRequest);
+    ReviewDto updateReview(ReviewDtoRequest reviewDtoRequest);
     AssignmentDto markAsDone(Long id);
 
-    List<AssignmentDto> getAllAssignment();
+    ReviewDto deleteReview(Long id);
+    ReviewDto restoreReview(Long id);
 
+    List<AssignmentDto> getAllAssignment();
     List<AssignmentDto> getAllUndoneAssignment();
 
-    ReviewDto createReview(ReviewDtoRequest reviewDtoRequest);
+    void sendMessageForGradeStudents(MessageDtoRequest messageDtoRequest);
 
-    ReviewDto updateReview(ReviewDtoRequest reviewDtoRequest);
-
-    ReviewDto deleteReview(Long id);
-
-    ReviewDto restoreReview(Long id);
+    DutyListDto createDutyList(DutyListDtoRequest dutyListDtoRequest);
+    DutyListDto updateDutyList(DutyListDtoRequest dutyListDtoRequest);
+    List<DutyListDto> getAllDutyListByGrade();
 }

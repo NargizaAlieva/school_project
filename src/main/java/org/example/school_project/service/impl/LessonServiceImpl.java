@@ -22,6 +22,10 @@ public class LessonServiceImpl implements LessonService {
     private final LessonRepository lessonRepository;
     private final LessonMapper lessonMapper;
     private final ScheduleService scheduleService;
+
+    public Lesson save(Lesson lesson) {
+        return lessonRepository.save(lesson);
+    }
     @Override
     public Lesson getLessonByIdEntity(Long id) {
         return lessonRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Lesson"));
@@ -58,169 +62,57 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public List<LessonDto> getAllLessonByTeacherId(Long id) {
+    public List<LessonDto> getAllLessonByTeacherId(List<LessonDto> lessonDtoList, Long teacherId) {
         List<LessonDto> teacherLesson = new ArrayList<>();
-        for (LessonDto l : getAllLesson()) {
-            if (l.getTeacherId().equals(id))
+        for (LessonDto l : lessonDtoList) {
+            if (l.getTeacherId().equals(teacherId))
                 teacherLesson.add(l);
         }
         return teacherLesson;
     }
 
     @Override
-    public List<LessonDto> getAllLessonByGradeId(Long id) {
+    public List<LessonDto> getAllLessonByGradeId(List<LessonDto> lessonDtoList, Long gradeId) {
         List<LessonDto> gradeLesson = new ArrayList<>();
-        for (LessonDto l : getAllLesson())
-            if (l.getGradeId().equals(id))
+        for (LessonDto l : lessonDtoList)
+            if (l.getGradeId().equals(gradeId))
                 gradeLesson.add(l);
         return gradeLesson;
     }
 
     @Override
-    public List<LessonDto> getAllLessonBySubjectId(Long id) {
+    public List<LessonDto> getAllLessonBySubjectId(List<LessonDto> lessonDtoList, Long subjectId) {
         List<LessonDto> subjectLesson = new ArrayList<>();
-        for (LessonDto l : getAllLesson())
-            if (l.getSubjectId().equals(id))
+        for (LessonDto l : lessonDtoList)
+            if (l.getSubjectId().equals(subjectId))
                 subjectLesson.add(l);
         return subjectLesson;
     }
 
     @Override
-    public List<LessonDto> getAllLessonByYear(String year) {
+    public List<LessonDto> getAllLessonByYear(List<LessonDto> lessonDtoList, String year) {
         List<LessonDto> subjectLesson = new ArrayList<>();
-        for (LessonDto l : getAllLesson())
+        for (LessonDto l : lessonDtoList)
             if (scheduleService.getScheduleById(l.getScheduleId()).getYear().equals(year))
                 subjectLesson.add(l);
         return subjectLesson;
     }
 
     @Override
-    public List<LessonDto> getAllTeacherGrade(Long teacherId, Long gradeId) {
-        List<LessonDto> teacherLesson = new ArrayList<>();
-        for (LessonDto l : getAllLessonByTeacherId(teacherId))
-            if (l.getGradeId().equals(gradeId))
-                teacherLesson.add(l);
-        return teacherLesson;
-    }
-
-    @Override
-    public List<LessonDto> getAllSubjectGrade(Long subjectId, Long gradeId) {
-        List<LessonDto> gradeLesson = new ArrayList<>();
-        for (LessonDto l : getAllLessonBySubjectId(subjectId))
-            if (l.getGradeId().equals(gradeId))
-                gradeLesson.add(l);
-        return gradeLesson;
-    }
-
-    @Override
-    public List<LessonDto> getAllLessonByYearTeacherId(String year, Long teacherId) {
+    public List<LessonDto> getAllLessonByQuarter(List<LessonDto> lessonDtoList, Integer quarter) {
         List<LessonDto> subjectLesson = new ArrayList<>();
-        for (LessonDto l : getAllLessonByYear(year))
-            if (l.getTeacherId().equals(teacherId))
+        for (LessonDto l : lessonDtoList)
+            if (scheduleService.getScheduleById(l.getScheduleId()).getQuarter().equals(quarter))
                 subjectLesson.add(l);
         return subjectLesson;
     }
 
     @Override
-    public List<LessonDto> getAllLessonByYearGradeId(String year, Long gradeId) {
-        List<LessonDto> subjectLesson = new ArrayList<>();
-        for (LessonDto l : getAllLessonByYear(year))
-            if (l.getGradeId().equals(gradeId))
-                subjectLesson.add(l);
-        return subjectLesson;
-    }
-
-    @Override
-    public List<LessonDto> getAllLessonByYearSubjectId(String year, Long subjectId) {
-        List<LessonDto> subjectLesson = new ArrayList<>();
-        for (LessonDto l : getAllLessonByYear(year))
-            if (l.getSubjectId().equals(subjectId))
-                subjectLesson.add(l);
-        return subjectLesson;
-    }
-
-    @Override
-    public List<LessonDto> getAllLessonByYearTeacherIdSubjectId(String year, Long teacherId, Long subjectId) {
-        List<LessonDto> subjectLesson = new ArrayList<>();
-        for (LessonDto l : getAllLessonByYear(year))
-            if (l.getTeacherId().equals(teacherId))
-                if (l.getSubjectId().equals(subjectId))
-                    subjectLesson.add(l);
-        return subjectLesson;
-    }
-
-    @Override
-    public List<LessonDto> getAllLessonByYearTeacherIdGradeId(String year, Long teacherId, Long gradeId) {
-        List<LessonDto> subjectLesson = new ArrayList<>();
-        for (LessonDto l : getAllLessonByYear(year))
-            if (l.getTeacherId().equals(teacherId))
-                if (l.getGradeId().equals(gradeId))
-                    subjectLesson.add(l);
-        return subjectLesson;
-    }
-
-    @Override
-    public List<LessonDto> getAllLessonByYearSubjectIdGradeId(String year, Long subjectId, Long gradeId) {
-        List<LessonDto> subjectLesson = new ArrayList<>();
-        for (LessonDto l : getAllLessonByYear(year))
-            if (l.getSubjectId().equals(subjectId))
-                if (l.getGradeId().equals(gradeId))
-                    subjectLesson.add(l);
-        return subjectLesson;
-    }
-
-    @Override
-    public List<LessonDto> getAllLessonByYearTeacherId(String year, Long teacherId, Integer quarter) {
-        List<LessonDto> subjectLesson = new ArrayList<>();
-        for (LessonDto l : getAllLessonByYearTeacherId(year, teacherId))
-            if (scheduleService.getScheduleById(l.getId()).getQuarter().equals(quarter))
-                subjectLesson.add(l);
-        return subjectLesson;
-    }
-
-    @Override
-    public List<LessonDto> getAllLessonByYearGradeId(String year, Long gradeId, Integer quarter) {
-        List<LessonDto> subjectLesson = new ArrayList<>();
-        for (LessonDto l : getAllLessonByYearGradeId(year, gradeId))
-            if (scheduleService.getScheduleById(l.getId()).getQuarter().equals(quarter))
-                subjectLesson.add(l);
-        return subjectLesson;
-    }
-
-    @Override
-    public List<LessonDto> getAllLessonByYearSubjectId(String year, Long subjectId, Integer quarter) {
-        List<LessonDto> subjectLesson = new ArrayList<>();
-        for (LessonDto l : getAllLessonByYearSubjectId(year, subjectId))
-            if (scheduleService.getScheduleById(l.getId()).getQuarter().equals(quarter))
-                subjectLesson.add(l);
-        return subjectLesson;
-    }
-
-    @Override
-    public List<LessonDto> getAllLessonByYearTeacherIdSubjectId(String year, Long teacherId, Long subjectId, Integer quarter) {
-        List<LessonDto> subjectLesson = new ArrayList<>();
-        for (LessonDto l : getAllLessonByYearTeacherId(year, teacherId, quarter))
-            if (l.getSubjectId().equals(subjectId))
-                subjectLesson.add(l);
-        return subjectLesson;
-    }
-
-    @Override
-    public List<LessonDto> getAllLessonByYearTeacherIdGradeId(String year, Long teacherId, Long gradeId, Integer quarter) {
-        List<LessonDto> subjectLesson = new ArrayList<>();
-        for (LessonDto l : getAllLessonByYearGradeId(year, gradeId, quarter))
-            if (l.getTeacherId().equals(teacherId))
-                subjectLesson.add(l);
-        return subjectLesson;
-    }
-
-    @Override
-    public List<LessonDto> getAllLessonByYearSubjectIdGradeId(String year, Long subjectId, Long gradeId, Integer quarter) {
-        List<LessonDto> subjectLesson = new ArrayList<>();
-        for (LessonDto l : getAllLessonByYearSubjectId(year, subjectId, quarter))
-            if (l.getGradeId().equals(gradeId))
-                subjectLesson.add(l);
-        return subjectLesson;
+    public List<LessonDto> getAllLessonByYearSubjectQuarter(String year, Long subjectId, Integer quarter, Long gradeId) {
+        List<LessonDto> allLessonByGrade = getAllLessonByGradeId(getAllLesson(), gradeId);
+        List<LessonDto> allLessonByYear = getAllLessonByYear(allLessonByGrade, year);
+        List<LessonDto> allLessonBySubject = getAllLessonBySubjectId(allLessonByYear, subjectId);
+        return getAllLessonByQuarter(allLessonBySubject, quarter);
     }
 
     @Override
@@ -240,7 +132,7 @@ public class LessonServiceImpl implements LessonService {
     @Override
     public List<LessonDto> getUndoneHwByStudent(List<HomeworkDto> homeworkDtoList, Long studentId, Long subjectId) {
         List<LessonDto> allHw = new ArrayList<>();
-        for (LessonDto l : getAllLessonBySubjectId(studentId)) {
+        for (LessonDto l : getAllLessonBySubjectId(getAllLesson(), studentId)) {
             Boolean isDone = false;
             for (HomeworkDto h : homeworkDtoList) {
                 if (l.getId().equals(h.getLessonId()) && h.getStudentId().equals(studentId))
@@ -249,9 +141,5 @@ public class LessonServiceImpl implements LessonService {
             if (!isDone) allHw.add(l);
         }
         return allHw;
-    }
-
-    public Lesson save(Lesson lesson) {
-        return lessonRepository.save(lesson);
     }
 }

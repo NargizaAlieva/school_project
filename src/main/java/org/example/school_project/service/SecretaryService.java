@@ -27,4 +27,6 @@ public interface SecretaryService {
     CharterDto deleteCharter(Long id);
 
     CharterDto restoreCharter(Long id);
+
+    List<CharterDto> getAllCharterByAuthor();
 }

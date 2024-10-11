@@ -31,7 +31,9 @@ public class ScheduleMapper {
         scheduleDto.setDueTime(schedule.getDueTime());
         scheduleDto.setQuarter(schedule.getQuarter());
         scheduleDto.setYear(schedule.getYear());
-        scheduleDto.setSubjectSchedule(schedule.getSubjectSchedule().getTitle());
+        scheduleDto.setSubjectId(schedule.getSubjectSchedule().getId());
+        scheduleDto.setSubjectTitle(schedule.getSubjectSchedule().getTitle());
+        scheduleDto.setGradeId(schedule.getGradeSchedule().getId());
         scheduleDto.setGradeName(schedule.getGradeSchedule().getTitle());
         scheduleDto.setTeacherName(teacherFullName);
         scheduleDto.setIsApprove(schedule.getIsApprove());

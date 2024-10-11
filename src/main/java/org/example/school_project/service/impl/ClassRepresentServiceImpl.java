@@ -1,9 +1,7 @@
 package org.example.school_project.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.example.school_project.dto.AssignmentDto;
-import org.example.school_project.dto.ReviewDto;
-import org.example.school_project.dto.ReviewDtoRequest;
+import org.example.school_project.dto.*;
 import org.example.school_project.entity.User;
 import org.example.school_project.service.*;
 import org.springframework.stereotype.Service;
@@ -15,15 +13,38 @@ import java.util.List;
 public class ClassRepresentServiceImpl implements ClassRepresentService {
     private final AssignmentService assignmentService;
     private final ReviewService reviewService;
-    private final StudentService studentService;
     private final UserService userService;
+    private final MessageService messageService;
+    private final StudentService studentService;
+    private final DutyListService dutyListService;
 
     private User getCurrentUser() {
         return userService.getCurrentUser();
     }
+
+    @Override
+    public ReviewDto createReview(ReviewDtoRequest reviewDtoRequest) {
+        return reviewService.createReview(reviewDtoRequest, getCurrentUser().getId());
+    }
+
+    @Override
+    public ReviewDto updateReview(ReviewDtoRequest reviewDtoRequest) {
+        return reviewService.updateReview(reviewDtoRequest, getCurrentUser().getId());
+    }
+
     @Override
     public AssignmentDto markAsDone(Long id) {
         return assignmentService.markAsDone(id, getCurrentUser().getId());
+    }
+
+    @Override
+    public ReviewDto deleteReview(Long id) {
+        return reviewService.deleteReview(id, getCurrentUser().getId());
+    }
+
+    @Override
+    public ReviewDto restoreReview(Long id) {
+        return reviewService.restoreReview(id, getCurrentUser().getId());
     }
 
     @Override
@@ -37,22 +58,26 @@ public class ClassRepresentServiceImpl implements ClassRepresentService {
     }
 
     @Override
-    public ReviewDto createReview(ReviewDtoRequest reviewDtoRequest) {
-        return reviewService.createReview(reviewDtoRequest);
+    public void sendMessageForGradeStudents(MessageDtoRequest messageDtoRequest) {
+        messageService.sendMessageForGradeStudents(
+                studentService.getAllStudentByGrade(
+                        studentService.getStudentByUserId(
+                                getCurrentUser().getId()).getGrade().getId()), messageDtoRequest);
     }
 
     @Override
-    public ReviewDto updateReview(ReviewDtoRequest reviewDtoRequest) {
-        return reviewService.updateReview(reviewDtoRequest);
+    public DutyListDto createDutyList(DutyListDtoRequest dutyListDtoRequest) {
+        return dutyListService.createDutyList(dutyListDtoRequest);
     }
 
     @Override
-    public ReviewDto deleteReview(Long id) {
-        return reviewService.deleteReview(id);
+    public DutyListDto updateDutyList(DutyListDtoRequest dutyListDtoRequest) {
+        return dutyListService.updateDutyList(dutyListDtoRequest);
     }
 
     @Override
-    public ReviewDto restoreReview(Long id) {
-        return reviewService.restoreReview(id);
+    public List<DutyListDto> getAllDutyListByGrade() {
+        return dutyListService.getAllDutyListByGrade(studentService.getStudentByUserId(
+                getCurrentUser().getId()).getGrade().getId());
     }
 }

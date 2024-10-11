@@ -29,6 +29,7 @@ public class SecretaryController {
     @GetMapping("/get-all-assignment")
     public ResponseEntity<Response> getAllAssignment() {
         try {
+            secretaryService.getAllAssignment();
             return ResponseEntity.ok(new Response("Successfully got all Assignment", secretaryService.getAllAssignment()));
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
@@ -121,6 +122,15 @@ public class SecretaryController {
     public ResponseEntity<Response> restoreCharter(@PathVariable Long id) {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(new Response("Restored Charter successfully", secretaryService.restoreCharter(id)));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping(value = "/get-all-self-charter")
+    public ResponseEntity<Response> getAllCharterByAuthor() {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(new Response("Successfully got all self Charter", secretaryService.getAllCharterByAuthor()));
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
         }

@@ -83,12 +83,17 @@ public class SecretaryServiceImpl implements SecretaryService {
 
     @Override
     public CharterDto deleteCharter(Long id) {
-        return charterService.deleteCharter(id);
+        return charterService.deleteCharter(id, getCurrentEmployee().getId());
     }
 
     @Override
     public CharterDto restoreCharter(Long id) {
-        return charterService.restoreCharter(id);
+        return charterService.restoreCharter(id, getCurrentEmployee().getId());
+    }
+
+    @Override
+    public List<CharterDto> getAllCharterByAuthor(){
+        return charterService.getAllCharterByAuthor(getCurrentEmployee().getId());
     }
 
 }

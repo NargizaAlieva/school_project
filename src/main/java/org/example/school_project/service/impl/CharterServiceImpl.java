@@ -6,8 +6,8 @@ import org.example.school_project.dto.CharterDtoRequest;
 import org.example.school_project.entity.Charter;
 import org.example.school_project.repository.CharterRepository;
 import org.example.school_project.service.CharterService;
-import org.example.school_project.service.EmployeeService;
 import org.example.school_project.util.exception.AlreadyExistException;
+import org.example.school_project.util.exception.DontHaveAccessException;
 import org.example.school_project.util.exception.ObjectNotFoundException;
 import org.example.school_project.util.mapper.CharterMapper;
 import org.springframework.stereotype.Service;
@@ -20,7 +20,6 @@ import java.util.List;
 public class CharterServiceImpl implements CharterService {
     private final CharterRepository charterRepository;
     private final CharterMapper charterMapper;
-    private final EmployeeService employeeService;
 
     public Charter getCharterByIdEntity(Long id) {
         return charterRepository.findById(id).orElseThrow(() -> new ObjectNotFoundException("Charter"));
@@ -29,6 +28,7 @@ public class CharterServiceImpl implements CharterService {
     public Charter save (Charter charter) {
         return charterRepository.save(charter);
     }
+
     @Override
     public CharterDto createCharter(CharterDtoRequest charterDtoR, Long authorId) {
         if(charterRepository.existsById(charterDtoR.getId()))
@@ -42,6 +42,9 @@ public class CharterServiceImpl implements CharterService {
         charterDtoR.setAuthorId(authorId);
         Charter oldCharter = charterMapper.dtoToEntity(charterDtoR);
         Charter newCharter = getCharterByIdEntity(charterDtoR.getId());
+
+        if(!newCharter.getAuthorOfCharter().getId().equals(authorId))
+            throw new DontHaveAccessException();
 
         newCharter.setTitle(oldCharter.getTitle());
         newCharter.setDescription(oldCharter.getDescription());
@@ -59,6 +62,26 @@ public class CharterServiceImpl implements CharterService {
     @Override
     public CharterDto restoreCharter(Long id) {
         Charter charter = getCharterByIdEntity(id);
+        charter.setIsActive(true);
+        return charterMapper.entityToDto(save(charter));
+    }
+    @Override
+    public CharterDto deleteCharter(Long id, Long authorId) {
+        Charter charter = getCharterByIdEntity(id);
+
+        if (!charter.getAuthorOfCharter().getId().equals(authorId))
+            throw new DontHaveAccessException();
+
+        charter.setIsActive(false);
+        return charterMapper.entityToDto(save(charter));
+    }
+    @Override
+    public CharterDto restoreCharter(Long id, Long authorId) {
+        Charter charter = getCharterByIdEntity(id);
+
+        if (!charter.getAuthorOfCharter().getId().equals(authorId))
+            throw new DontHaveAccessException();
+
         charter.setIsActive(true);
         return charterMapper.entityToDto(save(charter));
     }

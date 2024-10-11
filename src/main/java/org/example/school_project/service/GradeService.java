@@ -5,6 +5,7 @@ import org.example.school_project.entity.Grade;
 import org.example.school_project.entity.Student;
 
 import java.util.List;
+import java.util.Set;
 
 public interface GradeService {
     Grade getByIdEntity(Long id);
@@ -17,7 +18,7 @@ public interface GradeService {
 
     List<GradeDto> getAllActiveGrade();
 
-    List<GradeDto> getAllTeacherGrade(List<LessonDto> lessonDtoList);
+    Set<GradeDto> getAllTeacherGrade(List<LessonDto> lessonDtoList);
 
     List<GradeDto> getAllGrade();
 }

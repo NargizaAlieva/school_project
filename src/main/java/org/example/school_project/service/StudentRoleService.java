@@ -6,8 +6,18 @@ import java.util.List;
 
 public interface StudentRoleService {
     List<MarkDto> getAllMark();
-    List<MarkDto> getAllMarkBySubject(Long subject);
-    List<MarkDto> getAllMarkBySubjectQuarter(String year, Long subjectId, Integer quarter);
+
+    List<SubjectDto> getStudentSubject(String year);
+
+    List<LessonDto> getAllMarkByYearSubjectQuarter(String year, Long subjectId, Integer quarter);
+
+    List<Double> getGradeByYearSubject(String year, Long subjectId);
+
+    List<AttendanceDto> getAttendanceByYearSubject(String year, Long subjectId);
+
+    List<Double> getGradeByQuarterYear(Integer quarter, String year);
+
+    List<Double> getGradeByYear(String year);
 
     HomeworkDto sendHomework(HomeworkDtoRequest homeworkDtoRequest);
     List<HomeworkDto> getAllHomework();
@@ -17,11 +27,8 @@ public interface StudentRoleService {
 
     List<AttendanceDto> getAttendance();
     List<AttendanceDto> getAttendanceSubject(Long subjectId);
-    List<AttendanceDto> getAttendanceSubject(Long subjectId, String year);
-    List<AttendanceDto> getAttendanceSubject(Long subjectId, String year, Integer quarter);
 
     List<ScheduleDto> getStudentSchedule();
     List<LessonDto> getAllLessonByGrade();
-    List<SubjectDto> getSubjectList(String year);
     List<StudentDto> getClassmates();
 }

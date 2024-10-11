@@ -202,6 +202,15 @@ public class DeanController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
         }
     }
+    @PutMapping(value = "/restore-student/{id}")
+    public ResponseEntity<Response> restoreStudent(@PathVariable Long id) {
+        try {
+            StudentDto studentDto = deanService.restoreStudent(id);
+            return ResponseEntity.status(HttpStatus.OK).body(new Response("restored Student successfully", studentDto));
+        } catch (ObjectNotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+        }
+    }
     @GetMapping("/get-all-active-student")
     public ResponseEntity<Response> getAllActiveStudent() {
         try {
@@ -270,6 +279,15 @@ public class DeanController {
     public ResponseEntity<Response> getAllUndoneAssigment() {
         try {
             return ResponseEntity.status(HttpStatus.OK).body(new Response("Successfully got all undone Assignment", deanService.getAllUndoneAssigment()));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping(value = "/get-all-done-assignment")
+    public ResponseEntity<Response> getAllDoneAssigment() {
+        try {
+            return ResponseEntity.status(HttpStatus.OK).body(new Response("Successfully got all done Assignment", deanService.getAllDoneAssigment()));
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
         }

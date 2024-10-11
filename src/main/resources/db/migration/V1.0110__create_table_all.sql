@@ -131,7 +131,7 @@ create table if not exists messages (
     message varchar not null,
     theme varchar not null,
     title varchar,
-    author_id bigint references employees(id),
+    author_id bigint references users(id),
     receiver_id bigint references users(id),
     creation_date timestamp not null default now(),
     is_read boolean default false,

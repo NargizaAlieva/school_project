@@ -20,6 +20,8 @@ public interface StudentService {
 
     StudentDto excludeStudent(Long id);
 
+    StudentDto restoreStudent(Long id);
+
     List<StudentDto> getAllStudent();
     List<StudentDto> getAllActiveStudent();
     List<StudentDto> getAllStudentByGrade(Long id);

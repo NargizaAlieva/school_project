@@ -21,15 +21,18 @@ public class ReviewMapper {
         String authorFullName = review.getAuthorReview().getFirstName() + " " + review.getAuthorReview().getLastName();
         if(review.getAuthorReview().getMiddleName() != null) authorFullName += " " + review.getAuthorReview().getMiddleName();
 
-        String studentFullName = review.getAuthorReview().getFirstName() + " " + review.getAuthorReview().getLastName();
-        if(review.getAuthorReview().getMiddleName() != null) studentFullName += " " + review.getAuthorReview().getMiddleName();
+        String studentFullName = review.getStudentReview().getUser().getFirstName() + " " + review.getStudentReview().getUser().getLastName();
+        if(review.getStudentReview().getUser().getMiddleName() != null) studentFullName += " " + review.getStudentReview().getUser().getMiddleName();
 
         ReviewDto reviewDto = new ReviewDto();
         reviewDto.setId(review.getId());
         reviewDto.setReview(review.getReview());
         reviewDto.setCreationDate(review.getCreationDate());
-        reviewDto.setAuthorId(authorFullName);
-        reviewDto.setStudentId(studentFullName);
+        reviewDto.setAuthorId(review.getAuthorReview().getId());
+        reviewDto.setAuthorName(authorFullName);
+        reviewDto.setStudentId(review.getStudentReview().getId());
+        reviewDto.setStudentName(studentFullName);
+        reviewDto.setGradeName(review.getStudentReview().getGrade().getTitle());
         reviewDto.setIsActive(review.getIsActive());
         return reviewDto;
     }

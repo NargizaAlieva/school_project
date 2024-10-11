@@ -2,6 +2,7 @@ package org.example.school_project.service;
 
 import org.example.school_project.dto.MessageDto;
 import org.example.school_project.dto.MessageDtoRequest;
+import org.example.school_project.dto.StudentDto;
 
 import java.util.List;
 
@@ -21,4 +22,8 @@ public interface MessageService {
     List<MessageDto> getAllAdmissionApplication(List<MessageDto> messageDtoList);
     List<MessageDto> getAllAppeal(List<MessageDto> messageDtoList);
     List<MessageDto> getAllNormal(List<MessageDto> messageDtoList);
+
+    void sendMessageForGradeStudents(List<StudentDto> studentDtoList, MessageDtoRequest messageDtoRequest);
+
+    void sendMessageForGradeParent(List<StudentDto> studentDtoList, MessageDtoRequest messageDtoRequest);
 }

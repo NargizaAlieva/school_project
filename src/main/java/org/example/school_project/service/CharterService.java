@@ -14,6 +14,10 @@ public interface CharterService {
 
     CharterDto restoreCharter(Long id);
 
+    CharterDto deleteCharter(Long id, Long authorId);
+
+    CharterDto restoreCharter(Long id, Long authorId);
+
     List<CharterDto> getAllCharter ();
 
     List<CharterDto> getAllCharterByAuthor(Long authorId);
