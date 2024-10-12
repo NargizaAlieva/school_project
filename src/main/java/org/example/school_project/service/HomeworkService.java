@@ -13,6 +13,8 @@ public interface HomeworkService {
     HomeworkDto createHw(HomeworkDtoRequest homeworkDtoRequest);
     HomeworkDto updateHw(HomeworkDtoRequest homeworkDtoRequest);
 
+    List<HomeworkDto> getStudentHwBySubjectGrade(Long subjectId, Integer quarter, Long gradeId, Long studentId);
+
     List<HomeworkDto> getUncheckedHw(List<HomeworkDto> homeworklist);
 
     List<HomeworkDto> getHwByStudent(Long studentId);

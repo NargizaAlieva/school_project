@@ -16,13 +16,7 @@ public interface MarkService {
 
     List<MarkDto> getAllMark();
     List<MarkDto> getAllMarkByStudent(Long studentId);
+    List<MarkDto> getStudentMarksBySubjectGrade(Long subjectId, Integer quarter, Long gradeId, Long studentId);
 
-    Double getGradeByMarkDto(List<MarkDto> markDtoList);
-
-    Double getGradeByDouble(List<Double> markList);
-
-    List<MarkDto> filterMark(List<LessonDto> lessonDtoList);
-    List<MarkDto> filterMark(List<LessonDto> lessonDtoList, Long studentId);
-
-    Double getAverage(List<MarkDto> markDtoList);
+    List<MarkDto> convertToMark(List<LessonDto> lessonDtoList);
 }

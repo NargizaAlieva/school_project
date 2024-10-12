@@ -214,6 +214,39 @@ public class ClassTeacherController {
         }
     }
 
+    @GetMapping("/get-teacher-subjects-mark/{gradeId}/{subjectId}/{quarter}")
+    public ResponseEntity<Response> getAvgMarkBySubjectGradeQuarter(@PathVariable Long gradeId,
+                                                                    @PathVariable Long subjectId,
+                                                                    @PathVariable Integer quarter) {
+        try {
+            classTeacherService.getAvgMarkBySubjectGradeQuarter(gradeId, subjectId, quarter);
+            return ResponseEntity.ok(new Response("Successfully got Mark ", classTeacherService.getAvgMarkBySubjectGradeQuarter(gradeId, subjectId, quarter)));
+        } catch (ObjectNotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't found. " + exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/get-teacher-subjects-mark/{gradeId}/{subjectId}")
+    public ResponseEntity<Response> getAvgMarkBySubjectGrade(@PathVariable Long gradeId,
+                                                             @PathVariable Long subjectId) {
+        try {
+            classTeacherService.getAvgMarkBySubjectGrade(gradeId, subjectId);
+            return ResponseEntity.ok(new Response("Successfully got Mark ", classTeacherService.getAvgMarkBySubjectGrade(gradeId, subjectId)));
+        } catch (ObjectNotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't found. " + exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/get-teacher-subjects-mark/{subjectId}")
+    public ResponseEntity<Response> getAvgMarkBySubjectGrade(@PathVariable Long subjectId) {
+        try {
+            classTeacherService.getAvgMarkBySubject(subjectId);
+            return ResponseEntity.ok(new Response("Successfully got Mark ", classTeacherService.getAvgMarkBySubject(subjectId)));
+        } catch (ObjectNotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't found. " + exception.getMessage(), null));
+        }
+    }
+
     //Working
     @PostMapping(value = "/create-attendance")
     public ResponseEntity<Response> createAttendance(@RequestBody AttendanceDtoRequest request) {
@@ -285,4 +318,6 @@ public class ClassTeacherController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
         }
     }
+
+
 }

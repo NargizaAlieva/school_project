@@ -9,8 +9,6 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 public class HomeworkDtoRequest {
     private Long id;
-    private Integer mark;
-    private String teacherReview;
     private Long lessonId;
     private Long studentId;
 

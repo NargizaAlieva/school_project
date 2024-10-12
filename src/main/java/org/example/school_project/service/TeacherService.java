@@ -3,6 +3,7 @@ package org.example.school_project.service;
 import org.example.school_project.dto.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 public interface TeacherService {
@@ -23,6 +24,12 @@ public interface TeacherService {
     List<MarkDto> getMarkTeacher();
 
     List<MarkDto> getMarkTeacherByGrade(Long gradeId);
+
+    Map<String, Double> getAvgMarkBySubjectGradeQuarter(Long subjectId, Long gradeId, Integer quarter);
+
+    Map<String, Double> getAvgMarkBySubjectGrade(Long gradeId, Long subjectId);
+
+    Map<String, Double> getAvgMarkBySubject(Long subjectId);
 
     List<GradeDto> getAllGrade();
 

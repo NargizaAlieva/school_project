@@ -7,6 +7,7 @@ import org.example.school_project.dto.LessonDto;
 import org.example.school_project.entity.Homework;
 import org.example.school_project.repository.HomeworkRepository;
 import org.example.school_project.service.HomeworkService;
+import org.example.school_project.service.LessonService;
 import org.example.school_project.util.exception.AlreadyExistException;
 import org.example.school_project.util.exception.ObjectNotFoundException;
 import org.example.school_project.util.mapper.HomeworkMapper;
@@ -20,6 +21,7 @@ import java.util.List;
 public class HomeworkServiceImpl implements HomeworkService {
     private final HomeworkRepository homeworkRepository;
     private final HomeworkMapper homeworkMapper;
+    private final LessonService lessonService;
 
     public Homework save(Homework homework) {
         return homeworkRepository.save(homework);
@@ -67,6 +69,19 @@ public class HomeworkServiceImpl implements HomeworkService {
             for (HomeworkDto h : getAllHw())
                 if (l.getId().equals(h.getLessonId()))
                     allHw.add(h);
+        return allHw;
+    }
+
+    @Override
+    public List<HomeworkDto> getStudentHwBySubjectGrade(Long subjectId, Integer quarter, Long gradeId, Long studentId) {
+        List<HomeworkDto> allHw = new ArrayList<>();
+        List<LessonDto> lessonDtoList = lessonService.getAllLessonBySubjectQuarter(subjectId, quarter, gradeId);
+        for (LessonDto l : lessonDtoList) {
+            for (HomeworkDto h : getAllHw())
+                if (l.getId().equals(h.getLessonId()))
+                    if (h.getStudentId().equals(studentId) && h.getMark() != null)
+                        allHw.add(h);
+        }
         return allHw;
     }
 

@@ -44,10 +44,8 @@ public class HomeworkMapper {
     public Homework dtoToEntity(HomeworkDtoRequest homeworkDtoRequest) {
         Homework homework = new Homework();
         homework.setId(homeworkDtoRequest.getId());
-        homework.setMark(homeworkDtoRequest.getMark());
         homework.setCreationDate(LocalDateTime.now());
         homework.setIsChecked(false);
-        homework.setTeacherReview(homeworkDtoRequest.getTeacherReview());
         homework.setLessonHW(lessonService.getLessonByIdEntity(homeworkDtoRequest.getLessonId()));
         homework.setStudentHW(studentService.getStudentByIdEntity(homeworkDtoRequest.getStudentId()));
         return homework;

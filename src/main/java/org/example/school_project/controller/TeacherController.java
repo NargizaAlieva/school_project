@@ -23,7 +23,7 @@ public class TeacherController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't found" + exception.getMessage(), null));
         }
     }
-    //Working
+
     @PostMapping(value = "/create-review")
     public ResponseEntity<Response> createReview(@RequestBody ReviewDtoRequest request) {
         try {
@@ -33,7 +33,7 @@ public class TeacherController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Review is not saved. " + exception.getMessage(), null));
         }
     }
-    //Working
+
     @PutMapping(value = "/update-review")
     public ResponseEntity<Response> updateReview(@RequestBody ReviewDtoRequest request) {
         try {
@@ -118,6 +118,39 @@ public class TeacherController {
     public ResponseEntity<Response> getMarkTeacherByGrade(@PathVariable Long id) {
         try {
             return ResponseEntity.ok(new Response("Successfully got Mark ", teacherService.getMarkTeacherByGrade(id)));
+        } catch (ObjectNotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't found. " + exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/get-teacher-subjects-mark/{gradeId}/{subjectId}/{quarter}")
+    public ResponseEntity<Response> getAvgMarkBySubjectGradeQuarter(@PathVariable Long gradeId,
+                                                                    @PathVariable Long subjectId,
+                                                                    @PathVariable Integer quarter) {
+        try {
+            teacherService.getAvgMarkBySubjectGradeQuarter(gradeId, subjectId, quarter);
+            return ResponseEntity.ok(new Response("Successfully got Mark ", teacherService.getAvgMarkBySubjectGradeQuarter(gradeId, subjectId, quarter)));
+        } catch (ObjectNotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't found. " + exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/get-teacher-subjects-mark/{gradeId}/{subjectId}")
+    public ResponseEntity<Response> getAvgMarkBySubjectGrade(@PathVariable Long gradeId,
+                                                             @PathVariable Long subjectId) {
+        try {
+            teacherService.getAvgMarkBySubjectGrade(gradeId, subjectId);
+            return ResponseEntity.ok(new Response("Successfully got Mark ", teacherService.getAvgMarkBySubjectGrade(gradeId, subjectId)));
+        } catch (ObjectNotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't found. " + exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/get-teacher-subjects-mark/{subjectId}")
+    public ResponseEntity<Response> getAvgMarkBySubjectGrade(@PathVariable Long subjectId) {
+        try {
+            teacherService.getAvgMarkBySubject(subjectId);
+            return ResponseEntity.ok(new Response("Successfully got Mark ", teacherService.getAvgMarkBySubject(subjectId)));
         } catch (ObjectNotFoundException exception) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't found. " + exception.getMessage(), null));
         }

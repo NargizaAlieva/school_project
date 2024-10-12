@@ -7,6 +7,7 @@ import org.example.school_project.dto.LessonDto;
 import org.example.school_project.entity.Attendance;
 import org.example.school_project.repository.AttendanceRepository;
 import org.example.school_project.service.AttendanceService;
+import org.example.school_project.service.LessonService;
 import org.example.school_project.util.exception.AlreadyExistException;
 import org.example.school_project.util.exception.ObjectNotFoundException;
 import org.example.school_project.util.mapper.AttendanceMapper;
@@ -17,9 +18,10 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-public class AttendanceServiceMapper implements AttendanceService {
+public class AttendanceServiceImpl implements AttendanceService {
     private final AttendanceRepository attendanceRepository;
     private final AttendanceMapper attendanceMapper;
+    private final LessonService lessonService;
 
     public Attendance save(Attendance attendance) {
         return attendanceRepository.save(attendance);
@@ -57,61 +59,15 @@ public class AttendanceServiceMapper implements AttendanceService {
     }
 
     @Override
-    public List<AttendanceDto> filterAttendance(List<LessonDto> lessonDtoList) {
-        List<AttendanceDto> allAttendances = new ArrayList<>();
-        for (LessonDto l : lessonDtoList) {
-            for (AttendanceDto a : getAllAttendance())
-                if (l.getId().equals(a.getLessonId()))
-                    allAttendances.add(a);
-
-        }
-        return allAttendances;
-    }
-
-    @Override
-    public List<AttendanceDto> filterTrueAttendance(List<LessonDto> lessonDtoList, Long studentId) {
-        List<AttendanceDto> allAttendances = new ArrayList<>();
+    public List<AttendanceDto> getStudentAttendBySubjectGrade(Long subjectId, Integer quarter, Long gradeId, Long studentId) {
+        List<AttendanceDto> allHw = new ArrayList<>();
+        List<LessonDto> lessonDtoList = lessonService.getAllLessonBySubjectQuarter(subjectId, quarter, gradeId);
         for (LessonDto l : lessonDtoList) {
             for (AttendanceDto a : getAllAttendance())
                 if (l.getId().equals(a.getLessonId()))
                     if (a.getStudentId().equals(studentId))
-                        if (a.getIsAttended())
-                            allAttendances.add(a);
+                        allHw.add(a);
         }
-        return allAttendances;
-    }
-
-    @Override
-    public List<AttendanceDto> getAllAttendanceStudent(List<LessonDto> lessonDtoList, Long studentId) {
-        List<AttendanceDto> allAttendances = new ArrayList<>();
-        for (LessonDto l : lessonDtoList) {
-            for (AttendanceDto a : getAllAttendance())
-                if (l.getId().equals(a.getLessonId()) && a.getStudentId().equals(studentId))
-                        allAttendances.add(a);
-        }
-        return allAttendances;
-    }
-
-    @Override
-    public List<AttendanceDto> countAttendanceStudent(List<LessonDto> lessonDtoList, Long studentId) {
-        List<AttendanceDto> attendanceList = new ArrayList<>();
-        for (LessonDto l : lessonDtoList) {
-            for (AttendanceDto a : getAllAttendance())
-                if (l.getId().equals(a.getLessonId()) && a.getStudentId().equals(studentId)) {
-                    if (a.getIsAttended())
-                        attendanceList.add(a);
-                }
-        }
-        return attendanceList;
-    }
-
-    @Override
-    public Integer countAttend(List<AttendanceDto> attendanceDtoList) {
-        Integer attendCount = 0;
-        for (AttendanceDto a : attendanceDtoList) {
-            if (a.getIsAttended())
-                attendCount++;
-        }
-        return attendCount;
+        return allHw;
     }
 }

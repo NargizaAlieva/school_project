@@ -6,6 +6,7 @@ import org.example.school_project.dto.SubjectDtoRequest;
 import org.example.school_project.entity.Subject;
 
 import java.util.List;
+import java.util.Set;
 
 public interface SubjectService {
     Subject findByIdEntity(Long id);
@@ -19,6 +20,5 @@ public interface SubjectService {
 
     List<SubjectDto> getAllSubject();
     List<SubjectDto> getAllActiveSubject();
-
-    List<SubjectDto> getSubjectForGrade(List<ScheduleDto> scheduleDtoList, Long gradeId, String year);
+    Set<SubjectDto> getSubjectForGrade(Long gradeId, List<ScheduleDto> scheduleDtoList);
 }

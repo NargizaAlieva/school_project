@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -22,6 +23,7 @@ public class ClassTeacherServiceImpl implements ClassTeacherService {
     private final MarkService markService;
     private final MessageService messageService;
     private final AttendanceService attendanceService;
+    private final AverageMarkService averageMarkService;
 
     private Employee getCurrentClassTeacher() {
         return employeeService.getByUserId(userService.getCurrentUser().getId());
@@ -138,6 +140,21 @@ public class ClassTeacherServiceImpl implements ClassTeacherService {
     @Override
     public MarkDto updateMark(MarkDtoRequest markDtoRequest) {
         return markService.updateMark(markDtoRequest);
+    }
+
+    @Override
+    public Map<String, Double> getAvgMarkBySubjectGradeQuarter(Long subjectId, Long gradeId, Integer quarter) {
+        return averageMarkService.getAvgMarkBySubjectGradeQuarter(subjectId, gradeId, quarter);
+    }
+
+    @Override
+    public Map<String, Double> getAvgMarkBySubjectGrade(Long gradeId, Long subjectId) {
+        return averageMarkService.getAvgMarkBySubjectGrade(subjectId, gradeId);
+    }
+
+    @Override
+    public Map<String, Double> getAvgMarkBySubject(Long subjectId) {
+        return averageMarkService.getAvgMarkBySubject(subjectId);
     }
 
     @Override
