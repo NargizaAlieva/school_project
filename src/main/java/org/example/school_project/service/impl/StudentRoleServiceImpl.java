@@ -7,8 +7,9 @@ import org.example.school_project.service.*;
 import org.example.school_project.util.mapper.HomeworkToDoMapping;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -20,63 +21,44 @@ public class StudentRoleServiceImpl implements StudentRoleService {
     private final LessonService lessonService;
     private final SubjectService subjectService;
     private final StudentService studentService;
-    private final HomeworkToDoMapping homeworkToDoMapping;
-    private final AttendanceService attendanceService;
-
+    private final AverageMarkService averageMarkService;
+    private final AttendCountService attendCountService;
     public Student getCurrentStudent() {
         return studentService.getStudentByUserId(userService.getCurrentUser().getId());
     }
-
     @Override
     public List<MarkDto> getAllMark() {
         return markService.getAllMarkByStudent(getCurrentStudent().getId());
     }
 
     @Override
-    public List<LessonDto> getAllMarkByYearSubjectQuarter(String year, Long subjectId, Integer quarter) {
-        List<LessonDto> allLessonByGrade = lessonService.getAllLessonByGradeId(lessonService.getAllLesson(), getCurrentStudent().getGrade().getId());
-        List<LessonDto> allLessonByYear = lessonService.getAllLessonByYear(allLessonByGrade, year);
-        List<LessonDto> allLessonBySubject = lessonService.getAllLessonBySubjectId(allLessonByYear, subjectId);
-        List<LessonDto> allLessonBySubjec = lessonService.getAllLessonByQuarter(allLessonBySubject, quarter);
-        return lessonService.getAllLessonByQuarter(allLessonBySubject, quarter);
+    public Map<String, Double> getAvgMarkByGradeStudentQuarter(Integer quarter) {
+        return averageMarkService.getAvgMarkByGradeStudentQuarter(quarter, getCurrentStudent().getGrade().getId(), getCurrentStudent().getId());
     }
 
     @Override
-    public List<Double> getGradeByYearSubject(String year, Long subjectId) {
-        List<Double> gradeForYearSubject = new ArrayList<>();
-        for (int quarter = 1; quarter <= 4; quarter++) {
-            gradeForYearSubject.add(
-                    markService.getGradeByMarkDto(
-                            markService.filterMark(getAllMarkByYearSubjectQuarter(year, subjectId, quarter))));
-            gradeForYearSubject.add(
-                    homeworkService.getGradeByMarkDto(
-                            homeworkService.convertToHw(getAllMarkByYearSubjectQuarter(year, subjectId, quarter))));
-        }
-        return gradeForYearSubject;
+    public Map<String, Double> getAvgMarkBySubjectGradeStudent(Long subjectId) {
+        return averageMarkService.getAvgMarkBySubjectGradeStudent(subjectId, getCurrentStudent().getGrade().getId(), getCurrentStudent().getId());
     }
 
     @Override
-    public List<Double> getGradeByQuarterYear(Integer quarter, String year) {
-        List<Double> gradeForQuarterYear = new ArrayList<>();
-        for (SubjectDto s : getStudentSubject(year)) {
-            gradeForQuarterYear.
-                    add(markService.getGradeByMarkDto(
-                            markService.filterMark(getAllMarkByYearSubjectQuarter(year, s.getId(), quarter))));
-            gradeForQuarterYear.
-                    add(homeworkService.getGradeByMarkDto(
-                            homeworkService.convertToHw(getAllMarkByYearSubjectQuarter(year, s.getId(), quarter))));
-        }
-        return gradeForQuarterYear;
+    public Map<String, Double> getAvgMarkByGradeStudent() {
+        return averageMarkService.getAvgMarkByGradeStudent(getCurrentStudent().getGrade().getId(), getCurrentStudent().getId());
     }
 
     @Override
-    public List<Double> getGradeByYear(String year) {
-        List<Double> gradeForYear = new ArrayList<>();
-        for (int quarter = 1; quarter < 5; quarter++) {
-            gradeForYear.add(markService.getGradeByDouble(getGradeByQuarterYear(quarter, year)) / 4);
-        }
-        gradeForYear.add(markService.getGradeByDouble(gradeForYear));
-        return gradeForYear;
+    public Map<String, Double> getAttendByQuarterGradeStudent(Integer quarter) {
+        return attendCountService.getAttendByQuarterGradeStudent(quarter, getCurrentStudent().getGrade().getId(), getCurrentStudent().getId());
+    }
+
+    @Override
+    public Map<String, Double> getAttendBySubjectGradeStudent(Long subjectId) {
+        return attendCountService.getAttendBySubjectGradeStudent(subjectId, getCurrentStudent().getGrade().getId(), getCurrentStudent().getId());
+    }
+
+    @Override
+    public Map<String, Double> getAttendByGradeStudent() {
+        return attendCountService.getAttendByGradeStudent(getCurrentStudent().getGrade().getId(), getCurrentStudent().getId());
     }
 
     @Override
@@ -90,8 +72,8 @@ public class StudentRoleServiceImpl implements StudentRoleService {
     }
 
     @Override
-    public List<HomeworkToDoDto> getAllUndoneHomework() {
-        return homeworkToDoMapping.entityToDtoList(lessonService.getUndoneHwByStudent(getAllHomework(), getCurrentStudent().getId()));
+    public List<LessonDto> getAllUndoneHomework() {
+        return lessonService.getUndoneHwByStudent(getAllHomework(), getCurrentStudent().getId());
     }
 
     @Override
@@ -100,29 +82,8 @@ public class StudentRoleServiceImpl implements StudentRoleService {
     }
 
     @Override
-    public List<HomeworkToDoDto> getAllUndoneHomework(Long subjectId) {
-        return homeworkToDoMapping.entityToDtoList(lessonService.getUndoneHwByStudent(getAllHomework(), getCurrentStudent().getId(),subjectId));
-    }
-
-    @Override
-    public List<AttendanceDto> getAttendance() {
-        return attendanceService.getAllAttendanceStudent(lessonService.getAllLesson(), getCurrentStudent().getId());
-    }
-
-    @Override
-    public List<AttendanceDto> getAttendanceSubject(Long subjectId) {
-        return attendanceService.getAllAttendanceStudent(lessonService.getAllLessonBySubjectId(lessonService.getAllLesson(), subjectId), getCurrentStudent().getId());
-    }
-
-    @Override
-    public List<AttendanceDto> getAttendanceByYearSubject(String year, Long subjectId) {
-        List<AttendanceDto> attendanceYearSubject = new ArrayList<>();
-        for (int quarter = 1; quarter <= 4; quarter++) {
-            attendanceYearSubject.add((AttendanceDto) attendanceService.getAllAttendanceStudent(
-                            getAllMarkByYearSubjectQuarter(year, subjectId, quarter),
-                    getCurrentStudent().getId()));
-        }
-        return attendanceYearSubject;
+    public List<LessonDto> getAllUndoneHomework(Long subjectId) {
+        return lessonService.getUndoneHwByStudent(getAllHomework(), getCurrentStudent().getId(),subjectId);
     }
 
     @Override
@@ -136,12 +97,22 @@ public class StudentRoleServiceImpl implements StudentRoleService {
     }
 
     @Override
+    public Map<String, String> getLessonsTopics() {
+        return lessonService.getLessonsTopics(getAllLessonByGrade());
+    }
+
+    @Override
+    public Map<String, String> getLessonsTopicsBySubject(Long subjectId) {
+        return lessonService.getLessonsTopics(lessonService.getAllLessonBySubjectId(getAllLessonByGrade(), subjectId));
+    }
+
+    @Override
     public List<StudentDto> getClassmates() {
         return studentService.getAllStudentByGrade(getCurrentStudent().getGrade().getId());
     }
 
     @Override
-    public List<SubjectDto> getStudentSubject(String year) {
-        return subjectService.getSubjectForGrade(scheduleService.getAllSchedule(), getCurrentStudent().getGrade().getId(), year);
+    public Set<SubjectDto> getStudentSubject() {
+        return subjectService.getSubjectForGrade(getCurrentStudent().getGrade().getId(), scheduleService.getAllActiveSchedule());
     }
 }

@@ -3,32 +3,32 @@ package org.example.school_project.service;
 import org.example.school_project.dto.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 
 public interface StudentRoleService {
     List<MarkDto> getAllMark();
+    Map<String, Double> getAvgMarkByGradeStudentQuarter(Integer quarter);
+    Map<String, Double> getAvgMarkBySubjectGradeStudent(Long subjectId);
+    Map<String, Double> getAvgMarkByGradeStudent();
 
-    List<SubjectDto> getStudentSubject(String year);
-
-    List<LessonDto> getAllMarkByYearSubjectQuarter(String year, Long subjectId, Integer quarter);
-
-    List<Double> getGradeByYearSubject(String year, Long subjectId);
-
-    List<AttendanceDto> getAttendanceByYearSubject(String year, Long subjectId);
-
-    List<Double> getGradeByQuarterYear(Integer quarter, String year);
-
-    List<Double> getGradeByYear(String year);
+    Map<String, Double> getAttendByQuarterGradeStudent(Integer quarter);
+    Map<String, Double> getAttendBySubjectGradeStudent(Long subjectId);
+    Map<String, Double> getAttendByGradeStudent();
 
     HomeworkDto sendHomework(HomeworkDtoRequest homeworkDtoRequest);
     List<HomeworkDto> getAllHomework();
-    List<HomeworkToDoDto> getAllUndoneHomework();
+    List<LessonDto> getAllUndoneHomework();
     List<HomeworkDto> getAllHomeworkSubject(Long subjectId);
-    List<HomeworkToDoDto> getAllUndoneHomework(Long subjectId);
-
-    List<AttendanceDto> getAttendance();
-    List<AttendanceDto> getAttendanceSubject(Long subjectId);
+    List<LessonDto> getAllUndoneHomework(Long subjectId);
 
     List<ScheduleDto> getStudentSchedule();
     List<LessonDto> getAllLessonByGrade();
+
+    Map<String, String> getLessonsTopics();
+
+    Map<String, String> getLessonsTopicsBySubject(Long subjectId);
+
     List<StudentDto> getClassmates();
+    Set<SubjectDto> getStudentSubject();
 }

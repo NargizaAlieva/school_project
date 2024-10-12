@@ -19,7 +19,6 @@ public interface StudentService {
     List<StudentDto> getGradeRepresentative(List<Long> gradeId);
 
     StudentDto excludeStudent(Long id);
-
     StudentDto restoreStudent(Long id);
 
     List<StudentDto> getAllStudent();

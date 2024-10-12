@@ -7,6 +7,7 @@ import org.example.school_project.service.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Service
@@ -23,6 +24,8 @@ public class TeacherServiceImpl implements TeacherService {
     private final UserService userService;
     private final LessonService lessonService;
     private final MessageService messageService;
+    private final AttendCountService attendCountService;
+    private final AverageMarkService averageMarkService;
 
     public Employee getCurrentTeacher() {
         return employeeService.getByUserId(userService.getCurrentUser().getId());
@@ -75,15 +78,30 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public List<MarkDto> getMarkTeacher() {
-        return markService.filterMark(lessonService.getAllLessonByTeacherId(
+        return markService.convertToMark(lessonService.getAllLessonByTeacherId(
                 lessonService.getAllLesson(), getCurrentTeacher().getId()));
     }
 
     @Override
     public List<MarkDto> getMarkTeacherByGrade(Long gradeId) {
-        return markService.filterMark(lessonService.getAllLessonByGradeId(
+        return markService.convertToMark(lessonService.getAllLessonByGradeId(
                 lessonService.getAllLessonByTeacherId(
                         lessonService.getAllLesson(), getCurrentTeacher().getId()), gradeId));
+    }
+
+    @Override
+    public Map<String, Double> getAvgMarkBySubjectGradeQuarter(Long subjectId, Long gradeId, Integer quarter) {
+        return averageMarkService.getAvgMarkBySubjectGradeQuarter(subjectId, gradeId, quarter);
+    }
+
+    @Override
+    public Map<String, Double> getAvgMarkBySubjectGrade(Long gradeId, Long subjectId) {
+        return averageMarkService.getAvgMarkBySubjectGrade(subjectId, gradeId);
+    }
+
+    @Override
+    public Map<String, Double> getAvgMarkBySubject(Long subjectId) {
+        return averageMarkService.getAvgMarkBySubject(subjectId);
     }
 
     @Override

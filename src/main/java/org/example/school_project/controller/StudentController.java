@@ -23,24 +23,61 @@ public class StudentController {
         }
     }
 
-    @GetMapping("/get-all-mark-subject-quarter/{year}/{subjectId}/{quarter}")
-    public ResponseEntity<Response> getAllMarkBySubjectQuarter(@PathVariable String year,
-                                                               @PathVariable Long subjectId,
-                                                               @PathVariable Integer quarter) {
+    @GetMapping("/get-all-mark-quarter/{quarter}")
+    public ResponseEntity<Response> getAllMarkBySubjectQuarter(@PathVariable Integer quarter) {
         try {
-            studentRoleService.getAllMarkByYearSubjectQuarter(year, subjectId, quarter);
-            return ResponseEntity.ok(new Response("Successfully got Marks ", studentRoleService.getAllMarkByYearSubjectQuarter(year, subjectId, quarter)));
+            studentRoleService.getAvgMarkByGradeStudentQuarter(quarter);
+            return ResponseEntity.ok(new Response("Successfully got Marks ", studentRoleService.getAvgMarkByGradeStudentQuarter(quarter)));
         } catch (ObjectNotFoundException exception) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Marks not found. " + exception.getMessage(), null));
         }
     }
 
-    @GetMapping("/get-all-mark-subject-quarter/{year}/{subjectId}")
-    public ResponseEntity<Response> getGradeByYearSubject(@PathVariable String year,
-                                                               @PathVariable Long subjectId) {
+    @GetMapping("/get-all-mark-subject/{subjectId}")
+    public ResponseEntity<Response> getAllMarkBySubjectQuarter(@PathVariable Long subjectId) {
         try {
-            studentRoleService.getGradeByYearSubject(year, subjectId);
-            return ResponseEntity.ok(new Response("Successfully got Marks", studentRoleService.getGradeByYearSubject(year, subjectId)));
+            studentRoleService.getAvgMarkBySubjectGradeStudent(subjectId);
+            return ResponseEntity.ok(new Response("Successfully got Marks ", studentRoleService.getAvgMarkBySubjectGradeStudent(subjectId)));
+        } catch (ObjectNotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Marks not found. " + exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/get-all-mark-for-year")
+    public ResponseEntity<Response> getAvgMarkByGradeStudent() {
+        try {
+            studentRoleService.getAvgMarkByGradeStudent();
+            return ResponseEntity.ok(new Response("Successfully got Marks ", studentRoleService.getAvgMarkByGradeStudent()));
+        } catch (ObjectNotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Marks not found. " + exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/get-attendance-quarter/{quarter}")
+    public ResponseEntity<Response> getAttendByQuarterGradeStudent(@PathVariable Integer quarter) {
+        try {
+            studentRoleService.getAttendByQuarterGradeStudent(quarter);
+            return ResponseEntity.ok(new Response("Successfully got Marks ", studentRoleService.getAttendByQuarterGradeStudent(quarter)));
+        } catch (ObjectNotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Marks not found. " + exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/get-attendance-subject/{subjectId}")
+    public ResponseEntity<Response> getAttendBySubjectGradeStudent(@PathVariable Long subjectId) {
+        try {
+            studentRoleService.getAttendBySubjectGradeStudent(subjectId);
+            return ResponseEntity.ok(new Response("Successfully got Marks ", studentRoleService.getAttendBySubjectGradeStudent(subjectId)));
+        } catch (ObjectNotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Marks not found. " + exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/get-attendance-for-year")
+    public ResponseEntity<Response> getAttendByGradeStudent() {
+        try {
+            studentRoleService.getAttendByGradeStudent();
+            return ResponseEntity.ok(new Response("Successfully got Marks ", studentRoleService.getAttendByGradeStudent()));
         } catch (ObjectNotFoundException exception) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Marks not found. " + exception.getMessage(), null));
         }
@@ -66,6 +103,7 @@ public class StudentController {
     @GetMapping("/get-all-undone-hw")
     public ResponseEntity<Response> getAllUndoneHomework() {
         try {
+            studentRoleService.getAllUndoneHomework();
             return ResponseEntity.ok(new Response("Successfully got schedules ", studentRoleService.getAllUndoneHomework()));
         } catch (ObjectNotFoundException exception) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
@@ -104,10 +142,28 @@ public class StudentController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
         }
     }
-    @GetMapping("/get-student-subject/{year}")
-    public ResponseEntity<Response> getSubjectList(@PathVariable String year) {
+
+    @GetMapping("/get-all-lesson-topic")
+    public ResponseEntity<Response> getLessonsTopics() {
         try {
-            return ResponseEntity.ok(new Response("Successfully got schedules ", studentRoleService.getStudentSubject(year)));
+            return ResponseEntity.ok(new Response("Successfully got schedules ", studentRoleService.getLessonsTopics()));
+        } catch (ObjectNotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/get-all-lesson-topic/{subjectId}")
+    public ResponseEntity<Response> getLessonsTopics(@PathVariable Long subjectId) {
+        try {
+            return ResponseEntity.ok(new Response("Successfully got schedules ", studentRoleService.getLessonsTopicsBySubject(subjectId)));
+        } catch (ObjectNotFoundException exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+        }
+    }
+    @GetMapping("/get-student-subject")
+    public ResponseEntity<Response> getSubjectList() {
+        try {
+            return ResponseEntity.ok(new Response("Successfully got schedules ", studentRoleService.getStudentSubject()));
         } catch (ObjectNotFoundException exception) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
         }

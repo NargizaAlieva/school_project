@@ -6,6 +6,7 @@ import org.example.school_project.dto.LessonDtoRequest;
 import org.example.school_project.entity.Lesson;
 
 import java.util.List;
+import java.util.Map;
 
 public interface LessonService {
     Lesson getLessonByIdEntity(Long id);
@@ -13,6 +14,8 @@ public interface LessonService {
     LessonDto createLesson(LessonDtoRequest lessonDtoRequest);
     LessonDto updateLesson(LessonDtoRequest lessonDtoRequest);
     List<LessonDto> getAllLesson();
+
+    Map<String, String> getLessonsTopics(List<LessonDto> lessonDtoList);
 
     List<LessonDto> getAllLessonByTeacherId(List<LessonDto> lessonDtoList, Long teacherId);
 
@@ -24,7 +27,7 @@ public interface LessonService {
 
     List<LessonDto> getAllLessonByQuarter(List<LessonDto> lessonDtoList, Integer quarter);
 
-    List<LessonDto> getAllLessonByYearSubjectQuarter(String year, Long subjectId, Integer quarter, Long gradeId);
+    List<LessonDto> getAllLessonBySubjectQuarter(Long subjectId, Integer quarter, Long gradeId);
 
     List<LessonDto> getUndoneHwByStudent(List<HomeworkDto> homeworkDtoList, Long studentId);
 

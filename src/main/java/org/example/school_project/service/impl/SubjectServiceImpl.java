@@ -6,6 +6,7 @@ import org.example.school_project.dto.SubjectDto;
 import org.example.school_project.dto.SubjectDtoRequest;
 import org.example.school_project.entity.Subject;
 import org.example.school_project.repository.SubjectRepository;
+import org.example.school_project.service.ScheduleService;
 import org.example.school_project.service.SubjectService;
 import org.example.school_project.util.exception.AlreadyExistException;
 import org.example.school_project.util.exception.ObjectNotFoundException;
@@ -13,7 +14,9 @@ import org.example.school_project.util.mapper.SubjectMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -91,12 +94,13 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public List<SubjectDto> getSubjectForGrade(List<ScheduleDto> scheduleDtoList, Long gradeId, String year) {
-        List<SubjectDto> activeSubject = new ArrayList<>();
-        for (ScheduleDto s : scheduleDtoList)
-            if (s.getGradeId().equals(gradeId) && s.getYear().equals(year))
-                subjectMapper.entityToDto(findByIdEntity(s.getGradeId()));
+    public Set<SubjectDto> getSubjectForGrade(Long gradeId, List<ScheduleDto> scheduleDtoList) {
+        Set<SubjectDto> activeSubject = new HashSet<>();
+        for (ScheduleDto sch : scheduleDtoList)
+            if (sch.getGradeId().equals(gradeId))
+                activeSubject.add(
+                        subjectMapper.entityToDto(
+                                findByIdEntity(sch.getSubjectId())));
         return activeSubject;
     }
-
 }

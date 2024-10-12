@@ -14,7 +14,9 @@ import org.example.school_project.util.mapper.LessonMapper;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Component
 @RequiredArgsConstructor
@@ -59,6 +61,15 @@ public class LessonServiceImpl implements LessonService {
     @Override
     public List<LessonDto> getAllLesson() {
         return lessonMapper.entityToDtoList(lessonRepository.findAll());
+    }
+
+    @Override
+    public Map<String, String> getLessonsTopics(List<LessonDto> lessonDtoList) {
+        Map<String, String> lessonsTopics = new HashMap<>();
+        for (LessonDto l : lessonDtoList) {
+            lessonsTopics.put(l.getTopic(), scheduleService.getScheduleById(l.getScheduleId()).getSubjectTitle());
+        }
+        return lessonsTopics;
     }
 
     @Override
@@ -108,10 +119,9 @@ public class LessonServiceImpl implements LessonService {
     }
 
     @Override
-    public List<LessonDto> getAllLessonByYearSubjectQuarter(String year, Long subjectId, Integer quarter, Long gradeId) {
+    public List<LessonDto> getAllLessonBySubjectQuarter(Long subjectId, Integer quarter, Long gradeId) {
         List<LessonDto> allLessonByGrade = getAllLessonByGradeId(getAllLesson(), gradeId);
-        List<LessonDto> allLessonByYear = getAllLessonByYear(allLessonByGrade, year);
-        List<LessonDto> allLessonBySubject = getAllLessonBySubjectId(allLessonByYear, subjectId);
+        List<LessonDto> allLessonBySubject = getAllLessonBySubjectId(allLessonByGrade, subjectId);
         return getAllLessonByQuarter(allLessonBySubject, quarter);
     }
 
@@ -132,7 +142,7 @@ public class LessonServiceImpl implements LessonService {
     @Override
     public List<LessonDto> getUndoneHwByStudent(List<HomeworkDto> homeworkDtoList, Long studentId, Long subjectId) {
         List<LessonDto> allHw = new ArrayList<>();
-        for (LessonDto l : getAllLessonBySubjectId(getAllLesson(), studentId)) {
+        for (LessonDto l : getAllLessonBySubjectId(getAllLesson(), subjectId)) {
             Boolean isDone = false;
             for (HomeworkDto h : homeworkDtoList) {
                 if (l.getId().equals(h.getLessonId()) && h.getStudentId().equals(studentId))

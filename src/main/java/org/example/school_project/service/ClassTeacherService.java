@@ -3,6 +3,7 @@ package org.example.school_project.service;
 import org.example.school_project.dto.*;
 
 import java.util.List;
+import java.util.Map;
 
 public interface ClassTeacherService {
     AssignmentDto createAssignment(AssignmentDtoRequest assignmentDtoRequest);
@@ -35,6 +36,12 @@ public interface ClassTeacherService {
 
     MarkDto createMark(MarkDtoRequest markDtoRequest);
     MarkDto updateMark(MarkDtoRequest markDtoRequest);
+
+    Map<String, Double> getAvgMarkBySubjectGrade(Long gradeId, Long subjectId);
+
+    Map<String, Double> getAvgMarkBySubject(Long subjectId);
+
+    Map<String, Double> getAvgMarkBySubjectGradeQuarter(Long subjectId, Long gradeId, Integer quarter);
 
     AttendanceDto createAttendance(AttendanceDtoRequest attendanceDtoRequest);
     AttendanceDto updateAttendance(AttendanceDtoRequest attendanceDtoRequest);
