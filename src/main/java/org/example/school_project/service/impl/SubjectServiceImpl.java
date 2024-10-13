@@ -6,7 +6,6 @@ import org.example.school_project.dto.SubjectDto;
 import org.example.school_project.dto.SubjectDtoRequest;
 import org.example.school_project.entity.Subject;
 import org.example.school_project.repository.SubjectRepository;
-import org.example.school_project.service.ScheduleService;
 import org.example.school_project.service.SubjectService;
 import org.example.school_project.util.exception.AlreadyExistException;
 import org.example.school_project.util.exception.ObjectNotFoundException;

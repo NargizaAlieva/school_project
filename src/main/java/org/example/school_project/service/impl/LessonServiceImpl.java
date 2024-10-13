@@ -129,10 +129,12 @@ public class LessonServiceImpl implements LessonService {
     public List<LessonDto> getUndoneHwByStudent(List<HomeworkDto> homeworkDtoList, Long studentId) {
         List<LessonDto> allHw = new ArrayList<>();
         for (LessonDto l : getAllLesson()) {
-            Boolean isDone = false;
+            boolean isDone = false;
             for (HomeworkDto h : homeworkDtoList) {
-                if (l.getId().equals(h.getLessonId()) && h.getStudentId().equals(studentId))
+                if (l.getId().equals(h.getLessonId()) && h.getStudentId().equals(studentId)) {
                     isDone = true;
+                    break;
+                }
             }
             if (!isDone) allHw.add(l);
         }
@@ -143,10 +145,12 @@ public class LessonServiceImpl implements LessonService {
     public List<LessonDto> getUndoneHwByStudent(List<HomeworkDto> homeworkDtoList, Long studentId, Long subjectId) {
         List<LessonDto> allHw = new ArrayList<>();
         for (LessonDto l : getAllLessonBySubjectId(getAllLesson(), subjectId)) {
-            Boolean isDone = false;
+            boolean isDone = false;
             for (HomeworkDto h : homeworkDtoList) {
-                if (l.getId().equals(h.getLessonId()) && h.getStudentId().equals(studentId))
+                if (l.getId().equals(h.getLessonId()) && h.getStudentId().equals(studentId)) {
                     isDone = true;
+                    break;
+                }
             }
             if (!isDone) allHw.add(l);
         }

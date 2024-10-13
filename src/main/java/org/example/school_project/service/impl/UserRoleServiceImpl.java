@@ -1,21 +1,25 @@
 package org.example.school_project.service.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.example.school_project.dto.AnnouncementDto;
+import org.example.school_project.dto.CharterDto;
 import org.example.school_project.dto.MessageDto;
 import org.example.school_project.dto.MessageDtoRequest;
+import org.example.school_project.entity.Role;
 import org.example.school_project.entity.User;
-import org.example.school_project.service.MessageService;
-import org.example.school_project.service.UserRoleService;
-import org.example.school_project.service.UserService;
+import org.example.school_project.service.*;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
 public class UserRoleServiceImpl implements UserRoleService {
     private final UserService userService;
     private final MessageService messageService;
+    private final AnnouncementService announcementService;
+    private final CharterService charterService;
 
     private User getCurrentUser() {
         return userService.getCurrentUser();
@@ -69,5 +73,16 @@ public class UserRoleServiceImpl implements UserRoleService {
     @Override
     public List<MessageDto> getAllUnreadAuthorMessages() {
         return messageService.getAllUnreadMessages(getAllAuthorMessages());
+    }
+
+    @Override
+    public List<AnnouncementDto> getFilteredAnnouncement() {
+        Set<Role> roleSet = userService.getCurrentUser().getRoleSet();
+        return announcementService.filterByRoleAnnouncement(roleSet);
+    }
+
+    @Override
+    public List<CharterDto> getAllActiveCharter() {
+        return charterService.getAllActiveCharter();
     }
 }

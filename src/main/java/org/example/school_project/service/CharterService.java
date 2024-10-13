@@ -20,6 +20,8 @@ public interface CharterService {
 
     List<CharterDto> getAllCharter ();
 
+    List<CharterDto> getAllActiveCharter();
+
     List<CharterDto> getAllCharterByAuthor(Long authorId);
 
     List<CharterDto> filterActiveCharter(List<CharterDto> charterDtoList);

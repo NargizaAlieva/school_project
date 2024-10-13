@@ -92,6 +92,15 @@ public class CharterServiceImpl implements CharterService {
     }
 
     @Override
+    public List<CharterDto> getAllActiveCharter() {
+        List<CharterDto> charterDtoList = new ArrayList<>();
+        for (CharterDto c : getAllCharter())
+            if (c.getIsActive())
+                charterDtoList.add(c);
+        return charterDtoList;
+    }
+
+    @Override
     public List<CharterDto> getAllCharterByAuthor(Long authorId) {
         List<CharterDto> charterDtoList = new ArrayList<>();
         for (CharterDto c : getAllCharter())

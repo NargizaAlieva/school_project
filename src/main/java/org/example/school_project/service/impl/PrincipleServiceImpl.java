@@ -23,6 +23,7 @@ public class PrincipleServiceImpl implements PrincipleService {
     private final AssignmentService assignmentService;
     private final AverageMarkService averageMarkService;
     private final AttendCountService attendCountService;
+    private final AnnouncementService announcementService;
 
     private Employee getPrinciple() {
         return employeeService.getByUserId(userService.getCurrentUser().getId());
@@ -268,5 +269,40 @@ public class PrincipleServiceImpl implements PrincipleService {
     @Override
     public Map<String, Double> getAttendGrades() {
         return attendCountService.getAttendAll();
+    }
+
+    @Override
+    public AnnouncementDto createAnnouncement(AnnouncementDtoRequest announcementDtoRequest) {
+        return announcementService.createAnnouncement(announcementDtoRequest);
+    }
+
+    @Override
+    public AnnouncementDto updateAnnouncement(AnnouncementDtoRequest announcementDtoRequest) {
+        return announcementService.updateAnnouncement(announcementDtoRequest);
+    }
+
+    @Override
+    public AnnouncementDto deleteAnnouncement(Long id) {
+        return announcementService.deleteAnnouncement(id);
+    }
+
+    @Override
+    public AnnouncementDto restoreAnnouncement(Long id) {
+        return announcementService.restoreAnnouncement(id);
+    }
+
+    @Override
+    public List<AnnouncementDto> getAllAnnouncement() {
+        return announcementService.getAllAnnouncement();
+    }
+
+    @Override
+    public List<AnnouncementDto> getAllActiveAnnouncement() {
+        return announcementService.getAllActiveAnnouncement();
+    }
+
+    @Override
+    public List<AnnouncementDto> getAllSelfAnnouncement() {
+        return announcementService.getAllAnnouncementByAuthor(getPrinciple().getId());
     }
 }

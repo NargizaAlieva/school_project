@@ -84,4 +84,18 @@ public interface PrincipleService {
     Map<String, Double> getAttendByGrade(Long gradeId);
 
     Map<String, Double> getAttendGrades();
+
+    AnnouncementDto createAnnouncement(AnnouncementDtoRequest announcementDtoRequest);
+
+    AnnouncementDto updateAnnouncement(AnnouncementDtoRequest announcementDtoRequest);
+
+    AnnouncementDto deleteAnnouncement(Long id);
+
+    AnnouncementDto restoreAnnouncement(Long id);
+
+    List<AnnouncementDto> getAllAnnouncement();
+
+    List<AnnouncementDto> getAllActiveAnnouncement();
+
+    List<AnnouncementDto> getAllSelfAnnouncement();
 }

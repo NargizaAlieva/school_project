@@ -107,30 +107,10 @@ public class AssignmentServiceImpl implements AssignmentService{
     }
 
     @Override
-    public List<AssignmentDto> getAllUndoneAssignmentFrom(List<Long> ids) {
-        List<AssignmentDto> undoneAssignment = new ArrayList<>();
-
-        for (AssignmentDto assignmentDto : getAllAssignmentFromReceiver(ids)) {
-            if(!assignmentDto.getIsDone()) undoneAssignment.add(assignmentDto);
-        }
-        return undoneAssignment;
-    }
-
-    @Override
     public List<AssignmentDto> getAllDoneAssignment(List<AssignmentDto> assignmentDtoList) {
         List<AssignmentDto> doneAssignment = new ArrayList<>();
 
         for (AssignmentDto assignmentDto : getAllAssignment()) {
-            if(assignmentDto.getIsDone()) doneAssignment.add(assignmentDto);
-        }
-        return doneAssignment;
-    }
-
-    @Override
-    public List<AssignmentDto> getAllDoneAssignmentFrom(List<Long> ids) {
-        List<AssignmentDto> doneAssignment = new ArrayList<>();
-
-        for (AssignmentDto assignmentDto : getAllAssignmentFromReceiver(ids)) {
             if(assignmentDto.getIsDone()) doneAssignment.add(assignmentDto);
         }
         return doneAssignment;

@@ -130,8 +130,8 @@ public class AdminController {
     @PostMapping(value = "/create-parent")
     public ResponseEntity<Response> createParent(@RequestBody ParentDtoRequest request) {
         try {
-            adminService.createParent(request);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Successfully added created Parent.", request));
+            ParentDto parentDto = adminService.createParent(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Successfully added created Parent.", parentDto));
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Parent is not saved. " + exception.getMessage(), null));
         }

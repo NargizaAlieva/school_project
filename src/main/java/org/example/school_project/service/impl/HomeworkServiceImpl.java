@@ -47,20 +47,20 @@ public class HomeworkServiceImpl implements HomeworkService {
         return homeworkMapper.entityToDto(save(homeworkMapper.dtoToEntity(homeworkDtoRequest)));
     }
 
-    @Override
-    public HomeworkDto updateHw(HomeworkDtoRequest homeworkDtoRequest) {
-        Homework oldHomework = homeworkMapper.dtoToEntity(homeworkDtoRequest);
-        Homework newHomework = getHwByIdEntity(homeworkDtoRequest.getId());
-
-        newHomework.setId(oldHomework.getId());
-        newHomework.setMark(oldHomework.getMark());
-        newHomework.setCreationDate(oldHomework.getCreationDate());
-        newHomework.setTeacherReview(oldHomework.getTeacherReview());
-        newHomework.setIsChecked(oldHomework.getIsChecked());
-        newHomework.setStudentHW(oldHomework.getStudentHW());
-        newHomework.setLessonHW(oldHomework.getLessonHW());
-        return homeworkMapper.entityToDto(newHomework);
-    }
+//    @Override
+//    public HomeworkDto updateHw(HomeworkDtoRequest homeworkDtoRequest) {
+//        Homework oldHomework = homeworkMapper.dtoToEntity(homeworkDtoRequest);
+//        Homework newHomework = getHwByIdEntity(homeworkDtoRequest.getId());
+//
+//        newHomework.setId(oldHomework.getId());
+//        newHomework.setMark(oldHomework.getMark());
+//        newHomework.setCreationDate(oldHomework.getCreationDate());
+//        newHomework.setTeacherReview(oldHomework.getTeacherReview());
+//        newHomework.setIsChecked(oldHomework.getIsChecked());
+//        newHomework.setStudentHW(oldHomework.getStudentHW());
+//        newHomework.setLessonHW(oldHomework.getLessonHW());
+//        return homeworkMapper.entityToDto(newHomework);
+//    }
 
     @Override
     public List<HomeworkDto> convertToHw(List<LessonDto> lessonDtoList) {

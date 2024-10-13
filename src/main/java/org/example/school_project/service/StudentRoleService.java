@@ -31,4 +31,6 @@ public interface StudentRoleService {
 
     List<StudentDto> getClassmates();
     Set<SubjectDto> getStudentSubject();
+
+    List<DutyListDto> getStudentDutyList();
 }

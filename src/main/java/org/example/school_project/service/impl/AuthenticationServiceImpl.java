@@ -5,7 +5,6 @@ import org.example.school_project.dto.JwtAuthenticationResponse;
 import org.example.school_project.dto.RoleDto;
 import org.example.school_project.dto.SignInRequest;
 import org.example.school_project.dto.SignUpRequest;
-import org.example.school_project.entity.Role;
 import org.example.school_project.entity.User;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

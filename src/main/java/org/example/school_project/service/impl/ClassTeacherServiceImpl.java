@@ -38,9 +38,7 @@ public class ClassTeacherServiceImpl implements ClassTeacherService {
     }
 
     public Boolean isStudentFromTeacherGrade(Long studentId) {
-        if (getCurrentClassTeacher().getHomeGrades().contains(studentService.getStudentByIdEntity(studentId).getGrade()))
-            return true;
-        return false;
+        return getCurrentClassTeacher().getHomeGrades().contains(studentService.getStudentByIdEntity(studentId).getGrade());
     }
 
     @Override
