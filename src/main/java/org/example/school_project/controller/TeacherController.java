@@ -273,6 +273,14 @@ public class TeacherController {
         }
     }
 
+    @Operation(
+            summary = "Get average mark by subject",
+            description = "Retrieves the average mark for a specific subject."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully got Marks", content = @Content(schema = @Schema(implementation = Response.class))),
+            @ApiResponse(responseCode = "404", description = "Marks not found", content = @Content)
+    })
     @GetMapping("/get-teacher-subjects-mark/{subjectId}")
     public ResponseEntity<Response> getAvgMarkBySubjectGrade(@PathVariable Long subjectId) {
         try {
@@ -284,12 +292,12 @@ public class TeacherController {
     }
 
     @Operation(
-            summary = "Get average mark by subject",
-            description = "Retrieves the average mark for a specific subject."
+            summary = "Get all grades",
+            description = "Retrieves all grades available in the system."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully got Marks", content = @Content(schema = @Schema(implementation = Response.class))),
-            @ApiResponse(responseCode = "404", description = "Marks not found", content = @Content)
+            @ApiResponse(responseCode = "200", description = "Successfully got all Grades", content = @Content(schema = @Schema(implementation = Response.class))),
+            @ApiResponse(responseCode = "404", description = "Grades not found", content = @Content)
     })
     @GetMapping("/get-all-grade")
     public ResponseEntity<Response> getAllGrade() {
@@ -302,10 +310,10 @@ public class TeacherController {
 
     @Operation(
             summary = "Get all teacher grades",
-            description = "Retrieves all grades that the teacher is associated with."
+            description = "Retrieves all grades assigned to teachers."
     )
     @ApiResponses(value = {
-            @ApiResponse(responseCode = "200", description = "Successfully got Grades", content = @Content(schema = @Schema(implementation = Response.class))),
+            @ApiResponse(responseCode = "200", description = "Successfully got all teacher grades", content = @Content(schema = @Schema(implementation = Response.class))),
             @ApiResponse(responseCode = "404", description = "Grades not found", content = @Content)
     })
     @GetMapping("/get-all-teacher-grade")
