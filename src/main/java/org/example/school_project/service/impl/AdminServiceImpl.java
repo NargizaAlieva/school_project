@@ -16,7 +16,7 @@ public class AdminServiceImpl implements AdminService {
     private final StudentService studentService;
     private final ParentService parentService;
     private final UserMapper userMapper;
-
+    private final FileService fileService;
     @Override
     public List<UserDto> getAllUser() {
         return userService.getAllUser();
@@ -74,6 +74,7 @@ public class AdminServiceImpl implements AdminService {
 
     @Override
     public StudentDto createStudent(StudentDtoRequest studentDtoRequest) {
+        fileService.saveStudentDataToDocx(studentDtoRequest);
         return studentService.createStudent(studentDtoRequest);
     }
 

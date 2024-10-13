@@ -15,18 +15,13 @@ import java.io.IOException;
 @Service
 public class FileServiceImpl implements FileService {
 
-    private static final String FILE_PATH_STUDENTS = "documents/data.docx";
+    private static final String FILE_PATH_STUDENTS = "src/main/resources/files/data.docx";
 
     @Override
     public String saveStudentDataToDocx(StudentDtoRequest studentDtoRequest) {
-        File directory = new File("documents");
-        if (!directory.exists()) {
-            directory.mkdirs();
-        }
 
         XWPFDocument document;
 
-        // Проверьте наличие файла и откройте его, если он существует
         File file = new File(FILE_PATH_STUDENTS);
         if (file.exists()) {
             try (FileInputStream fis = new FileInputStream(file)) {
@@ -39,12 +34,10 @@ public class FileServiceImpl implements FileService {
             document = new XWPFDocument();
         }
 
-        // Добавьте новый параграф с данными
         XWPFParagraph paragraph = document.createParagraph();
         XWPFRun run = paragraph.createRun();
         run.setText(studentDtoRequest.toString());
 
-        // Сохраните изменения в файл
         try (FileOutputStream out = new FileOutputStream(FILE_PATH_STUDENTS)) {
             document.write(out);
         } catch (IOException e) {

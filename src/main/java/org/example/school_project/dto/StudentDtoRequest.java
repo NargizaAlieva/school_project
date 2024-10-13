@@ -16,5 +16,17 @@ public class StudentDtoRequest {
     private Long parentId;
     private Long gradeId;
 
+    @Override
+    public String toString() {
+        return   " StudentDtoRequest {" +
+                "id=" + id +
+                ", birthday=" + birthday +
+                ", parentStatus=" + parentStatus +
+                ", userId=" + userId +
+                ", parentId=" + parentId +
+                ", gradeId=" + gradeId +
+                '}';
+    }
+
     public StudentDtoRequest(){}
 }

@@ -3,6 +3,7 @@ package org.example.school_project.controller;
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
 import org.apache.poi.xwpf.usermodel.XWPFRun;
+import org.example.school_project.dto.StudentDtoRequest;
 import org.example.school_project.entity.YourDataClass;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -19,9 +20,8 @@ public class TestController {
     private static final String FILE_PATH = "src/main/resources/files/data.docx";
 
     @PostMapping("/saveData")
-    public String saveDataToDatabaseAndDocx(@RequestBody YourDataClass data) {
+    public String saveDataToDatabaseAndDocx(@RequestBody StudentDtoRequest studentDtoRequest) {
 
-        saveDataToDatabase(data);
 
         XWPFDocument document;
 
@@ -39,7 +39,7 @@ public class TestController {
 
         XWPFParagraph paragraph = document.createParagraph();
         XWPFRun run = paragraph.createRun();
-        run.setText(data.toString());
+        run.setText(studentDtoRequest.toString());
 
         try (FileOutputStream out = new FileOutputStream(FILE_PATH)) {
             document.write(out);
@@ -50,7 +50,5 @@ public class TestController {
 
         return "Data saved successfully";
     }
-    private void saveDataToDatabase(YourDataClass data) {
-        System.out.println(data); // Реализуйте логику сохранения данных в базу данных
-    }
+
 }
