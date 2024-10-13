@@ -1,5 +1,7 @@
 package org.example.school_project.service;
 
+import org.example.school_project.dto.AnnouncementDto;
+import org.example.school_project.dto.CharterDto;
 import org.example.school_project.dto.MessageDto;
 import org.example.school_project.dto.MessageDtoRequest;
 
@@ -19,4 +21,8 @@ public interface UserRoleService {
 
     List<MessageDto> getAllUnreadReceiverMessages();
     List<MessageDto> getAllUnreadAuthorMessages();
+
+    List<AnnouncementDto> getFilteredAnnouncement();
+
+    List<CharterDto> getAllActiveCharter();
 }

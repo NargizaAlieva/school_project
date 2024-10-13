@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.example.school_project.dto.*;
 import org.example.school_project.entity.Student;
 import org.example.school_project.service.*;
-import org.example.school_project.util.mapper.HomeworkToDoMapping;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,6 +20,7 @@ public class StudentRoleServiceImpl implements StudentRoleService {
     private final LessonService lessonService;
     private final SubjectService subjectService;
     private final StudentService studentService;
+    private final DutyListService dutyListService;
     private final AverageMarkService averageMarkService;
     private final AttendCountService attendCountService;
     public Student getCurrentStudent() {
@@ -114,5 +114,10 @@ public class StudentRoleServiceImpl implements StudentRoleService {
     @Override
     public Set<SubjectDto> getStudentSubject() {
         return subjectService.getSubjectForGrade(getCurrentStudent().getGrade().getId(), scheduleService.getAllActiveSchedule());
+    }
+
+    @Override
+    public List<DutyListDto> getStudentDutyList() {
+        return dutyListService.getAllDutyListByStudent(getCurrentStudent().getId());
     }
 }

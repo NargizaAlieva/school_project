@@ -439,4 +439,59 @@ public class PrincipleController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't found. " + exception.getMessage(), null));
         }
     }
+
+    @PostMapping(value = "/create-announcement")
+    public ResponseEntity<Response> createAnnouncement(@RequestBody AnnouncementDtoRequest request) {
+        try {
+            AnnouncementDto announcementDto = principleService.createAnnouncement(request);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Successfully created Announcement.", announcementDto));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Announcement is not saved. " + exception.getMessage(), null));
+        }
+    }
+
+    @PutMapping(value = "/update-announcement")
+    public ResponseEntity<Response> updateAnnouncement(@RequestBody AnnouncementDtoRequest request) {
+        try {
+            AnnouncementDto announcementDto = principleService.updateAnnouncement(request);
+            return ResponseEntity.ok(new Response("Announcement Schedule successfully.", announcementDto));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Announcement not updated. " + exception.getMessage(), null));
+        }
+    }
+
+    @DeleteMapping("/delete-announcement/{announcementId}")
+    public ResponseEntity<Response> deleteAnnouncement(@PathVariable Long announcementId) {
+        try {
+            return ResponseEntity.ok(new Response("Successfully deleted Announcement with id.", principleService.deleteAnnouncement(announcementId)));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Failed to delete. " + exception.getMessage(), null));
+        }
+    }
+    @PutMapping("/restore-announcement/{announcementId}")
+    public ResponseEntity<Response> restoreAnnouncement(@PathVariable Long announcementId) {
+        try {
+            return ResponseEntity.ok(new Response("Successfully restored Announcement with id.", principleService.restoreAnnouncement(announcementId)));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Failed to restore. " + exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping(value = "/get-all-active-announcement")
+    public ResponseEntity<Response> getAllActiveAnnouncement() {
+        try {
+            return ResponseEntity.ok(new Response("Successfully got all active Announcement.", principleService.getAllActiveAnnouncement()));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't find. " + exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping(value = "/get-all-self-announcement")
+    public ResponseEntity<Response> getAllSelfAnnouncement() {
+        try {
+            return ResponseEntity.ok(new Response("Successfully got all self Announcement.", principleService.getAllSelfAnnouncement()));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't find. " + exception.getMessage(), null));
+        }
+    }
 }

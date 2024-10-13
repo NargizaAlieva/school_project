@@ -4,8 +4,7 @@ public enum CanSeeOnly {
     ALL,
     DEAN,
     CLASS_REPRESENTATIVE,
-    EMPLOYEE,
+    TEACHER,
     PARENT,
-    STUDENT,
-    CLASS_STUDENT
+    STUDENT
 }

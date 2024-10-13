@@ -10,7 +10,7 @@ import org.example.school_project.dto.*;
 import org.example.school_project.service.UserRoleService;
 
 @RestController
-@RequestMapping(value = "/users")
+@RequestMapping(value = "/user")
 @AllArgsConstructor
 public class UserController {
     private final UserRoleService userRoleService;
@@ -29,9 +29,9 @@ public class UserController {
     public ResponseEntity<Response> getMessageById(@PathVariable Long id) {
         try {
             MessageDto messageDto = userRoleService.getMessageById(id);
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Message successfully updated.", messageDto));
+            return ResponseEntity.ok(new Response("Message successfully updated.", messageDto));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Message is not updated. " + exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Message is not updated. " + exception.getMessage(), null));
         }
     }
 
@@ -39,16 +39,16 @@ public class UserController {
     public ResponseEntity<Response> markAsUnread(@PathVariable Long id) {
         try {
             MessageDto messageDto = userRoleService.markAsUnread(id);
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Message successfully updated.", messageDto));
+            return ResponseEntity.ok(new Response("Message successfully updated.", messageDto));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Message is not updated. " + exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Message is not updated. " + exception.getMessage(), null));
         }
     }
 
     @DeleteMapping(value = "/delete-message/{id}")
     public ResponseEntity<Response> deleteMessage(@PathVariable Long id) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Deleted Message successfully.", userRoleService.deleteMessage(id)));
+            return ResponseEntity.ok(new Response("Deleted Message successfully.", userRoleService.deleteMessage(id)));
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Failed to delete. " + exception.getMessage(), null));
         }
@@ -57,7 +57,7 @@ public class UserController {
     @PutMapping(value = "/restore-message/{id}")
     public ResponseEntity<Response> restoreAssignment(@PathVariable Long id) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Restored Message successfully.", userRoleService.restoreMessage(id)));
+            return ResponseEntity.ok(new Response("Restored Message successfully.", userRoleService.restoreMessage(id)));
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Failed to restore. " + exception.getMessage(), null));
         }
@@ -66,45 +66,63 @@ public class UserController {
     @GetMapping(value = "/get-all-message")
     public ResponseEntity<Response> getAllMessages() {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Successfully got all Messages.", userRoleService.getAllMessages()));
+            return ResponseEntity.ok(new Response("Successfully got all Messages.", userRoleService.getAllMessages()));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't find. " + exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't find. " + exception.getMessage(), null));
         }
     }
 
     @GetMapping(value = "/get-all-receiver-messages")
     public ResponseEntity<Response> getAllReceiverMessages() {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Successfully got all receive Messages.", userRoleService.getAllReceiverMessages()));
+            return ResponseEntity.ok(new Response("Successfully got all receive Messages.", userRoleService.getAllReceiverMessages()));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't find. " + exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't find. " + exception.getMessage(), null));
         }
     }
 
     @GetMapping(value = "/get-all-author-messages")
     public ResponseEntity<Response> getAllAuthorMessages() {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Successfully got all author Messages.", userRoleService.getAllAuthorMessages()));
+            return ResponseEntity.ok(new Response("Successfully got all author Messages.", userRoleService.getAllAuthorMessages()));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't find. " + exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't find. " + exception.getMessage(), null));
         }
     }
 
     @GetMapping(value = "/get-all-receiver-unread-messages")
     public ResponseEntity<Response> getAllUnreadReceiverMessages() {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Successfully got all receive unread Messages.", userRoleService.getAllUnreadReceiverMessages()));
+            return ResponseEntity.ok(new Response("Successfully got all receive unread Messages.", userRoleService.getAllUnreadReceiverMessages()));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't find. " + exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't find. " + exception.getMessage(), null));
         }
     }
 
     @GetMapping(value = "/get-all-author-unread-messages")
     public ResponseEntity<Response> getAllUnreadAuthorMessages() {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Successfully got all author unread Messages.", userRoleService.getAllUnreadAuthorMessages()));
+            return ResponseEntity.ok(new Response("Successfully got all author unread Messages.", userRoleService.getAllUnreadAuthorMessages()));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't find. " + exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't find. " + exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping(value = "/get-announcements")
+    public ResponseEntity<Response> getFilteredAnnouncement() {
+        try {
+            return ResponseEntity.ok(new Response("Successfully got filtered Announcements.", userRoleService.getFilteredAnnouncement()));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't find. " + exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping(value = "/get-charter")
+    public ResponseEntity<Response> getAllActiveCharter() {
+        try {
+            return ResponseEntity.ok(new Response("Successfully got all active Charter.", userRoleService.getAllActiveCharter()));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't find. " + exception.getMessage(), null));
         }
     }
 }

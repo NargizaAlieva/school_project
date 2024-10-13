@@ -1,10 +1,7 @@
 package org.example.school_project.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.example.school_project.dto.AssignmentDto;
-import org.example.school_project.dto.CharterDto;
-import org.example.school_project.dto.CharterDtoRequest;
-import org.example.school_project.dto.MessageDto;
+import org.example.school_project.dto.*;
 import org.example.school_project.entity.Employee;
 import org.example.school_project.service.*;
 import org.springframework.stereotype.Service;
@@ -19,6 +16,7 @@ public class SecretaryServiceImpl implements SecretaryService {
     private final EmployeeService employeeService;
     private final UserService userService;
     private final CharterService charterService;
+    private final AnnouncementService announcementService;
 
     private Employee getCurrentEmployee() {
         return employeeService.getByUserId(userService.getCurrentUser().getId());
@@ -96,4 +94,33 @@ public class SecretaryServiceImpl implements SecretaryService {
         return charterService.getAllCharterByAuthor(getCurrentEmployee().getId());
     }
 
+    @Override
+    public AnnouncementDto createAnnouncement(AnnouncementDtoRequest announcementDtoRequest) {
+        return announcementService.createAnnouncement(announcementDtoRequest);
+    }
+
+    @Override
+    public AnnouncementDto updateAnnouncement(AnnouncementDtoRequest announcementDtoRequest) {
+        return announcementService.updateAnnouncement(announcementDtoRequest);
+    }
+
+    @Override
+    public AnnouncementDto deleteAnnouncement(Long id) {
+        return announcementService.deleteAnnouncement(id);
+    }
+
+    @Override
+    public AnnouncementDto restoreAnnouncement(Long id) {
+        return announcementService.restoreAnnouncement(id);
+    }
+
+    @Override
+    public List<AnnouncementDto> getAllActiveAnnouncement() {
+        return announcementService.getAllActiveAnnouncement();
+    }
+
+    @Override
+    public List<AnnouncementDto> getAllSelfAnnouncement() {
+        return announcementService.getAllAnnouncementByAuthor(getCurrentEmployee().getId());
+    }
 }

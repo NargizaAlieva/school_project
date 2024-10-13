@@ -19,6 +19,7 @@ public interface DeanService {
     Map<String, Integer> getAllTeacherScheduleNum();
 
     GradeDto getGradeById(Long id);
+
     GradeDto createGrade(GradeDtoRequest gradeDtoRequest);
     GradeDto updateGrade(GradeDtoRequest gradeDtoRequest);
     GradeDto deleteGrade(Long id);
@@ -43,6 +44,7 @@ public interface DeanService {
 
     List<StudentDto> getAllStudent();
     List<StudentDto> getAllActiveStudent();
+
     List<StudentDto> getAllActiveStudentByGrade(Long gradeId);
 
     AssignmentDto createAssignment(AssignmentDtoRequest assignmentDtoRequest);
@@ -79,4 +81,16 @@ public interface DeanService {
     Map<String, Double> getAttendByGrade(Long gradeId);
 
     Map<String, Double> getAttendGrades();
+
+    AnnouncementDto createAnnouncement(AnnouncementDtoRequest announcementDtoRequest);
+
+    AnnouncementDto updateAnnouncement(AnnouncementDtoRequest announcementDtoRequest);
+
+    AnnouncementDto deleteAnnouncement(Long id);
+
+    AnnouncementDto restoreAnnouncement(Long id);
+
+    List<AnnouncementDto> getAllActiveAnnouncement();
+
+    List<AnnouncementDto> getAllSelfAnnouncement();
 }

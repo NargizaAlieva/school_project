@@ -176,4 +176,13 @@ public class StudentController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Classmates is not found. " + exception.getMessage(), null));
         }
     }
+
+    @GetMapping("/get-duty-list")
+    public ResponseEntity<Response> getStudentDutyList() {
+        try {
+            return ResponseEntity.ok(new Response("Successfully got student Duty List.", studentRoleService.getStudentDutyList()));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Duty list is not found. " + exception.getMessage(), null));
+        }
+    }
 }

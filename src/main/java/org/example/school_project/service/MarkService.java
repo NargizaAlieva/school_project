@@ -9,6 +9,7 @@ import java.util.List;
 
 public interface MarkService {
     Mark getMarkByIdEntity(Long id);
+
     MarkDto getMarkById(Long id);
 
     MarkDto createMark(MarkDtoRequest markDtoRequest);

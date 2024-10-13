@@ -9,7 +9,9 @@ import java.util.List;
 
 public interface AttendanceService {
     Attendance getAttendanceByIdEntity(Long id);
+
     AttendanceDto getAttendanceById(Long id);
+
     AttendanceDto createAttendance(AttendanceDtoRequest attendanceDtoRequest);
     AttendanceDto updateAttendance(AttendanceDtoRequest attendanceDtoRequest);
 
