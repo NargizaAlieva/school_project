@@ -18,7 +18,7 @@ import org.example.school_project.service.ClassTeacherService;
 @RestController
 @RequestMapping(value = "/class-teacher")
 @AllArgsConstructor
-@Tag(name = "Class Teacher", description = "Operations related to class teacher.")
+@Tag(name = "Class Teacher Management", description = "Operations related to class teacher role.")
 public class ClassTeacherController {
     private final ClassTeacherService classTeacherService;
 
