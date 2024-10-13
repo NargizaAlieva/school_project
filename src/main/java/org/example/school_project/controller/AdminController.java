@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.example.school_project.dto.*;
 import org.example.school_project.service.AdminService;
+import org.example.school_project.service.FileService;
 import org.example.school_project.util.exception.ObjectNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @Slf4j
 public class AdminController {
     private final AdminService adminService;
+    private final FileService fileService;
     @GetMapping("/get-all-user")
     public ResponseEntity<Response> getAllUser() {
         try {
@@ -212,5 +214,9 @@ public class AdminController {
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
         }
+    }
+    @GetMapping(value = "/reviewsAsDOCX")
+    public ResponseEntity<byte[]> getReviewsAsDocx() {
+        return fileService.getReviewsAsDocx();
     }
 }
