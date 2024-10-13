@@ -121,4 +121,5 @@ public class AdminServiceImpl implements AdminService {
     public UserDto removeRoleFromUser(RoleDto roleDto) {
         return userMapper.entityToDto(userService.removeRoleFromUser(roleDto));
     }
+
 }
