@@ -2,53 +2,78 @@ package org.example.school_project.controller;
 
 import org.apache.poi.xwpf.usermodel.XWPFDocument;
 import org.apache.poi.xwpf.usermodel.XWPFParagraph;
-import org.apache.poi.xwpf.usermodel.XWPFRun;
-import org.example.school_project.dto.StudentDtoRequest;
-import org.example.school_project.entity.YourDataClass;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
+import org.example.school_project.entity.Review;
+import org.example.school_project.repository.ReviewRepository;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
+import java.util.List;
 
 @RestController
 public class TestController {
 
-    private static final String FILE_PATH = "src/main/resources/files/data.docx";
+   // private static final String FILE_PATH = "src/main/resources/files/data.docx";
+   private static final String FILE_PATH_REVIEW = "src/main/resources/files/review.docx";
 
-    @PostMapping("/saveData")
-    public String saveDataToDatabaseAndDocx(@RequestBody StudentDtoRequest studentDtoRequest) {
+    private final ReviewRepository reviewRepository;
 
+    public TestController(ReviewRepository reviewRepository) {
+        this.reviewRepository = reviewRepository;
+    }
 
-        XWPFDocument document;
+    @GetMapping("/reviews/docx")
+    public ResponseEntity<byte[]> getReviewsAsDocx() {
+        List<Review> reviews = reviewRepository.findAll();
+        try (XWPFDocument document = new XWPFDocument();
+             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
 
-        File file = new File(FILE_PATH);
-        if (file.exists()) {
-            try (FileInputStream fis = new FileInputStream(file)) {
-                document = new XWPFDocument(fis);
-            } catch (IOException e) {
-                e.printStackTrace();
-                return "Error occurred while opening existing DOCX file";
+            for (Review review : reviews) {
+                XWPFParagraph paragraph = document.createParagraph();
+                paragraph.createRun().setText("Review ID: " + review.getId());
+                paragraph.createRun().addBreak();
+                paragraph.createRun().setText("Author ID: " + review.getReview());
+                paragraph.createRun().addBreak();
+                paragraph.createRun().setText("Content: " + review.getAuthorReview());
+                paragraph.createRun().addBreak();
+                paragraph.createRun().setText("Student Review: " + review.getStudentReview());
+                paragraph.createRun().addBreak();
+                paragraph.createRun().setText("Creation Date: " + review.getCreationDate());
+                paragraph.createRun().addBreak();
+                paragraph.createRun().setText("Is active: " + review.getIsActive());
+                paragraph.createRun().addBreak();
+                paragraph.createRun().addBreak();
             }
-        } else {
-            document = new XWPFDocument();
-        }
 
-        XWPFParagraph paragraph = document.createParagraph();
-        XWPFRun run = paragraph.createRun();
-        run.setText(studentDtoRequest.toString());
+            document.write(outputStream);
+            byte[] docxBytes = outputStream.toByteArray();
 
-        try (FileOutputStream out = new FileOutputStream(FILE_PATH)) {
-            document.write(out);
+            HttpHeaders headers = new HttpHeaders();
+            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+            headers.add("Content-Disposition", "attachment; filename=reviews.docx");
+
+            return new ResponseEntity<>(docxBytes, headers, HttpStatus.OK);
         } catch (IOException e) {
             e.printStackTrace();
-            return "Error occurred while saving data to DOCX file";
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
-        return "Data saved successfully";
+
+    }
+
+    @GetMapping("/test-docx")
+    public ResponseEntity<byte[]> testDocx() {
+        byte[] dummyData = "This is a test".getBytes();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        headers.add("Content-Disposition", "attachment; filename=test.txt");
+
+        return new ResponseEntity<>(dummyData, headers, HttpStatus.OK);
     }
 
 }

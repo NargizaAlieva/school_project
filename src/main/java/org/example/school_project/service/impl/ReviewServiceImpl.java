@@ -5,6 +5,7 @@ import org.example.school_project.dto.ReviewDto;
 import org.example.school_project.dto.ReviewDtoRequest;
 import org.example.school_project.entity.Review;
 import org.example.school_project.repository.ReviewRepository;
+import org.example.school_project.service.FileService;
 import org.example.school_project.service.ReviewService;
 import org.example.school_project.util.exception.AlreadyExistException;
 import org.example.school_project.util.exception.DontHaveAccessException;
@@ -20,6 +21,7 @@ import java.util.List;
 public class ReviewServiceImpl implements ReviewService {
     private final ReviewRepository reviewRepository;
     private final ReviewMapper reviewMapper;
+    private final FileService fileService;
 
     public List<Review> getAllReview() {
         return reviewRepository.findAll();
@@ -65,6 +67,7 @@ public class ReviewServiceImpl implements ReviewService {
 
     @Override
     public ReviewDto createReview(ReviewDtoRequest reviewDtoRequest, Long authorId) {
+        fileService.createReviewToDocx(reviewDtoRequest);
         reviewDtoRequest.setAuthorId(authorId);
         if (reviewRepository.existsById(reviewDtoRequest.getId()))
             throw new AlreadyExistException("Review", "'id'");

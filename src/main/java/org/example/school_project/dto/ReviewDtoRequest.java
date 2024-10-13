@@ -14,5 +14,16 @@ public class ReviewDtoRequest {
     private Long authorId;
     private Long studentId;
 
+    @Override
+    public String toString() {
+        return "NEW Review {" +
+                "id=" + id +
+                ", review='" + review + '\'' +
+                ", creationDate=" + creationDate +
+                ", authorId=" + authorId +
+                ", studentId=" + studentId +
+                '}';
+    }
+
     public ReviewDtoRequest(){}
 }
