@@ -2,6 +2,7 @@ package org.example.school_project.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
+
 import lombok.Data;
 
 @Data

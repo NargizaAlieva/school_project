@@ -5,6 +5,7 @@ import org.example.school_project.dto.ScheduleDto;
 import org.example.school_project.dto.ScheduleDtoRequest;
 import org.example.school_project.entity.Schedule;
 import org.example.school_project.repository.ScheduleRepository;
+import org.example.school_project.service.EmployeeService;
 import org.example.school_project.service.ScheduleService;
 import org.example.school_project.service.StudentService;
 import org.example.school_project.util.exception.AlreadyExistException;
@@ -22,6 +23,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     private final ScheduleRepository scheduleRepository;
     private final ScheduleMapper scheduleMapper;
     private final StudentService studentService;
+    private final EmployeeService employeeService;
 
     public Schedule save(Schedule schedule) {
         return scheduleRepository.save(schedule);
@@ -63,6 +65,13 @@ public class ScheduleServiceImpl implements ScheduleService {
         newSchedule.setTeacherSchedule(oldSchedule.getTeacherSchedule());
         newSchedule.setIsApprove(oldSchedule.getIsApprove());
         return scheduleMapper.entityToDto(save(newSchedule));
+    }
+
+    @Override
+    public ScheduleDto changeTeacherSchedule(Long teacherId) {
+        Schedule schedule = getScheduleByIdEntity(teacherId);
+        schedule.setTeacherSchedule(employeeService.findByIdEntity(teacherId));
+        return scheduleMapper.entityToDto(save(schedule));
     }
 
     @Override

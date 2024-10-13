@@ -4,13 +4,13 @@ import lombok.RequiredArgsConstructor;
 import org.example.school_project.dto.*;
 import org.example.school_project.entity.Employee;
 import org.example.school_project.entity.Grade;
+import org.example.school_project.entity.Student;
 import org.example.school_project.service.*;
 import org.example.school_project.util.exception.ObjectNotFoundException;
+import org.example.school_project.util.mapper.GradeMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -24,9 +24,34 @@ public class ClassTeacherServiceImpl implements ClassTeacherService {
     private final MessageService messageService;
     private final AttendanceService attendanceService;
     private final AverageMarkService averageMarkService;
+    private final AttendCountService attendCountService;
+    private final GradeMapper gradeMapper;
 
     private Employee getCurrentClassTeacher() {
         return employeeService.getByUserId(userService.getCurrentUser().getId());
+    }
+
+    public Grade getTeacherGrades(Long subjectId) {
+        if (getCurrentClassTeacher().getHomeGrades().size() < subjectId)
+            throw new ObjectNotFoundException("Subject");
+        return getCurrentClassTeacher().getHomeGrades().get((int) (subjectId-1));
+    }
+
+    public Boolean isStudentFromTeacherGrade(Long studentId) {
+        if (getCurrentClassTeacher().getHomeGrades().contains(studentService.getStudentByIdEntity(studentId).getGrade()))
+            return true;
+        return false;
+    }
+
+    @Override
+    public Map<String, GradeDto> getTeacherGradesList() {
+        Map<String, GradeDto> studentDtoMap = new HashMap<>();
+        for (int i = 1; i <= getCurrentClassTeacher().getHomeGrades().size(); i++) {
+            String gradeIndex = "Grade: " + i;
+            GradeDto gradeDto = gradeMapper.entityToDto(getTeacherGrades((long) i));
+            studentDtoMap.put(gradeIndex, gradeDto);
+        }
+        return studentDtoMap;
     }
 
     @Override
@@ -85,7 +110,8 @@ public class ClassTeacherServiceImpl implements ClassTeacherService {
 
     @Override
     public List<StudentDto> getAllStudentsGrade(Long gradeId) {
-        return studentService.getAllStudentByGrade(gradeId);
+        Grade grade = getTeacherGrades(gradeId);
+        return studentService.getAllStudentByGrade(grade.getId());
     }
 
     @Override
@@ -95,7 +121,9 @@ public class ClassTeacherServiceImpl implements ClassTeacherService {
 
     @Override
     public List<ReviewDto> getReviewByStudentId(Long id) {
-        return reviewService.getReviewByStudentId(id);
+        if (isStudentFromTeacherGrade(id))
+            return reviewService.getReviewByStudentId(id);
+        throw new ObjectNotFoundException("Student from home grade");
     }
 
     @Override
@@ -143,18 +171,55 @@ public class ClassTeacherServiceImpl implements ClassTeacherService {
     }
 
     @Override
-    public Map<String, Double> getAvgMarkBySubjectGradeQuarter(Long subjectId, Long gradeId, Integer quarter) {
-        return averageMarkService.getAvgMarkBySubjectGradeQuarter(subjectId, gradeId, quarter);
+    public Map<String, Double> getAvgMarkByGradeStudentQuarter(Integer quarter, Long studentId) {
+        if (isStudentFromTeacherGrade(studentId)) {
+            Student student = studentService.getStudentByIdEntity(studentId);
+            return averageMarkService.getAvgMarkByGradeStudentQuarter(quarter, student.getGrade().getId(), studentId);
+        }
+        throw new ObjectNotFoundException("Student");
     }
 
     @Override
-    public Map<String, Double> getAvgMarkBySubjectGrade(Long gradeId, Long subjectId) {
-        return averageMarkService.getAvgMarkBySubjectGrade(subjectId, gradeId);
+    public Map<String, Double> getAvgMarkBySubjectGradeStudent(Long subjectId, Long studentId) {
+        if (isStudentFromTeacherGrade(studentId)) {
+            Student student = studentService.getStudentByIdEntity(studentId);
+            return averageMarkService.getAvgMarkBySubjectGradeStudent(subjectId, student.getGrade().getId(), studentId);
+        }
+        throw new ObjectNotFoundException("Student");
     }
 
     @Override
-    public Map<String, Double> getAvgMarkBySubject(Long subjectId) {
-        return averageMarkService.getAvgMarkBySubject(subjectId);
+    public Map<String, Double> getAvgMarkByGradeStudent(Long studentId) {
+        if (isStudentFromTeacherGrade(studentId)) {
+            Student student = studentService.getStudentByIdEntity(studentId);
+            return averageMarkService.getAvgMarkByGradeStudent(student.getGrade().getId(), studentId);
+        }
+        throw new ObjectNotFoundException("Student");
+    }
+
+    @Override
+    public Map<String, Double> getAvgMarkByGradeQuarter(Integer quarter, Long gradeId) {
+        Grade grade = getTeacherGrades(gradeId);
+        return averageMarkService.getAvgMarkByGradeQuarter(quarter, grade.getId());
+    }
+
+    @Override
+    public Map<String, Double> getAvgMarkByGrade(Long gradeId) {
+        Grade grade = getTeacherGrades(gradeId);
+        return averageMarkService.getAvgMarkByGrade(grade.getId());
+    }
+
+    @Override
+    public Map<String, Double> getAvgMarks() {
+        Map<String, Double> markMap = new HashMap<>();
+        for (Grade g : getCurrentClassTeacher().getHomeGrades()) {
+            Collection<Double> avgMarkByGrade = getAvgMarkByGrade(g.getId()).values();
+
+            String gradeName = "Grade: " + g.getTitle();
+            Double avgMark = averageMarkService.countAvgByDouble(avgMarkByGrade);
+            markMap.put(gradeName, avgMark);
+        }
+        return markMap;
     }
 
     @Override
@@ -165,6 +230,58 @@ public class ClassTeacherServiceImpl implements ClassTeacherService {
     @Override
     public AttendanceDto updateAttendance(AttendanceDtoRequest attendanceDtoRequest) {
         return attendanceService.updateAttendance(attendanceDtoRequest);
+    }
+
+    @Override
+    public Map<String, Double> getAttendByQuarterGradeStudent(Integer quarter, Long gradeId, Long studentId) {
+        if (isStudentFromTeacherGrade(studentId)) {
+            Grade grade = getTeacherGrades(gradeId);
+            return attendCountService.getAttendByQuarterGradeStudent(quarter, grade.getId(), studentId);
+        }
+        throw new ObjectNotFoundException("Student from home grade");
+    }
+
+    @Override
+    public Map<String, Double> getAttendBySubjectGradeStudent(Long subjectId, Long gradeId, Long studentId) {
+        if (isStudentFromTeacherGrade(studentId)) {
+            Grade grade = getTeacherGrades(gradeId);
+            return attendCountService.getAttendBySubjectGradeStudent(subjectId, grade.getId(), studentId);
+        }
+        throw new ObjectNotFoundException("Student from home grade");
+    }
+
+    @Override
+    public Map<String, Double> getAttendByGradeStudent(Long gradeId, Long studentId) {
+        if (isStudentFromTeacherGrade(studentId)) {
+            Grade grade = getTeacherGrades(gradeId);
+            return attendCountService.getAttendByGradeStudent(grade.getId(), studentId);
+        }
+        throw new ObjectNotFoundException("Student from home grade");
+    }
+
+    @Override
+    public Map<String, Double> getAttendByQuarterGrade(Integer quarter, Long gradeId) {
+        Grade grade = getTeacherGrades(gradeId);
+        return attendCountService.getAttendByQuarterGrade(quarter, grade.getId());
+    }
+
+    @Override
+    public Map<String, Double> getAttendByGrade(Long gradeId) {
+        Grade grade = getTeacherGrades(gradeId);
+        return attendCountService.getAttendByGrade(grade.getId());
+    }
+
+    @Override
+    public Map<String, Double> getAttendGrades() {
+        Map<String, Double> markMap = new HashMap<>();
+        for (Grade g : getCurrentClassTeacher().getHomeGrades()) {
+            Collection<Double> attendByGrade = getAttendByGrade(g.getId()).values();
+
+            String gradeName = "Grade: " + g.getTitle();
+            Double trueAttend = attendCountService.getTrueAttendCount(attendByGrade);
+            markMap.put(gradeName, trueAttend);
+        }
+        return markMap;
     }
 
     @Override

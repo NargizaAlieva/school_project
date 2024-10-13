@@ -3,12 +3,13 @@ package org.example.school_project.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.example.school_project.dto.*;
 import org.example.school_project.entity.Employee;
+import org.example.school_project.entity.Subject;
 import org.example.school_project.service.*;
+import org.example.school_project.util.exception.ObjectNotFoundException;
+import org.example.school_project.util.mapper.SubjectMapper;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -24,11 +25,28 @@ public class TeacherServiceImpl implements TeacherService {
     private final UserService userService;
     private final LessonService lessonService;
     private final MessageService messageService;
-    private final AttendCountService attendCountService;
     private final AverageMarkService averageMarkService;
+    private final SubjectMapper subjectMapper;
 
     public Employee getCurrentTeacher() {
         return employeeService.getByUserId(userService.getCurrentUser().getId());
+    }
+    public Subject getTeacherSubjects(Long subjectId) {
+        List<Subject> subjectList = new ArrayList<>(getCurrentTeacher().getSubjectSet());
+        if (subjectList.size() < subjectId)
+            throw new ObjectNotFoundException("Subject");
+        return subjectList.get((int) (subjectId-1));
+    }
+
+    @Override
+    public Map<String, SubjectDto> getTeacherSubjectList() {
+        Map<String, SubjectDto> studentDtoMap = new HashMap<>();
+        for (int i = 1; i <= getCurrentTeacher().getSubjectSet().size(); i++) {
+            String subjectIndex = "Subject: " + i;
+            SubjectDto subjectDto = subjectMapper.entityToDto(getTeacherSubjects((long) i));
+            studentDtoMap.put(subjectIndex, subjectDto);
+        }
+        return studentDtoMap;
     }
 
     @Override
@@ -90,18 +108,21 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public Map<String, Double> getAvgMarkBySubjectGradeQuarter(Long subjectId, Long gradeId, Integer quarter) {
-        return averageMarkService.getAvgMarkBySubjectGradeQuarter(subjectId, gradeId, quarter);
+    public Map<String, Double> getAvgMarkBySubjectGradeQuarter(Long gradeId, Integer quarter, Long subjectId) {
+        Subject getTeacerSubject = getTeacherSubjects(subjectId);
+        return averageMarkService.getAvgMarkBySubjectGradeQuarter(getTeacerSubject.getId(), gradeId, quarter);
     }
 
     @Override
     public Map<String, Double> getAvgMarkBySubjectGrade(Long gradeId, Long subjectId) {
-        return averageMarkService.getAvgMarkBySubjectGrade(subjectId, gradeId);
+        Subject getTeacerSubject = getTeacherSubjects(subjectId);
+        return averageMarkService.getAvgMarkBySubjectGrade(getTeacerSubject.getId(), gradeId);
     }
 
     @Override
     public Map<String, Double> getAvgMarkBySubject(Long subjectId) {
-        return averageMarkService.getAvgMarkBySubject(subjectId);
+        Subject getTeacerSubject = getTeacherSubjects(subjectId);
+        return averageMarkService.getAvgMarkBySubject(getTeacerSubject.getId());
     }
 
     @Override

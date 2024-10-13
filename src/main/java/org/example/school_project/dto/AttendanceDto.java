@@ -1,11 +1,9 @@
 package org.example.school_project.dto;
 
-import jakarta.persistence.*;
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.example.school_project.entity.Lesson;
-
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor

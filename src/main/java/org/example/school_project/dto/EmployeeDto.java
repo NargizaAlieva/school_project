@@ -2,9 +2,6 @@ package org.example.school_project.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.example.school_project.entity.*;
-
-import java.util.Set;
 
 @Data
 @AllArgsConstructor

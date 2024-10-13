@@ -1,11 +1,11 @@
 package org.example.school_project.entity;
 
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
 import lombok.*;
-import org.example.school_project.enums.CanSeeOnly;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
+import org.example.school_project.enums.CanSeeOnly;
 
 @Entity
 @Table(name = "announcements")

@@ -1,13 +1,13 @@
 package org.example.school_project.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "grades")

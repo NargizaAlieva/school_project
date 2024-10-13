@@ -1,10 +1,10 @@
 package org.example.school_project.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-
 import java.time.LocalDateTime;
 
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
 @Data
 @AllArgsConstructor
 public class CharterDto {

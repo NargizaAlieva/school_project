@@ -1,10 +1,9 @@
 package org.example.school_project.entity;
 
+import java.sql.Date;
+
 import jakarta.persistence.*;
 import lombok.*;
-
-import java.sql.Date;
-import java.util.List;
 
 @Entity
 @Table(name = "duty_list")
