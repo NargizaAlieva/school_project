@@ -13,6 +13,8 @@ public interface ScheduleService {
     ScheduleDto createSchedule(ScheduleDtoRequest scheduleDtoRequest);
     ScheduleDto updateSchedule(ScheduleDtoRequest scheduleDtoRequest);
 
+    ScheduleDto changeTeacherSchedule(Long teacherId);
+
     ScheduleDto restoreSchedule(Long id);
     ScheduleDto deleteSchedule(Long id);
     ScheduleDto approveSchedule(Long id);

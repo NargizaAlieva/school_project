@@ -1,8 +1,9 @@
 package org.example.school_project.repository;
 
-import org.example.school_project.entity.Parent;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
+
+import org.example.school_project.entity.Parent;
 
 @Repository
 public interface ParentRepository extends JpaRepository<Parent, Long> {

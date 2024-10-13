@@ -1,10 +1,10 @@
 package org.example.school_project.dto;
 
-import lombok.*;
-import org.example.school_project.entity.Role;
-
 import java.time.LocalDateTime;
 import java.util.Set;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @Data
 @AllArgsConstructor

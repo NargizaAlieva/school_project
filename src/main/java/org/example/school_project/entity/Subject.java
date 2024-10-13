@@ -1,13 +1,10 @@
 package org.example.school_project.entity;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
-import jakarta.persistence.*;
-import lombok.*;
-
 import java.util.HashSet;
 import java.util.Set;
+
+import jakarta.persistence.*;
+import lombok.*;
 
 @Entity
 @Table(name = "subjects")

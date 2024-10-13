@@ -73,28 +73,6 @@ public class HomeworkServiceImpl implements HomeworkService {
     }
 
     @Override
-    public List<HomeworkDto> getStudentHwBySubjectGrade(Long subjectId, Integer quarter, Long gradeId, Long studentId) {
-        List<HomeworkDto> allHw = new ArrayList<>();
-        List<LessonDto> lessonDtoList = lessonService.getAllLessonBySubjectQuarter(subjectId, quarter, gradeId);
-        for (LessonDto l : lessonDtoList) {
-            for (HomeworkDto h : getAllHw())
-                if (l.getId().equals(h.getLessonId()))
-                    if (h.getStudentId().equals(studentId) && h.getMark() != null)
-                        allHw.add(h);
-        }
-        return allHw;
-    }
-
-    @Override
-    public List<HomeworkDto> getUncheckedHw(List<HomeworkDto> homeworklist) {
-        List<HomeworkDto> allHw = new ArrayList<>();
-        for (HomeworkDto h : homeworklist)
-            if (!h.getIsChecked())
-                allHw.add(h);
-        return allHw;
-    }
-
-    @Override
     public List<HomeworkDto> getHwByStudent(Long studentId) {
         List<HomeworkDto> allHw = new ArrayList<>();
         for (HomeworkDto h : getAllHw()) {
@@ -113,12 +91,35 @@ public class HomeworkServiceImpl implements HomeworkService {
     }
 
     @Override
+    public List<HomeworkDto> getStudentHwBySubjectGrade(Long subjectId, Integer quarter, Long gradeId, Long studentId) {
+        List<HomeworkDto> allHw = new ArrayList<>();
+        List<LessonDto> lessonDtoList = lessonService.getAllLessonBySubjectQuarter(subjectId, quarter, gradeId);
+        for (LessonDto l : lessonDtoList) {
+            for (HomeworkDto h : getAllHw())
+                if (l.getId().equals(h.getLessonId()))
+                    if (h.getStudentId().equals(studentId) && h.getMark() != null)
+                        allHw.add(h);
+        }
+        return allHw;
+    }
+
+    @Override
     public List<HomeworkDto> getHwByStudentSubject(Long studentId, Long subjectId) {
         List<HomeworkDto> allHw = new ArrayList<>();
         for (HomeworkDto h : getAllHw()) {
-            if (h.getStudentId().equals(studentId) && h.getStudentId().equals(subjectId))
+            if (h.getStudentId().equals(studentId) &&
+                    lessonService.getLessonById(h.getLessonId()).getSubjectId().equals(subjectId))
                 allHw.add(h);
         }
+        return allHw;
+    }
+
+    @Override
+    public List<HomeworkDto> getUncheckedHw(List<HomeworkDto> homeworklist) {
+        List<HomeworkDto> allHw = new ArrayList<>();
+        for (HomeworkDto h : homeworklist)
+            if (!h.getIsChecked())
+                allHw.add(h);
         return allHw;
     }
 
@@ -132,21 +133,6 @@ public class HomeworkServiceImpl implements HomeworkService {
 
         }
         return allHwMarks;
-    }
-
-    @Override
-    public Double getAverageHwMark(List<Integer> mark) {
-        Double sum = 0.0;
-        for (Integer i : mark)
-            sum += i;
-        return sum/mark.size();
-    }
-
-    @Override
-    public Double getGradeByMarkDto(List<HomeworkDto> homeworkDtoList) {
-        Double sum = 0.0;
-        for (HomeworkDto h : homeworkDtoList) sum += h.getMark();
-        return sum/homeworkDtoList.size();
     }
 
     @Override

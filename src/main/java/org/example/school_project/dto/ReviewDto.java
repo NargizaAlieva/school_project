@@ -1,14 +1,9 @@
 package org.example.school_project.dto;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.example.school_project.entity.Student;
-import org.example.school_project.entity.User;
-
-import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor

@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 public interface ClassTeacherService {
+    Map<String, GradeDto> getTeacherGradesList();
+
     AssignmentDto createAssignment(AssignmentDtoRequest assignmentDtoRequest);
     AssignmentDto updateAssignment(AssignmentDtoRequest assignmentDtoRequest);
     AssignmentDto deleteAssignment(Long id);
@@ -37,14 +39,32 @@ public interface ClassTeacherService {
     MarkDto createMark(MarkDtoRequest markDtoRequest);
     MarkDto updateMark(MarkDtoRequest markDtoRequest);
 
-    Map<String, Double> getAvgMarkBySubjectGrade(Long gradeId, Long subjectId);
+    Map<String, Double> getAvgMarkByGradeStudentQuarter(Integer quarter, Long studentId);
 
-    Map<String, Double> getAvgMarkBySubject(Long subjectId);
+    Map<String, Double> getAvgMarkBySubjectGradeStudent(Long subjectId, Long studentId);
 
-    Map<String, Double> getAvgMarkBySubjectGradeQuarter(Long subjectId, Long gradeId, Integer quarter);
+    Map<String, Double> getAvgMarkByGradeStudent(Long studentId);
+
+    Map<String, Double> getAvgMarkByGradeQuarter(Integer quarter, Long gradeId);
+
+    Map<String, Double> getAvgMarkByGrade(Long gradeId);
+
+    Map<String, Double> getAvgMarks();
 
     AttendanceDto createAttendance(AttendanceDtoRequest attendanceDtoRequest);
     AttendanceDto updateAttendance(AttendanceDtoRequest attendanceDtoRequest);
+
+    Map<String, Double> getAttendByQuarterGradeStudent(Integer quarter, Long gradeId, Long studentId);
+
+    Map<String, Double> getAttendBySubjectGradeStudent(Long subjectId, Long gradeId, Long studentId);
+
+    Map<String, Double> getAttendByGradeStudent(Long gradeId, Long studentId);
+
+    Map<String, Double> getAttendByQuarterGrade(Integer quarter, Long gradeId);
+
+    Map<String, Double> getAttendByGrade(Long gradeId);
+
+    Map<String, Double> getAttendGrades();
 
     List<StudentDto> getAllStudentHomeGrade(Long gradeId);
 

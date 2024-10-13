@@ -1,11 +1,12 @@
 package org.example.school_project.entity;
 
-import jakarta.persistence.*;
-import lombok.*;
-import org.example.school_project.enums.ParentStatus;
-
 import java.sql.Date;
 import java.util.List;
+
+import jakarta.persistence.*;
+import lombok.*;
+
+import org.example.school_project.enums.ParentStatus;
 
 @Entity
 @Table(name = "students")

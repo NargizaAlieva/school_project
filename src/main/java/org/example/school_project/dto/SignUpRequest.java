@@ -1,14 +1,12 @@
 package org.example.school_project.dto;
 
-import jakarta.persistence.Column;
+import java.time.LocalDateTime;
+
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import lombok.Data;
-import org.example.school_project.entity.Role;
 
-import java.time.LocalDateTime;
-import java.util.Set;
+import lombok.Data;
 
 @Data
 public class SignUpRequest {

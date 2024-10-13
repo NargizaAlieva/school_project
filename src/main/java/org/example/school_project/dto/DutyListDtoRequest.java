@@ -1,8 +1,8 @@
 package org.example.school_project.dto;
 
-import lombok.Data;
-
 import java.sql.Date;
+
+import lombok.Data;
 
 @Data
 public class DutyListDtoRequest {

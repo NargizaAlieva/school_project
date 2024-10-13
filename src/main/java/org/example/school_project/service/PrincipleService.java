@@ -4,6 +4,7 @@ import org.example.school_project.dto.*;
 import org.example.school_project.entity.*;
 
 import java.util.List;
+import java.util.Map;
 
 public interface PrincipleService {
     // methods connected with schedule
@@ -58,4 +59,29 @@ public interface PrincipleService {
     List<AssignmentDto> getAllUndoneAssigment();
 
 
+    Map<String, Double> getAvgMarkByGradeStudentQuarter(Integer quarter, Long studentId);
+
+    Map<String, Double> getAvgMarkBySubjectGradeStudent(Long subjectId, Long studentId);
+
+    Map<String, Double> getAvgMarkByGradeStudent(Long studentId);
+
+    Map<String, Double> getAvgMarkByGradeQuarter(Integer quarter, Long gradeId);
+
+    Map<String, Double> getAvgMarkByGrade(Long gradeId);
+
+    Map<String, Double> getAvgMarks();
+
+    Map<String, Double> getAvgSchoolMark();
+
+    Map<String, Double> getAttendByQuarterGradeStudent(Integer quarter, Long gradeId, Long studentId);
+
+    Map<String, Double> getAttendBySubjectGradeStudent(Long subjectId, Long gradeId, Long studentId);
+
+    Map<String, Double> getAttendByGradeStudent(Long gradeId, Long studentId);
+
+    Map<String, Double> getAttendByQuarterGrade(Integer quarter, Long gradeId);
+
+    Map<String, Double> getAttendByGrade(Long gradeId);
+
+    Map<String, Double> getAttendGrades();
 }

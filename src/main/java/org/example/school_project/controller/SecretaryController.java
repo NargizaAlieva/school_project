@@ -1,14 +1,13 @@
 package org.example.school_project.controller;
 
 import lombok.AllArgsConstructor;
-import org.example.school_project.dto.*;
-import org.example.school_project.service.SecretaryService;
-import org.example.school_project.util.exception.ObjectNotFoundException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import org.example.school_project.dto.*;
+import org.example.school_project.service.SecretaryService;
 
 @RestController
 @RequestMapping(value = "/secretary")
@@ -16,23 +15,22 @@ import java.util.List;
 public class SecretaryController {
     private final SecretaryService secretaryService;
 
-    @PutMapping(value = "/mark-done/{id}")
-    public ResponseEntity<Response> markAsDone(@PathVariable Long id) {
+    @PutMapping(value = "/mark-done/{assignmentId}")
+    public ResponseEntity<Response> markAsDone(@PathVariable Long assignmentId) {
         try {
-            AssignmentDto updateAssignment = secretaryService.markAsDone(id);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Mark as done successfully", updateAssignment));
+            AssignmentDto updateAssignment = secretaryService.markAsDone(assignmentId);
+            return ResponseEntity.ok(new Response("Mark as done successfully", updateAssignment));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Failed to mark as done. " + exception.getMessage(), null));
         }
     }
 
     @GetMapping("/get-all-assignment")
     public ResponseEntity<Response> getAllAssignment() {
         try {
-            secretaryService.getAllAssignment();
             return ResponseEntity.ok(new Response("Successfully got all Assignment", secretaryService.getAllAssignment()));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't found. " + exception.getMessage(), null));
         }
     }
 
@@ -41,15 +39,15 @@ public class SecretaryController {
         try {
             return ResponseEntity.ok(new Response("Successfully got all undone Assignment", secretaryService.getAllUndoneAssignment()));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't found. " + exception.getMessage(), null));
         }
     }
-    @GetMapping("/get-message/{id}")
-    public ResponseEntity<Response> getMessageById(@PathVariable Long id) {
+    @GetMapping("/get-message/{messageId}")
+    public ResponseEntity<Response> getMessageById(@PathVariable Long messageId) {
         try {
-            return ResponseEntity.ok(new Response("Successfully got Message with id", secretaryService.getMessageById(id)));
+            return ResponseEntity.ok(new Response("Successfully got Message with id", secretaryService.getMessageById(messageId)));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't found. " + exception.getMessage(), null));
         }
     }
 
@@ -58,7 +56,7 @@ public class SecretaryController {
         try {
             return ResponseEntity.ok(new Response("Successfully got all Admission message", secretaryService.getAllAdmissionApplication()));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't found. " + exception.getMessage(), null));
         }
     }
 
@@ -67,7 +65,7 @@ public class SecretaryController {
         try {
             return ResponseEntity.ok(new Response("Successfully got all unread Admission message", secretaryService.getAllUnreadAdmissionApplication()));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't found. " + exception.getMessage(), null));
         }
     }
 
@@ -76,7 +74,7 @@ public class SecretaryController {
         try {
             return ResponseEntity.ok(new Response("Successfully got all Appeal message", secretaryService.getAllAppeal()));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't found. " + exception.getMessage(), null));
         }
     }
 
@@ -86,7 +84,7 @@ public class SecretaryController {
         try {
             return ResponseEntity.ok(new Response("Successfully got all unread Appeal message", secretaryService.getAllUnreadAppeal()));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't found. " + exception.getMessage(), null));
         }
     }
 
@@ -94,7 +92,7 @@ public class SecretaryController {
     public ResponseEntity<Response> createCharter(@RequestBody CharterDtoRequest request) {
         try {
             CharterDto charterDto = secretaryService.createCharter(request);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Successfully Charter created", charterDto));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Successfully Charter created.", charterDto));
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Charter is not saved. " + exception.getMessage(), null));
         }
@@ -104,35 +102,35 @@ public class SecretaryController {
     public ResponseEntity<Response> updateCharter(@RequestBody CharterDtoRequest request) {
         try {
             CharterDto createCharter = secretaryService.updateCharter(request);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Updated Charter successfully", createCharter));
+            return ResponseEntity.ok(new Response("Successfully Charter updated.", createCharter));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Charter is not updated. " + exception.getMessage(), null));
         }
     }
 
-    @DeleteMapping(value = "/delete-charter/{id}")
-    public ResponseEntity<Response> deleteCharter(@PathVariable Long id) {
+    @DeleteMapping(value = "/delete-charter/{charterId}")
+    public ResponseEntity<Response> deleteCharter(@PathVariable Long charterId) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Deleted Charter successfully", secretaryService.deleteCharter(id)));
+            return ResponseEntity.ok(new Response("Deleted Charter successfully", secretaryService.deleteCharter(charterId)));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Failed to delete. " + exception.getMessage(), null));
         }
     }
-    @PutMapping(value = "/restore-charter/{id}")
-    public ResponseEntity<Response> restoreCharter(@PathVariable Long id) {
+    @PutMapping(value = "/restore-charter/{charterId}")
+    public ResponseEntity<Response> restoreCharter(@PathVariable Long charterId) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Restored Charter successfully", secretaryService.restoreCharter(id)));
+            return ResponseEntity.ok(new Response("Restored Charter successfully", secretaryService.restoreCharter(charterId)));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Failed to restore. " + exception.getMessage(), null));
         }
     }
 
     @GetMapping(value = "/get-all-self-charter")
     public ResponseEntity<Response> getAllCharterByAuthor() {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Successfully got all self Charter", secretaryService.getAllCharterByAuthor()));
+            return ResponseEntity.ok(new Response("Successfully got all self Charter", secretaryService.getAllCharterByAuthor()));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't found. " + exception.getMessage(), null));
         }
     }
 

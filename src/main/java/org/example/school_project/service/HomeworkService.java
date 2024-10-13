@@ -23,11 +23,8 @@ public interface HomeworkService {
 
     List<Integer> getAllHwMark(List<LessonDto> lessonDtoList);
 
-    Double getAverageHwMark(List<Integer> mark);
-
     List<HomeworkDto> getHwByLesson(Long id);
 
-    Double getGradeByMarkDto(List<HomeworkDto> homeworkDtoList);
 
     HomeworkDto leaveHwMarkReview(Long hwId, Integer mark, String hwReview);
 

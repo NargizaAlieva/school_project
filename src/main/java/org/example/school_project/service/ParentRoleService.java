@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 public interface ParentRoleService {
+    Map<String, StudentDto> getChildList();
+
     StudentDto createStudent(StudentDtoRequest studentDtoRequest);
 
     List<MarkDto> getAllMark(Long childId);

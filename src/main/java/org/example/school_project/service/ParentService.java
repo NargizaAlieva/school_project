@@ -8,6 +8,8 @@ import org.example.school_project.entity.Parent;
 import java.util.List;
 
 public interface ParentService {
+    Parent getParentByUserId(Long id);
+
     Parent getByIdEntity(Long id);
 
     ParentDto createParent(ParentDtoRequest parentDtoRequest);

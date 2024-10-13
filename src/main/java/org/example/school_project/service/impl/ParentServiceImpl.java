@@ -1,10 +1,8 @@
 package org.example.school_project.service.impl;
 
 import lombok.RequiredArgsConstructor;
-import org.example.school_project.dto.EmployeeDto;
 import org.example.school_project.dto.ParentDto;
 import org.example.school_project.dto.ParentDtoRequest;
-import org.example.school_project.dto.UserDto;
 import org.example.school_project.entity.Parent;
 import org.example.school_project.repository.ParentRepository;
 import org.example.school_project.service.ParentService;
@@ -12,7 +10,6 @@ import org.example.school_project.service.UserService;
 import org.example.school_project.util.exception.AlreadyExistException;
 import org.example.school_project.util.exception.ObjectNotFoundException;
 import org.example.school_project.util.mapper.ParentMapping;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -36,10 +33,11 @@ public class ParentServiceImpl implements ParentService {
         return false;
     }
 
-    public ParentDto getParentByUserId(Long id) {
+    @Override
+    public Parent getParentByUserId(Long id) {
         for (ParentDto p : getAllParent())
             if (p.getUser().getId().equals(id))
-                return p;
+                return getByIdEntity(p.getId());
         throw new ObjectNotFoundException("Parent");
     }
     @Override

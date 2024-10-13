@@ -1,19 +1,17 @@
 package org.example.school_project.controller;
 
 import lombok.AllArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.example.school_project.dto.*;
-import org.example.school_project.service.ClassTeacherService;
-import org.example.school_project.util.exception.ObjectNotFoundException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import org.example.school_project.dto.*;
+import org.example.school_project.service.ClassTeacherService;
 
 @RestController
 @RequestMapping(value = "/class-teacher")
 @AllArgsConstructor
-@Slf4j
 public class ClassTeacherController {
     private final ClassTeacherService classTeacherService;
 
@@ -21,9 +19,9 @@ public class ClassTeacherController {
     public ResponseEntity<Response> createAssignment(@RequestBody AssignmentDtoRequest request) {
         try {
             AssignmentDto assignmentDto = classTeacherService.createAssignment(request);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Successfully added Assignment", assignmentDto));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Successfully added Assignment.", assignmentDto));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Assignment is not saved" + exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Assignment is not saved. " + exception.getMessage(), null));
         }
     }
 
@@ -31,80 +29,85 @@ public class ClassTeacherController {
     public ResponseEntity<Response> updateAssignment(@RequestBody AssignmentDtoRequest request) {
         try {
             AssignmentDto createAssignment = classTeacherService.updateAssignment(request);
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Assignment successfully updated", createAssignment));
+            return ResponseEntity.ok(new Response("Successfully updated Assignment.", createAssignment));
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Assignment is not updated. " + exception.getMessage(), null));
         }
     }
-    @DeleteMapping(value = "/delete-assignment/{id}")
-    public ResponseEntity<Response> deleteAssignment(@PathVariable Long id) {
+
+    @DeleteMapping(value = "/delete-assignment/{assignmentId}")
+    public ResponseEntity<Response> deleteAssignment(@PathVariable Long assignmentId) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Deleted Assignment successfully", classTeacherService.deleteAssignment(id)));
+            return ResponseEntity.ok(new Response("Deleted Assignment successfully", classTeacherService.deleteAssignment(assignmentId)));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Failed to delete. " + exception.getMessage(), null));
         }
     }
-    @PutMapping(value = "/restore-assignment/{id}")
-    public ResponseEntity<Response> restoreAssignment(@PathVariable Long id) {
+
+    @PutMapping(value = "/restore-assignment/{assignmentId}")
+    public ResponseEntity<Response> restoreAssignment(@PathVariable Long assignmentId) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Restored Assignment successfully", classTeacherService.restoreAssignment(id)));
+            return ResponseEntity.ok(new Response("Restored Assignment successfully", classTeacherService.restoreAssignment(assignmentId)));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Failed to restore. " + exception.getMessage(), null));
         }
     }
 
     @GetMapping(value = "/get-all-assignment-to-class-represent")
     public ResponseEntity<Response> getAllAssignmentByAuthor() {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Successfully got all Assignment", classTeacherService.getAllAssignmentFromClassRepresent()));
+            return ResponseEntity.ok(new Response("Successfully got all Assignment for class representative. ",
+                    classTeacherService.getAllAssignmentFromClassRepresent()));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't find. " + exception.getMessage(), null));
         }
     }
 
     @GetMapping(value = "/get-all-undone-assignment-to-class-represent")
     public ResponseEntity<Response> getAllUndoneAssigment() {
         try {
-            return ResponseEntity.ok(new Response("Successfully got all undone Assignment", classTeacherService.getAllUndoneAssFromClassRepresent()));
+            return ResponseEntity.ok(new Response("Successfully got all undone Assignment for class representative. ",
+                    classTeacherService.getAllUndoneAssFromClassRepresent()));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't find. " + exception.getMessage(), null));
         }
     }
 
     @GetMapping("/get-all-done-assignment-to-class-represent")
     public ResponseEntity<Response> getAllDoneAssignmentFrom() {
         try {
-            return ResponseEntity.ok(new Response("Successfully got all done assignment", classTeacherService.getAllDoneAssFromClassRepresent()));
+            return ResponseEntity.ok(new Response("Successfully got all done Assignment for class representative. ",
+                    classTeacherService.getAllDoneAssFromClassRepresent()));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't find. " + exception.getMessage(), null));
         }
     }
 
-    @PutMapping(value = "/mark-done/{id}")
-    public ResponseEntity<Response> markAsDone(@PathVariable Long id) {
+    @PutMapping(value = "/mark-done/{assignmentId}")
+    public ResponseEntity<Response> markAsDone(@PathVariable Long assignmentId) {
         try {
-            AssignmentDto updateAssignment = classTeacherService.markAsDone(id);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Mark as done successfully", updateAssignment));
+            AssignmentDto updateAssignment = classTeacherService.markAsDone(assignmentId);
+            return ResponseEntity.ok(new Response("Successfully mark as done.", updateAssignment));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Failed to mark as done. " + exception.getMessage(), null));
         }
     }
 
     @GetMapping("/get-all-assignment-from-dean")
     public ResponseEntity<Response> getAllAssignment() {
         try {
-            return ResponseEntity.ok(new Response("Successfully got all Assignment", classTeacherService.getAllAssFromDean()));
+            return ResponseEntity.ok(new Response("Successfully got all Assignment from dean.", classTeacherService.getAllAssFromDean()));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't find. " + exception.getMessage(), null));
         }
     }
 
     @GetMapping("/get-all-undone-assignment-from-dean")
     public ResponseEntity<Response> getAllUndoneAssignment() {
         try {
-            return ResponseEntity.ok(new Response("Successfully got all undone Assignment", classTeacherService.getAllUndoneAssFromDean()));
+            return ResponseEntity.ok(new Response("Successfully got all undone Assignment from dean.", classTeacherService.getAllUndoneAssFromDean()));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't find. " + exception.getMessage(), null));
         }
     }
 
@@ -112,52 +115,49 @@ public class ClassTeacherController {
     public ResponseEntity<Response> updateGrade(@PathVariable Long id) {
         try {
             StudentDto studentDto = classTeacherService.chooseClassRepresentative(id);
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Chosen successfully", studentDto));
+            return ResponseEntity.status(HttpStatus.OK).body(new Response("Chosen successfully. ", studentDto));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Failed to choose. " + exception.getMessage(), null));
         }
     }
 
-    //Working
     @GetMapping("/get-all-class-student")
     public ResponseEntity<Response> studentsFromClass() {
         try {
-            return ResponseEntity.ok(new Response("Successfully got all class student", classTeacherService.getAllStudentsFromClass()));
+            return ResponseEntity.ok(new Response("Successfully got all class Student from home grades.", classTeacherService.getAllStudentsFromClass()));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't find. " + exception.getMessage(), null));
         }
     }
 
-    //Working
-    @GetMapping("/get-review-student/{id}")
-    public ResponseEntity<Response> getReviewByStudentId(@PathVariable Long id) {
+    @GetMapping("/get-review-student/{studentId}")
+    public ResponseEntity<Response> getReviewByStudentId(@PathVariable Long studentId) {
         try {
-            return ResponseEntity.ok(new Response("Successfully got all Reviews by Student", classTeacherService.getReviewByStudentId(id)));
+            return ResponseEntity.ok(new Response("Successfully got all Reviews by Student", classTeacherService.getReviewByStudentId(studentId)));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
-        }
-    }
-    //Working
-    @GetMapping("/get-review-author/{id}")
-    public ResponseEntity<Response> getReviewByAuthorId(@PathVariable Long id) {
-        try {
-            return ResponseEntity.ok(new Response("Successfully got all Reviews by author", classTeacherService.getReviewByAuthorId(id)));
-        } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't find. " + exception.getMessage(), null));
         }
     }
 
-    //Working
+    @GetMapping("/get-review-author/{studentId}")
+    public ResponseEntity<Response> getReviewByAuthorId(@PathVariable Long studentId) {
+        try {
+            return ResponseEntity.ok(new Response("Successfully got all Reviews by author", classTeacherService.getReviewByAuthorId(studentId)));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't find. " + exception.getMessage(), null));
+        }
+    }
+
     @GetMapping("/get-review-class-represent")
     public ResponseEntity<Response> getReviewByClassRepresent() {
         try {
             classTeacherService.getReviewByClassRepresent();
-            return ResponseEntity.ok(new Response("Successfully got all class representatives's Reviews", classTeacherService.getReviewByClassRepresent()));
-        } catch (ObjectNotFoundException exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.ok(new Response("Successfully got all class representatives's Reviews.", classTeacherService.getReviewByClassRepresent()));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't find. " + exception.getMessage(), null));
         }
     }
-    //Working
+
     @PostMapping(value = "/create-review")
     public ResponseEntity<Response> createGrade(@RequestBody ReviewDtoRequest request) {
         try {
@@ -167,30 +167,32 @@ public class ClassTeacherController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Review is not saved. " + exception.getMessage(), null));
         }
     }
-    //Working
+
     @PutMapping(value = "/update-review")
     public ResponseEntity<Response> updateReview(@RequestBody ReviewDtoRequest request) {
         try {
             ReviewDto reviewDto = classTeacherService.updateReview(request);
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Successfully Review updated", reviewDto));
+            return ResponseEntity.ok(new Response("Successfully Review updated", reviewDto));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Review is not saved. " + exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Review is not updated. " + exception.getMessage(), null));
         }
     }
-    @DeleteMapping(value = "/delete-review/{id}")
-    public ResponseEntity<Response> deleteReview(@PathVariable Long id) {
+
+    @DeleteMapping(value = "/delete-review/{reviewId}")
+    public ResponseEntity<Response> deleteReview(@PathVariable Long reviewId) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Deleted Review successfully", classTeacherService.deleteReview(id)));
+            return ResponseEntity.ok(new Response("Deleted Review successfully", classTeacherService.deleteReview(reviewId)));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Failed to delete. " + exception.getMessage(), null));
         }
     }
-    @PutMapping(value = "/restore-review/{id}")
-    public ResponseEntity<Response> restoreReview(@PathVariable Long id) {
+
+    @PutMapping(value = "/restore-review/{reviewId}")
+    public ResponseEntity<Response> restoreReview(@PathVariable Long reviewId) {
         try {
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Restored Review successfully", classTeacherService.restoreReview(id)));
+            return ResponseEntity.ok(new Response("Restored Review successfully", classTeacherService.restoreReview(reviewId)));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Failed to restore. " + exception.getMessage(), null));
         }
     }
 
@@ -198,104 +200,194 @@ public class ClassTeacherController {
     public ResponseEntity<Response> createMark(@RequestBody MarkDtoRequest request) {
         try {
             MarkDto markDto = classTeacherService.createMark(request);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Successfully created ", markDto));
-        } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Employee is not saved. " + exception.getMessage(), null));
-        }
-    }
-    //Working
-    @PutMapping(value = "/update-mark")
-    public ResponseEntity<Response> updateMark(@RequestBody MarkDtoRequest request) {
-        try {
-            MarkDto markDto = classTeacherService.updateMark(request);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Successfully updated Mark", markDto));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Successfully created Mark.", markDto));
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Mark is not saved. " + exception.getMessage(), null));
         }
     }
 
-    @GetMapping("/get-teacher-subjects-mark/{gradeId}/{subjectId}/{quarter}")
-    public ResponseEntity<Response> getAvgMarkBySubjectGradeQuarter(@PathVariable Long gradeId,
-                                                                    @PathVariable Long subjectId,
-                                                                    @PathVariable Integer quarter) {
+    @PutMapping(value = "/update-mark")
+    public ResponseEntity<Response> updateMark(@RequestBody MarkDtoRequest request) {
         try {
-            classTeacherService.getAvgMarkBySubjectGradeQuarter(gradeId, subjectId, quarter);
-            return ResponseEntity.ok(new Response("Successfully got Mark ", classTeacherService.getAvgMarkBySubjectGradeQuarter(gradeId, subjectId, quarter)));
-        } catch (ObjectNotFoundException exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't found. " + exception.getMessage(), null));
+            MarkDto markDto = classTeacherService.updateMark(request);
+            return ResponseEntity.ok(new Response("Successfully updated Mark.", markDto));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Mark is not saved. " + exception.getMessage(), null));
         }
     }
 
-    @GetMapping("/get-teacher-subjects-mark/{gradeId}/{subjectId}")
-    public ResponseEntity<Response> getAvgMarkBySubjectGrade(@PathVariable Long gradeId,
-                                                             @PathVariable Long subjectId) {
+    @GetMapping("/get-quarter-student-mark/{quarter}/{studentId}")
+    public ResponseEntity<Response> getAvgMarkByGradeStudentQuarter(@PathVariable Integer quarter,
+                                                                    @PathVariable Long studentId) {
         try {
-            classTeacherService.getAvgMarkBySubjectGrade(gradeId, subjectId);
-            return ResponseEntity.ok(new Response("Successfully got Mark ", classTeacherService.getAvgMarkBySubjectGrade(gradeId, subjectId)));
-        } catch (ObjectNotFoundException exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't found. " + exception.getMessage(), null));
+            return ResponseEntity.ok(new Response("Successfully got Marks.", classTeacherService.getAvgMarkByGradeStudentQuarter(quarter, studentId)));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't found. " + exception.getMessage(), null));
         }
     }
 
-    @GetMapping("/get-teacher-subjects-mark/{subjectId}")
-    public ResponseEntity<Response> getAvgMarkBySubjectGrade(@PathVariable Long subjectId) {
+    @GetMapping("/get-subject-student-mark/{subjectId}/{studentId}")
+    public ResponseEntity<Response> getAvgMarkBySubjectGradeStudent(@PathVariable Long subjectId,
+                                                                    @PathVariable Long studentId) {
         try {
-            classTeacherService.getAvgMarkBySubject(subjectId);
-            return ResponseEntity.ok(new Response("Successfully got Mark ", classTeacherService.getAvgMarkBySubject(subjectId)));
-        } catch (ObjectNotFoundException exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Couldn't found. " + exception.getMessage(), null));
+            return ResponseEntity.ok(new Response("Successfully got Marks.", classTeacherService.getAvgMarkBySubjectGradeStudent(subjectId, studentId)));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't found. " + exception.getMessage(), null));
         }
     }
 
-    //Working
+    @GetMapping("/get-student-mark/{studentId}")
+    public ResponseEntity<Response> getAvgMarkByGradeStudent(@PathVariable Long studentId) {
+        try {
+            return ResponseEntity.ok(new Response("Successfully got Marks.", classTeacherService.getAvgMarkByGradeStudent(studentId)));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't found. " + exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/get-quarter-grade-mark/{quarter}/{gradeId}")
+    public ResponseEntity<Response> getAvgMarkByGradeQuarter(@PathVariable Integer quarter,
+                                                             @PathVariable Long gradeId) {
+        try {
+            return ResponseEntity.ok(new Response("Successfully got Marks.", classTeacherService.getAvgMarkByGradeQuarter(quarter, gradeId)));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't found. " + exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/get-grade-mark/{gradeId}")
+    public ResponseEntity<Response> getAvgMarkByGrade(@PathVariable Long gradeId) {
+        try {
+            return ResponseEntity.ok(new Response("Successfully got Marks.", classTeacherService.getAvgMarkByGrade(gradeId)));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't found. " + exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/get-grades-mark")
+    public ResponseEntity<Response> getAvgMarks() {
+        try {
+            return ResponseEntity.ok(new Response("Successfully got Marks.", classTeacherService.getAvgMarks()));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't found. " + exception.getMessage(), null));
+        }
+    }
+
     @PostMapping(value = "/create-attendance")
     public ResponseEntity<Response> createAttendance(@RequestBody AttendanceDtoRequest request) {
         try {
             AttendanceDto attendanceDto = classTeacherService.createAttendance(request);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Successfully created Attendance", attendanceDto));
-        } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Attendance is not saved. " + exception.getMessage(), null));
-        }
-    }
-    //Working
-    @PutMapping(value = "/update-attendance")
-    public ResponseEntity<Response> updateAttendance(@RequestBody AttendanceDtoRequest request) {
-        try {
-            AttendanceDto attendanceDto = classTeacherService.updateAttendance(request);
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Successfully updated Attendance", attendanceDto));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new Response("Successfully created Attendance.", attendanceDto));
         } catch (Exception exception) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Attendance is not saved. " + exception.getMessage(), null));
         }
     }
 
-    @PostMapping(value = "/send-to-parent-by-student/{id}")
-    public ResponseEntity<Response> sendToParentByStudentId(@PathVariable Long id,
+    @PutMapping(value = "/update-attendance")
+    public ResponseEntity<Response> updateAttendance(@RequestBody AttendanceDtoRequest request) {
+        try {
+            AttendanceDto attendanceDto = classTeacherService.updateAttendance(request);
+            return ResponseEntity.status(HttpStatus.OK).body(new Response("Successfully updated Attendance.", attendanceDto));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Attendance is not updated. " + exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/get-quarter-grade-student-attend/{quarter}/{gradeId}/{studentId}")
+    public ResponseEntity<Response> getAttendByQuarterGradeStudent(@PathVariable Integer quarter,
+                                                                   @PathVariable Long gradeId,
+                                                                   @PathVariable Long studentId) {
+        try {
+            return ResponseEntity.ok(new Response("Successfully got Attendance.", classTeacherService.getAttendByQuarterGradeStudent(quarter, gradeId, studentId)));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't found. " + exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/get-subject-grade-student-attend/{subjectId}/{gradeId}/{studentId}")
+    public ResponseEntity<Response> getAttendByQuarterGradeStudent(@PathVariable Long subjectId,
+                                                                   @PathVariable Long gradeId,
+                                                                   @PathVariable Long studentId) {
+        try {
+            classTeacherService.getAttendBySubjectGradeStudent(subjectId, gradeId, studentId);
+            return ResponseEntity.ok(new Response("Successfully got Attendance.", classTeacherService.getAttendBySubjectGradeStudent(subjectId, gradeId, studentId)));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't found. " + exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/get-grade-student-attend/{gradeId}/{studentId}")
+    public ResponseEntity<Response> getAttendByGradeStudent(@PathVariable Long gradeId,
+                                                            @PathVariable Long studentId) {
+        try {
+            classTeacherService.getAttendByGradeStudent(gradeId, studentId);
+            return ResponseEntity.ok(new Response("Successfully got Attendance.", classTeacherService.getAttendByGradeStudent(gradeId, studentId)));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't found. " + exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/get-quarter-grade-attend/{quarter}/{gradeId}")
+    public ResponseEntity<Response> getAttendByQuarterGrade(@PathVariable Integer quarter,
+                                                            @PathVariable Long gradeId) {
+        try {
+            classTeacherService.getAttendByQuarterGrade(quarter, gradeId);
+            return ResponseEntity.ok(new Response("Successfully got Attendance.", classTeacherService.getAttendByQuarterGrade(quarter, gradeId)));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't found. " + exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/get-grade-attend/{gradeId}")
+    public ResponseEntity<Response> getAttendByQuarterGrade(@PathVariable Long gradeId) {
+        try {
+            classTeacherService.getAttendByGrade(gradeId);
+            return ResponseEntity.ok(new Response("Successfully got Attendance.", classTeacherService.getAttendByGrade(gradeId)));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't found. " + exception.getMessage(), null));
+        }
+    }
+
+    @GetMapping("/get-grades-attend")
+    public ResponseEntity<Response> getAttendGrades() {
+        try {
+            classTeacherService.getAttendGrades();
+            return ResponseEntity.ok(new Response("Successfully got Attendance.", classTeacherService.getAttendGrades()));
+        } catch (Exception exception) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Couldn't found. " + exception.getMessage(), null));
+        }
+    }
+
+    @PostMapping(value = "/send-to-parent-by-student/{studentId}")
+    public ResponseEntity<Response> sendToParentByStudentId(@PathVariable Long studentId,
                                                             @RequestBody MessageDtoRequest request) {
         try {
-            classTeacherService.sendToParentByStudentId(id, request);
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Sent successfully", null));
+            classTeacherService.sendToParentByStudentId(studentId, request);
+            return ResponseEntity.ok(new Response("Sent successfully.", null));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Response("Failed to sent. " + exception.getMessage(), null));
         }
     }
-    @PostMapping(value = "/send-message-to-home-grade-students-by-grade/{id}")
-    public ResponseEntity<Response> sendMessageForGradeStudentsByGrade(@PathVariable Long id,
-                                                                @RequestBody MessageDtoRequest request) {
+
+    @PostMapping(value = "/send-message-to-home-grade-students-by-grade/{studentId}")
+    public ResponseEntity<Response> sendMessageForGradeStudentsByGrade(@PathVariable Long studentId,
+                                                                       @RequestBody MessageDtoRequest request) {
         try {
-            classTeacherService.sendMessageForGradeStudentsByGrade(id, request);
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Sent successfully", null));
+            classTeacherService.sendMessageForGradeStudentsByGrade(studentId, request);
+            return ResponseEntity.ok(new Response("Sent successfully.", null));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Failed to sent. " + exception.getMessage(), null));
         }
     }
-    @PostMapping(value = "/send-message-to-home-grade-parents-by-grade/{id}")
-    public ResponseEntity<Response> sendMessageForGradeParentsByGrade(@PathVariable Long id,
+
+    @PostMapping(value = "/send-message-to-home-grade-parents-by-grade/{studentId}")
+    public ResponseEntity<Response> sendMessageForGradeParentsByGrade(@PathVariable Long studentId,
                                                                 @RequestBody MessageDtoRequest request) {
         try {
-            classTeacherService.sendMessageForGradeParentsByGrade(id, request);
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Sent successfully", null));
+            classTeacherService.sendMessageForGradeParentsByGrade(studentId, request);
+            return ResponseEntity.ok(new Response("Sent successfully. ", null));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new Response("Failed to sent. " + exception.getMessage(), null));
         }
     }
 
@@ -303,9 +395,9 @@ public class ClassTeacherController {
     public ResponseEntity<Response> sendMessageForGradeStudents(@RequestBody MessageDtoRequest request) {
         try {
             classTeacherService.sendMessageForGradeStudents(request);
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Sent successfully", null));
+            return ResponseEntity.status(HttpStatus.OK).body(new Response("Sent successfully. ", null));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Failed to sent. " + exception.getMessage(), null));
         }
     }
 
@@ -313,9 +405,9 @@ public class ClassTeacherController {
     public ResponseEntity<Response> sendMessageForGradeParent(@RequestBody MessageDtoRequest request) {
         try {
             classTeacherService.sendMessageForGradeParent(request);
-            return ResponseEntity.status(HttpStatus.OK).body(new Response("Sent successfully", null));
+            return ResponseEntity.status(HttpStatus.OK).body(new Response("Sent successfully. ", null));
         } catch (Exception exception) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response(exception.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new Response("Failed to sent. " + exception.getMessage(), null));
         }
     }
 
