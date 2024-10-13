@@ -2,6 +2,7 @@ package org.example.school_project.entity;
 
 import jakarta.persistence.*;
 import lombok.*;
+
 import org.example.school_project.enums.DaysOfWeek;
 
 @Entity

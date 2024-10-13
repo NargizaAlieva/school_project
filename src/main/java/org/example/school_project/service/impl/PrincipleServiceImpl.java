@@ -3,20 +3,26 @@ package org.example.school_project.service.impl;
 import lombok.RequiredArgsConstructor;
 import org.example.school_project.dto.*;
 import org.example.school_project.entity.Employee;
+import org.example.school_project.entity.Student;
 import org.example.school_project.service.*;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
 public class PrincipleServiceImpl implements PrincipleService {
     private final UserService userService;
+    private final StudentService studentService;
     private final ScheduleService scheduleService;
     private final CharterService charterService;
     private final EmployeeService employeeService;
     private final SubjectService subjectService;
     private final AssignmentService assignmentService;
+    private final AverageMarkService averageMarkService;
+    private final AttendCountService attendCountService;
 
     private Employee getPrinciple() {
         return employeeService.getByUserId(userService.getCurrentUser().getId());
@@ -191,5 +197,76 @@ public class PrincipleServiceImpl implements PrincipleService {
     @Override
     public List<AssignmentDto> getAllUndoneAssigment(){
         return assignmentService.getAllUndoneAssignment(getAllAssignmentByAuthor());
+    }
+
+    @Override
+    public Map<String, Double> getAvgMarkByGradeStudentQuarter(Integer quarter, Long studentId) {
+        Student student = studentService.getStudentByIdEntity(studentId);
+        return averageMarkService.getAvgMarkByGradeStudentQuarter(quarter, student.getGrade().getId(), studentId);
+    }
+
+    @Override
+    public Map<String, Double> getAvgMarkBySubjectGradeStudent(Long subjectId, Long studentId) {
+        Student student = studentService.getStudentByIdEntity(studentId);
+        return averageMarkService.getAvgMarkBySubjectGradeStudent(subjectId, student.getGrade().getId(), studentId);
+    }
+
+    @Override
+    public Map<String, Double> getAvgMarkByGradeStudent(Long studentId) {
+        Student student = studentService.getStudentByIdEntity(studentId);
+        return averageMarkService.getAvgMarkByGradeStudent(student.getGrade().getId(), studentId);
+    }
+
+    @Override
+    public Map<String, Double> getAvgMarkByGradeQuarter(Integer quarter, Long gradeId) {
+        return averageMarkService.getAvgMarkByGradeQuarter(quarter, gradeId);
+    }
+
+    @Override
+    public Map<String, Double> getAvgMarkByGrade(Long gradeId) {
+        return averageMarkService.getAvgMarkByGrade(gradeId);
+    }
+
+    @Override
+    public Map<String, Double> getAvgMarks() {
+        return averageMarkService.getAvgMarkAll();
+    }
+    @Override
+    public Map<String, Double> getAvgSchoolMark() {
+        Map<String, Double> markMap = new HashMap<>();
+        String title = "School average mark:";
+        Double avgMark = averageMarkService.getSchoolAvgMark();
+        markMap.put(title, avgMark);
+        return markMap;
+    }
+
+    @Override
+    public Map<String, Double> getAttendByQuarterGradeStudent(Integer quarter, Long gradeId, Long studentId) {
+        return attendCountService.getAttendByQuarterGradeStudent(quarter, gradeId, studentId);
+    }
+
+    @Override
+    public Map<String, Double> getAttendBySubjectGradeStudent(Long subjectId, Long gradeId, Long studentId) {
+        return attendCountService.getAttendBySubjectGradeStudent(subjectId, gradeId, studentId);
+    }
+
+    @Override
+    public Map<String, Double> getAttendByGradeStudent(Long gradeId, Long studentId) {
+        return attendCountService.getAttendByGradeStudent(gradeId, studentId);
+    }
+
+    @Override
+    public Map<String, Double> getAttendByQuarterGrade(Integer quarter, Long gradeId) {
+        return attendCountService.getAttendByQuarterGrade(quarter, gradeId);
+    }
+
+    @Override
+    public Map<String, Double> getAttendByGrade(Long gradeId) {
+        return attendCountService.getAttendByGrade(gradeId);
+    }
+
+    @Override
+    public Map<String, Double> getAttendGrades() {
+        return attendCountService.getAttendAll();
     }
 }

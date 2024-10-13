@@ -9,6 +9,8 @@ import java.util.Map;
 public interface AttendCountService {
     Map<String, Double> getAttendByQuarterGradeStudent(Integer quarter, Long gradeId, Long studentId);
 
+    Map<String, Double> getAttendByQuarterGrade(Integer quarter, Long gradeId);
+
     Map<String, Double> getAttendBySubjectGradeStudent(Long subjectId, Long gradeId, Long studentId);
 
     Map<String, Double> getAttendByGradeStudent(Long gradeId, Long studentId);

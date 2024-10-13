@@ -1,10 +1,10 @@
 package org.example.school_project.dto;
 
+import java.util.Set;
+import java.util.HashSet;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
-
-import java.util.HashSet;
-import java.util.Set;
 
 @Data
 @AllArgsConstructor

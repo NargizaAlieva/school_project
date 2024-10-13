@@ -10,6 +10,8 @@ import java.util.Map;
 public interface AverageMarkService {
     Map<String, Double> getAvgMarkByGradeStudentQuarter(Integer quarter, Long gradeId, Long studentId);
 
+    Map<String, Double> getAvgMarkByGradeQuarter(Integer quarter, Long gradeId);
+
     Map<String, Double> getAvgMarkBySubjectGradeStudent(Long subjectId, Long gradeId, Long studentId);
 
     Map<String, Double> getAvgMarkByGradeStudent(Long gradeId, Long studentId);

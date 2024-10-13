@@ -35,7 +35,20 @@ public class AcademicPerformServiceImpl implements AverageMarkService, AttendCou
                 avgMark += countAvgByHwDto(
                         homeworkService.getStudentHwBySubjectGrade(s.getId(), quarter, gradeId, studentId));
             }
-            markMap.put(subjectName, avgMark);
+            markMap.put(subjectName, avgMark/2);
+        }
+        return markMap;
+    }
+
+    @Override
+    public Map<String, Double> getAvgMarkByGradeQuarter(Integer quarter, Long gradeId) {
+        Map<String, Double> markMap = new HashMap<>();
+        for (StudentDto s : studentService.getAllStudentByGrade(gradeId)) {
+            Collection<Double> avgMarkBySubjectGrade = getAvgMarkByGradeStudentQuarter(quarter, gradeId, s.getId()).values();
+
+            String studentName = "Student: " + s.getUser().getFirstName() + " " + s.getUser().getLastName();
+            Double avgMark = countAvgByDouble(avgMarkBySubjectGrade);
+            markMap.put(studentName, avgMark);
         }
         return markMap;
     }
@@ -53,7 +66,7 @@ public class AcademicPerformServiceImpl implements AverageMarkService, AttendCou
                 avgMark += countAvgByHwDto(
                         homeworkService.getStudentHwBySubjectGrade(subjectId, quarter, gradeId, studentId));
             }
-            markMap.put(quarterName, avgMark);
+            markMap.put(quarterName, avgMark/2);
         }
         return markMap;
     }
@@ -75,7 +88,7 @@ public class AcademicPerformServiceImpl implements AverageMarkService, AttendCou
     public Map<String, Double> getAvgMarkByGrade(Long gradeId) {
         Map<String, Double> markMap = new HashMap<>();
         for (StudentDto s : studentService.getAllStudentByGrade(gradeId)) {
-            List<Double> avgMarkBySubjectGrade = (List<Double>) getAvgMarkByGradeStudent(gradeId, s.getId()).values();
+            Collection<Double> avgMarkBySubjectGrade = getAvgMarkByGradeStudent(gradeId, s.getId()).values();
 
             String studentName = "Student: " + s.getUser().getFirstName() + " " + s.getUser().getLastName();
             Double avgMark = countAvgByDouble(avgMarkBySubjectGrade);
@@ -148,7 +161,6 @@ public class AcademicPerformServiceImpl implements AverageMarkService, AttendCou
         return markMap;
     }
 
-
     @Override
     public Double countAvgByMarkDto(List<MarkDto> markDtoList) {
         Double sum = 0.0;
@@ -160,7 +172,7 @@ public class AcademicPerformServiceImpl implements AverageMarkService, AttendCou
     public Double countAvgByHwDto(List<HomeworkDto> markDtoList) {
         Double sum = 0.0;
         for (HomeworkDto h : markDtoList) sum += h.getMark();
-        return sum/markDtoList.size();
+        return Math.round(sum / markDtoList.size() * 100) / 100.;
     }
 
     @Override
@@ -168,7 +180,7 @@ public class AcademicPerformServiceImpl implements AverageMarkService, AttendCou
         Double sum = 0.0;
         for (Double m : markList)
             sum += m;
-        return sum/markList.size();
+        return Math.round(sum / markList.size() * 100) / 100.;
     }
 
     @Override
@@ -182,6 +194,19 @@ public class AcademicPerformServiceImpl implements AverageMarkService, AttendCou
                         attendanceService.getStudentAttendBySubjectGrade(s.getId(), quarter, gradeId, studentId));
             }
             attendMap.put(subjectName, trueAttend);
+        }
+        return attendMap;
+    }
+
+    @Override
+    public Map<String, Double> getAttendByQuarterGrade(Integer quarter, Long gradeId) {
+        Map<String, Double> attendMap = new HashMap<>();
+        for (StudentDto s : studentService.getAllStudentByGrade(gradeId)) {
+            Collection<Double> attendSubjectGrade = getAttendByQuarterGradeStudent(quarter, gradeId, s.getId()).values();
+
+            String studentName = "Student: " + s.getUser().getFirstName() + " " + s.getUser().getLastName();
+            Double trueAttend = getTrueAttendCount(attendSubjectGrade);
+            attendMap.put(studentName, trueAttend);
         }
         return attendMap;
     }
@@ -218,7 +243,7 @@ public class AcademicPerformServiceImpl implements AverageMarkService, AttendCou
     public Map<String, Double> getAttendByGrade(Long gradeId) {
         Map<String, Double> attendMap = new HashMap<>();
         for (StudentDto s : studentService.getAllStudentByGrade(gradeId)) {
-            List<Double> attendSubjectGrade = (List<Double>) getAttendByGradeStudent(gradeId, s.getId()).values();
+            Collection<Double> attendSubjectGrade = getAttendByGradeStudent(gradeId, s.getId()).values();
 
             String studentName = "Student: " + s.getUser().getFirstName() + " " + s.getUser().getLastName();
             Double trueAttend = getTrueAttendCount(attendSubjectGrade);
