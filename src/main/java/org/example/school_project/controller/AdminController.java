@@ -15,10 +15,11 @@ import org.example.school_project.dto.*;
 import org.example.school_project.service.AdminService;
 import org.example.school_project.service.FileService;
 import org.example.school_project.util.exception.ObjectNotFoundException;
-@Tag(name = "Admin Management", description = "API for managing users and admin-related operations.")
+
 @RestController
 @RequestMapping(value = "/admin")
 @AllArgsConstructor
+@Tag(name = "Admin Management", description = "API for managing admin-related operations.")
 public class AdminController {
     private final AdminService adminService;
     private final FileService fileService;

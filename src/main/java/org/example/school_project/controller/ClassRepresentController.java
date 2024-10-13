@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,7 @@ import org.example.school_project.service.ClassRepresentService;
 @RestController
 @RequestMapping(value = "/class-represent")
 @AllArgsConstructor
+@Tag(name = "Class Representative Management", description = "Operations related to class representative role.")
 public class ClassRepresentController {
     private final ClassRepresentService classRepresentService;
 

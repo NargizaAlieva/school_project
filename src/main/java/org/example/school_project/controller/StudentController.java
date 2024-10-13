@@ -1,5 +1,11 @@
 package org.example.school_project.controller;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.AllArgsConstructor;
 
 import org.springframework.http.HttpStatus;
@@ -12,8 +18,18 @@ import org.example.school_project.service.StudentRoleService;
 @RestController
 @RequestMapping(value = "/student")
 @AllArgsConstructor
+@Tag(name = "Student Management", description = "Operations related to student role.")
 public class StudentController {
     private final StudentRoleService studentRoleService;
+
+    @Operation(
+            summary = "Get all students' marks",
+            description = "Retrieves all students' marks."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully got all Students Marks", content = @Content(schema = @Schema(implementation = Response.class))),
+            @ApiResponse(responseCode = "404", description = "Marks not found", content = @Content)
+    })
     @GetMapping("/get-all-mark")
     public ResponseEntity<Response> getAllMark() {
         try {
@@ -23,6 +39,14 @@ public class StudentController {
         }
     }
 
+    @Operation(
+            summary = "Get all marks by quarter",
+            description = "Retrieves all marks for the specified quarter."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully got Marks", content = @Content(schema = @Schema(implementation = Response.class))),
+            @ApiResponse(responseCode = "404", description = "Marks not found", content = @Content)
+    })
     @GetMapping("/get-all-mark-quarter/{quarter}")
     public ResponseEntity<Response> getAllMarkBySubjectQuarter(@PathVariable Integer quarter) {
         try {
@@ -32,6 +56,14 @@ public class StudentController {
         }
     }
 
+    @Operation(
+            summary = "Get all marks by subject",
+            description = "Retrieves all marks for the specified subject."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully got Marks", content = @Content(schema = @Schema(implementation = Response.class))),
+            @ApiResponse(responseCode = "404", description = "Marks not found", content = @Content)
+    })
     @GetMapping("/get-all-mark-subject/{subjectId}")
     public ResponseEntity<Response> getAllMarkBySubjectQuarter(@PathVariable Long subjectId) {
         try {
@@ -41,6 +73,14 @@ public class StudentController {
         }
     }
 
+    @Operation(
+            summary = "Get average marks for the year",
+            description = "Retrieves average marks for all students for the year."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully got average marks", content = @Content(schema = @Schema(implementation = Response.class))),
+            @ApiResponse(responseCode = "404", description = "Marks not found", content = @Content)
+    })
     @GetMapping("/get-all-mark-for-year")
     public ResponseEntity<Response> getAvgMarkByGradeStudent() {
         try {
@@ -50,6 +90,14 @@ public class StudentController {
         }
     }
 
+    @Operation(
+            summary = "Get attendance by quarter",
+            description = "Retrieves attendance for the specified quarter."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully got Attendance", content = @Content(schema = @Schema(implementation = Response.class))),
+            @ApiResponse(responseCode = "404", description = "Attendance not found", content = @Content)
+    })
     @GetMapping("/get-attendance-quarter/{quarter}")
     public ResponseEntity<Response> getAttendByQuarterGradeStudent(@PathVariable Integer quarter) {
         try {
@@ -59,6 +107,14 @@ public class StudentController {
         }
     }
 
+    @Operation(
+            summary = "Get attendance by subject",
+            description = "Retrieves attendance for the specified subject."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully got Attendance", content = @Content(schema = @Schema(implementation = Response.class))),
+            @ApiResponse(responseCode = "404", description = "Attendance not found", content = @Content)
+    })
     @GetMapping("/get-attendance-subject/{subjectId}")
     public ResponseEntity<Response> getAttendBySubjectGradeStudent(@PathVariable Long subjectId) {
         try {
@@ -68,6 +124,14 @@ public class StudentController {
         }
     }
 
+    @Operation(
+            summary = "Get attendance for the year",
+            description = "Retrieves attendance records for all students for the year."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully got Attendance", content = @Content(schema = @Schema(implementation = Response.class))),
+            @ApiResponse(responseCode = "404", description = "Attendance not found", content = @Content)
+    })
     @GetMapping("/get-attendance-for-year")
     public ResponseEntity<Response> getAttendByGradeStudent() {
         try {
@@ -77,6 +141,14 @@ public class StudentController {
         }
     }
 
+    @Operation(
+            summary = "Send homework",
+            description = "Sends homework details to the specified endpoint."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "201", description = "Successfully sent Homework", content = @Content(schema = @Schema(implementation = Response.class))),
+            @ApiResponse(responseCode = "400", description = "Homework is not saved", content = @Content)
+    })
     @PostMapping(value = "/send-hw")
     public ResponseEntity<Response> sendHomework(@RequestBody HomeworkDtoRequest request) {
         try {
@@ -87,6 +159,14 @@ public class StudentController {
         }
     }
 
+    @Operation(
+            summary = "Get all homework",
+            description = "Retrieves all homework records."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully got all Homeworks", content = @Content(schema = @Schema(implementation = Response.class))),
+            @ApiResponse(responseCode = "404", description = "Homework is not found", content = @Content)
+    })
     @GetMapping("/get-all-hw")
     public ResponseEntity<Response> getAllHomework() {
         try {
@@ -96,6 +176,14 @@ public class StudentController {
         }
     }
 
+    @Operation(
+            summary = "Get all undone homework",
+            description = "Retrieves all undone homework assigned to students."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully got all undone Homeworks", content = @Content(schema = @Schema(implementation = Response.class))),
+            @ApiResponse(responseCode = "404", description = "Homework is not found", content = @Content)
+    })
     @GetMapping("/get-all-undone-hw")
     public ResponseEntity<Response> getAllUndoneHomework() {
         try {
@@ -105,6 +193,14 @@ public class StudentController {
         }
     }
 
+    @Operation(
+            summary = "Get all homework by subject",
+            description = "Retrieves all homework assigned by a specific subject."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully got all Homeworks by subject", content = @Content(schema = @Schema(implementation = Response.class))),
+            @ApiResponse(responseCode = "404", description = "Homework is not found", content = @Content)
+    })
     @GetMapping("/get-all-hw-subject/{subjectId}")
     public ResponseEntity<Response> getAllHomeworkSubject(@PathVariable Long subjectId) {
         try {
@@ -114,6 +210,14 @@ public class StudentController {
         }
     }
 
+    @Operation(
+            summary = "Get all undone homework by subject",
+            description = "Retrieves all undone homework assigned for a specific subject."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully got all undone Homeworks by subject", content = @Content(schema = @Schema(implementation = Response.class))),
+            @ApiResponse(responseCode = "404", description = "Homework is not found", content = @Content)
+    })
     @GetMapping("/get-all-undone-hw-subject/{subjectId}")
     public ResponseEntity<Response> getAllUndoneHomework(@PathVariable Long subjectId) {
         try {
@@ -123,6 +227,14 @@ public class StudentController {
         }
     }
 
+    @Operation(
+            summary = "Get student schedule",
+            description = "Retrieves the schedule for a specific student."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully got Schedules", content = @Content(schema = @Schema(implementation = Response.class))),
+            @ApiResponse(responseCode = "404", description = "Schedules not found", content = @Content)
+    })
     @GetMapping("/get-student-schedule")
     public ResponseEntity<Response> getStudentSchedule() {
         try {
@@ -132,6 +244,14 @@ public class StudentController {
         }
     }
 
+    @Operation(
+            summary = "Get all lessons by grade",
+            description = "Retrieves all lessons assigned to a specific grade."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully got Lessons", content = @Content(schema = @Schema(implementation = Response.class))),
+            @ApiResponse(responseCode = "404", description = "Lessons topic not found", content = @Content)
+    })
     @GetMapping("/get-all-lesson-grade")
     public ResponseEntity<Response> getAllLessonByGrade() {
         try {
@@ -141,6 +261,14 @@ public class StudentController {
         }
     }
 
+    @Operation(
+            summary = "Get lessons topics",
+            description = "Retrieves all lesson topics available."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully got Lessons topics", content = @Content(schema = @Schema(implementation = Response.class))),
+            @ApiResponse(responseCode = "404", description = "Lessons topic not found", content = @Content)
+    })
     @GetMapping("/get-all-lesson-topic")
     public ResponseEntity<Response> getLessonsTopics() {
         try {
@@ -150,6 +278,14 @@ public class StudentController {
         }
     }
 
+    @Operation(
+            summary = "Get lesson topics by subject",
+            description = "Retrieves lesson topics for a specific subject."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully got Lesson topics", content = @Content(schema = @Schema(implementation = Response.class))),
+            @ApiResponse(responseCode = "404", description = "Lesson topics not found", content = @Content)
+    })
     @GetMapping("/get-all-lesson-topic/{subjectId}")
     public ResponseEntity<Response> getLessonsTopics(@PathVariable Long subjectId) {
         try {
@@ -159,6 +295,14 @@ public class StudentController {
         }
     }
 
+    @Operation(
+            summary = "Get student subjects",
+            description = "Retrieves the list of subjects for a specific student."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully got student subjects", content = @Content(schema = @Schema(implementation = Response.class))),
+            @ApiResponse(responseCode = "404", description = "Subjects not found", content = @Content)
+    })
     @GetMapping("/get-student-subject")
     public ResponseEntity<Response> getSubjectList() {
         try {
@@ -168,6 +312,14 @@ public class StudentController {
         }
     }
 
+    @Operation(
+            summary = "Get classmates",
+            description = "Retrieves a list of classmates for a specific student."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully got classmates", content = @Content(schema = @Schema(implementation = Response.class))),
+            @ApiResponse(responseCode = "404", description = "Classmates not found", content = @Content)
+    })
     @GetMapping("/get-classmates")
     public ResponseEntity<Response> getClassmates() {
         try {
@@ -177,6 +329,14 @@ public class StudentController {
         }
     }
 
+    @Operation(
+            summary = "Get student duty list",
+            description = "Retrieves the list of duties for a specific student."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully got student duty list", content = @Content(schema = @Schema(implementation = Response.class))),
+            @ApiResponse(responseCode = "404", description = "Duty list not found", content = @Content)
+    })
     @GetMapping("/get-duty-list")
     public ResponseEntity<Response> getStudentDutyList() {
         try {
